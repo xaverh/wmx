@@ -46,6 +46,7 @@ implementPList(ClientList, Client);
 implementPList(ListList, ClientList);
 #endif
 
+#define DEFAULT_PORT 6999
 WindowManager::WindowManager(int argc, char **argv) :
     m_focusChanging(False),
     m_altPressed(False),
@@ -54,7 +55,10 @@ WindowManager::WindowManager(int argc, char **argv) :
 {
     char *home = getenv("HOME");
     char *wmxdir = getenv("WMXDIR");
-    
+
+    max_fd = 0;
+    memset((void *)&active_fds, 0, sizeof(fd_set));
+
     fprintf(stderr, "\nwmx: Copyright (c) 1996-2001 Chris Cannam."
 	    "  Sixth release, April 2001\n"
 	    "     Parts derived from 9wm Copyright (c) 1994-96 David Hogan\n"
@@ -70,7 +74,11 @@ WindowManager::WindowManager(int argc, char **argv) :
 #if CONFIG_USE_SESSION_MANAGER != False
     char *oldSessionId = 0;
 #endif
-    
+
+
+    // remote_control = NULL;
+    remote_control = new Remote(this);
+
     if (argc > 1) {
 
 #if CONFIG_USE_SESSION_MANAGER != False
@@ -79,11 +87,46 @@ WindowManager::WindowManager(int argc, char **argv) :
 	    oldSessionId = argv[2];
 	} else {
 #endif
+	    {
+		int	c ;
+		int	port;
+		int	verbose = 0;
 
-	for (i = strlen(argv[0])-1; i > 0 && argv[0][i] != '/'; --i);
-	fprintf(stderr, "\nwmx: Usage: %s [-clientId id]\n",
-		argv[0] + (i > 0) + i);
-	exit(2);
+		port = 0;
+		while ( (c = getopt(argc, argv, "rp:v")) != EOF ) {
+		    switch(c) {
+		    case 'r':
+			port = DEFAULT_PORT;
+			break ;
+		    case 'p':
+			port = atoi(optarg) ;
+			break ;
+		    case 'v':
+			verbose++ ;
+			break ;
+		    case '?':
+		    default:
+			fprintf(stderr, "bad option\n") ;
+			exit(1) ;
+		    }
+		}
+
+		if (port > 0) {
+		    //remote_control_socket = setup_socket("localhost", port);
+		    // remote_control = Remote::Remote(this, port);
+		    remote_control->setup_port(port, verbose);
+		}
+
+
+	    }
+
+
+	    if (optind < argc) {
+		for (i = strlen(argv[0])-1; i > 0 && argv[0][i] != '/'; --i);
+		fprintf(stderr, "\nwmx: Usage: %s [-clientId id]\n",
+			argv[0] + (i > 0) + i);
+		exit(2);
+	    }
 
 #if CONFIG_USE_SESSION_MANAGER != False
 	}
@@ -196,6 +239,11 @@ WindowManager::WindowManager(int argc, char **argv) :
         fprintf(stderr, "\n     Not GNOME compliant.");
     }
 
+    if (remote_control->RemoteControlIsOn()) {
+	  fprintf(stderr, "\n     Remote control on port %d.",
+		  remote_control->RemoteControlIsOn());
+    }
+
     fprintf(stderr, "\n     Command menu taken from ");
     if (wmxdir == NULL) {
 	fprintf(stderr, "%s/%s.\n", home, CONFIG_COMMAND_MENU);
@@ -211,6 +259,8 @@ WindowManager::WindowManager(int argc, char **argv) :
 
     m_display = XOpenDisplay(NULL);
     if (!m_display) fatal("can't open display");
+
+    add_fd_to_watch(ConnectionNumber(m_display));
 
     m_shell = (char *)getenv("SHELL");
     if (!m_shell) m_shell = NewString("/bin/sh");
@@ -231,7 +281,10 @@ WindowManager::WindowManager(int argc, char **argv) :
     XSetErrorHandler(errorHandler);
     ignoreBadWindowErrors = False;
 
-    // 9wm does more, I think for nohup
+    key_binding_with_mod = new Keybinding(this, wmxdir, true);
+    key_binding_without_mod = new Keybinding(this, wmxdir, false);
+
+    // 9wm does mRore, I think for nohup
     signal(SIGTERM, sigHandler);
     signal(SIGINT,  sigHandler);
     signal(SIGHUP,  sigHandler);
@@ -922,7 +975,7 @@ extern int putenv(char *);	/* not POSIX */
 }
 #endif
 
-void WindowManager::spawn(char *name, char *file)
+void WindowManager::spawn(char *name, char *file, char *arg1 /* = NULL*/)
 {
     // strange code thieved from 9wm to avoid leaving zombies
 
@@ -932,6 +985,9 @@ void WindowManager::spawn(char *name, char *file)
 	if (fork() == 0) {
 
 	    close(ConnectionNumber(m_display));
+	    if (remote_control->RemoteControlIsOn()) {
+		  remote_control->close_all_sockets();
+	    }
 
 	    // if you don't have putenv, miss out this next
 	    // conditional and its contents
@@ -949,14 +1005,14 @@ void WindowManager::spawn(char *name, char *file)
 	    }
 
 	    if (CONFIG_EXEC_USING_SHELL) {
-		if (file) execl(m_shell, m_shell, "-c", file, 0);
-		else execl(m_shell, m_shell, "-c", name, 0);
+		if (file) execl(m_shell, m_shell, "-c", file, arg1, 0);
+		else execl(m_shell, m_shell, "-c", name, arg1, 0);
 		fprintf(stderr, "wmx: exec %s", m_shell);
 		perror(" failed");
 	    }
 
 	    if (file) {
-		execl(file, name, 0);
+		execl(file, name, arg1, 0);
 	    }
 	    else {
 		if (strcmp(CONFIG_NEW_WINDOW_COMMAND, name)) {
@@ -977,6 +1033,79 @@ void WindowManager::spawn(char *name, char *file)
     }
     wait((int *) 0);
 }
+
+int compare_client_names_a(const void *p, const void *q)
+{
+    // This is necessary because we get called the parameter void *
+    // needs to be derefenced twice to get a Client type.
+    Client **x1 = (Client **) p;
+    Client **x2 = (Client **) q;
+
+    Client *c1 = *x1;
+    Client *c2 = *x2;
+
+    return compare_client_names(c1, c2);
+}
+
+void WindowManager::print_clients(int fd) {
+      int i;
+      char buff[1024];
+      Client *c;
+      XTextProperty text_prop;
+      char *res_name = "?";
+
+      //      if (SORT_CLIENTS) {
+      //	  this->sort_clients();
+      //}
+
+      // printf("Number of clients: %d\n", m_clients.count());
+      // sprintf(buff, "Number of clients: %d\n", clients().count());
+      // write(fd, buff, strlen(buff));
+      if (m_clients.count() == 0) {
+	  sprintf(buff, "No clients!\n");
+	  write(fd, buff, strlen(buff));
+      }
+      for (i = 0; i < m_clients.count(); ++i) {
+	  // printf("%s\n", m_clients.item(i)->label());
+	  c = clients().item(i);
+	  if (XGetTextProperty(c->display(), c->window(), 
+			       &text_prop, XA_WM_CLASS)) {
+	      res_name = (char *)text_prop.value;
+	  }
+	  sprintf(buff,
+		  "0x%x %d %c%c%c (%s) \"%s\"\n", 
+		  c->window(),
+		  c->channel(),
+		  c->isHidden() ? 'H' :  '-',
+		  c->isWithdrawn() ? 'W' :  '-',
+		  c->isSticky() ? 'S' : '-',
+		  res_name,
+		  c->label() );
+      write(fd, buff, strlen(buff));
+      }
+}
+
+void WindowManager::add_fd_to_watch(int fd)
+{
+    // fprintf(stderr, "adding fd %d to read_set\n", fd);
+    if (fd >= max_fd) {
+	max_fd = fd+1;
+    }
+    FD_SET(fd, &active_fds);
+}
+
+void WindowManager::remove_fd_from_watch(int fd)
+{
+    // fprintf(stderr, "removing fd %d from read_set\n", fd);
+    FD_CLR(fd, &active_fds);
+}
+
+void WindowManager::sort_clients(void)
+{
+    m_clients.sort(compare_client_names_a);
+    m_hiddenClients.sort(compare_client_names_a);
+}
+
 
 
 #if CONFIG_GNOME_COMPLIANCE != False
@@ -1105,6 +1234,7 @@ void WindowManager::gnomeUpdateChannelList()
 
     gnomeUpdateCurrentChannel();
 }   
+
 
 void WindowManager::gnomeUpdateCurrentChannel()
 {

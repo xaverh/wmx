@@ -15,7 +15,7 @@ public:
     virtual int getSelection();
     static void cleanup(WindowManager *const);
     int screen() { return m_windowManager->screen(); }
- 
+
  protected:
     static Window *m_window;
     

@@ -21,6 +21,8 @@ struct DynamicConfigImpl
     int  feeddelay;
     char disable;	// 0 = New Window option, 1 = no New
     char rightBt;	// 0 = disable, 1 = circulate, 2 = lower, 4 = height
+    char className;	// 0 = no,  1 = yes (add class name to menu)
+    char sortClients;	// 0 = no, 1 = yes
 };  
 
 DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
@@ -57,7 +59,8 @@ DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
     m_impl->feeddelay = 300;
     m_impl->disable = 0;        // 0 = allow New window, 1 = don't
     m_impl->rightBt = 1;	// 0 = disable, 1 = circulate, 2 = lower
-
+    m_impl->className = 0;	// 0 = no class name in menu,  1 = yes
+    m_impl->sortClients = 0;	// 0 = no, 1 = yes
     scan(1);
 }
 
@@ -78,6 +81,8 @@ char DynamicConfig::disableNew() { return m_impl->disable & 1; }
 char DynamicConfig::rightCirculate() { return m_impl->rightBt & 1; }
 char DynamicConfig::rightLower() { return m_impl->rightBt & 2; }
 char DynamicConfig::rightToggleHeight() { return m_impl->rightBt & 4; }
+char DynamicConfig::classInMenu() { return m_impl->className & 1; }
+char DynamicConfig::sortClients() { return m_impl->sortClients & 1; }
 
 void DynamicConfig::scan(char startup)
 {
@@ -95,9 +100,10 @@ void DynamicConfig::scan(char startup)
 }
 
 
-void DynamicConfig::update(char *string)
+int DynamicConfig::update(char *string)
 {
     char *s;
+    int errors = 0;
 
 #define OPTION(x) ( (!strncasecmp(s, x, strlen(x))) && (s += strlen(x)) )
 
@@ -138,15 +144,25 @@ void DynamicConfig::update(char *string)
 	    else if (OPTION("circulate")) m_impl->rightBt = 1;
 	    else if (OPTION("lower")) m_impl->rightBt = 2;
 	    else if (OPTION("toggleheight")) m_impl->rightBt = 4;
-	
+
+	if (OPTION("class:"))
+	    if (OPTION("on")) m_impl->className = 1;
+	    else if (OPTION("off")) m_impl->className = 0;
+
+	if (OPTION("sort:"))
+	    if (OPTION("on")) m_impl->sortClients = 1;
+	    else if (OPTION("off")) m_impl->sortClients = 0;
+
 	if (*s != '\0') {
 	    fprintf(stderr, "\nwmx: Dynamic configuration error: "
 		    "`%s' @ position %d", s, string - s);
+	    errors++;
 	}
 
     } while (s = strtok(NULL, "/"));
 
     fprintf(stderr, "\n");
+    return errors;
 
 #undef OPTION
 }

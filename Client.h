@@ -30,6 +30,7 @@ public:
 				// otherwise lower.
 
     void move(XButtonEvent *);		// event for grab timestamp & coords
+    void move(int, int, Boolean);
     void resize(XButtonEvent *, Boolean, Boolean);
     void moveOrResize(XButtonEvent *);
     void ensureVisible();	// make sure x, y are on-screen
@@ -114,8 +115,14 @@ public:
 
 #if CONFIG_GNOME_COMPLIANCE != False
     void gnomeSetChannel();
-    Window window()        { return m_window; }
 #endif
+
+
+    Window window()        { return m_window; }
+    void setLabel(char *);
+    char * Client::make_class_and_label_name(void);
+    friend int compare_client_names(Client *c1, Client *c2);
+
 
 protected:      // cravenly submitting to gcc's warnings
     ~Client();
@@ -173,6 +180,7 @@ private:
 
     char *m_name;
     char *m_iconName;
+    char *m_className;
     const char *m_label;	// alias: one of (instance,class,name,iconName)
     static const char *const m_defaultLabel;
 

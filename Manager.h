@@ -4,8 +4,12 @@
 
 #include "General.h"
 #include "listmacro.h"
+#include "Keybinding.h"
+#include "Remote.h"
 
 class Client;
+class Remote;
+
 declarePList(ClientList, Client);
 
 #if CONFIG_GROUPS != False
@@ -70,7 +74,7 @@ public:
     void releaseGrab(XButtonEvent *);
     void releaseGrabKeyMode(XButtonEvent *);
     void releaseGrabKeyMode(XKeyEvent *);
-    void spawn(char *, char *);
+    void spawn(char *, char *, char * = NULL);
 
     int channel() { return m_currentChannel; }
     int channels() { return m_channels; }
@@ -101,6 +105,15 @@ public:
 
     // Stupid little helper function
     static int numdigits(int);
+
+    void WindowManager::sort_clients(void);
+
+    class Keybinding *key_binding_with_mod;
+    class Keybinding *key_binding_without_mod;
+
+    void print_clients(int);
+    void add_fd_to_watch(int);
+    void remove_fd_from_watch(int fd);
 
 private:
     int loop();
@@ -215,6 +228,30 @@ private:
 #endif
 
     int m_altModMask;
+    /// int remote_control_port;
+
+    class Remote * remote_control;
+
+    int WindowManager::wmxsocket(int argc, char **argv);
+    /// int WindowManager::RemoteControlIsOn(void) {
+    // ///?? return remote_control_port;
+    ///  return remote_control->RemoteControlIsOn();
+    /// }
+
+    Boolean WindowManager::isRemoteControlFd(int fd);
+    Boolean WindowManager::doRemoteControl(int fd);
+
+    void WindowManager::parse_command(char *buff, int fd);
+
+    fd_set active_fds;
+
+    /// fd_set remote_control_connections;
+    /// int remote_control_socket;
+
+    int max_fd;
+    // int WindowManager::check_remote_controls(fd_set *read_fds);
+
+
 };
 
 #endif

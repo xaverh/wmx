@@ -34,6 +34,7 @@ public: \
     void remove_all(); \
     void move_to_start(long index); \
     void move_to_end(long index); \
+    void sort( int (*func) (const void *, const void *) ); \
 \
 private: \
     T *m_items; \
@@ -89,6 +90,9 @@ void List::move_to_end(long index) { \
     if (index < m_count-1) memmove(m_items+index, m_items+index+1, \
 				   (m_count-index-1) * sizeof(T)); \
     new (&m_items[m_count-1], this) T(temp); \
+} \
+void List::sort( int (*func) (const void *, const void *) ) { \
+    qsort(m_items, m_count, sizeof(T), func); \
 }
 
 #endif

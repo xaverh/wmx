@@ -51,12 +51,16 @@ public:
     char rightCirculate();
     char rightLower();
     char rightToggleHeight();
+    char classInMenu();
+    char sortClients();
 
     static DynamicConfig dynamicConfig;
+    // made public for now...  and made int
+    int update(char *);
 
 private:
     DynamicConfigImpl *m_impl;
-    void update(char *);
+    // void update(char *);
 };
 
 static DynamicConfig &dConfig = DynamicConfig::dynamicConfig;
@@ -75,8 +79,8 @@ static DynamicConfig &dConfig = DynamicConfig::dynamicConfig;
 
 // What to run to get a new window (from the "New" menu option)
 #define CONFIG_NEW_WINDOW_LABEL "New"
-//#define CONFIG_NEW_WINDOW_COMMAND "xterm"
-#define CONFIG_NEW_WINDOW_COMMAND "/home/chris/.wmx/terminal"
+#define CONFIG_NEW_WINDOW_COMMAND "xterm"
+// #define CONFIG_NEW_WINDOW_COMMAND "/home/chris/.wmx/terminal"
 #define CONFIG_NEW_WINDOW_COMMAND_OPTIONS 0
 // or, for example,
 //#define CONFIG_NEW_WINDOW_COMMAND_OPTIONS "-ls","-sb","-sl","1024",0
@@ -167,6 +171,13 @@ static DynamicConfig &dConfig = DynamicConfig::dynamicConfig;
 
 #define MENU_ENTRY_MAXLENGTH		80
 
+// The default is wheel up (button 4) increases the channel
+#define PREV_CHANNEL_BUTTON Button4
+#define NEXT_CHANNEL_BUTTON Button5
+// To have wheel down increase the channel switch,  then
+// comment the previous two and uncomment these:
+// #define NEXT_CHANNEL_BUTTON Button4
+// #define PREV_CHANNEL_BUTTON Button5
 
 // ========================
 // Section II. Key bindings
@@ -234,6 +245,16 @@ static DynamicConfig &dConfig = DynamicConfig::dynamicConfig;
 #define CONFIG_SUNPOWER_OPTIONS	"-x","-h",0
 #define CONFIG_SUNPOWER_SHIFTOPTIONS	"-x","-n",0
 
+// If menus should have the client class displayed
+// #define CLASS_IN_MENU False
+// #define CLASS_IN_MENU True
+// Dynamic option:  class: on|off
+#define CLASS_IN_MENU	(dConfig.classInMenu())
+
+// Should clients be sorted when displayed on menu or for the
+// clients command in remote control?
+// Can be set to False, True or (dConfig.sortClients())
+#define SORT_CLIENTS (dConfig.sortClients())
 
 // ==============================
 // Section III. Colours and fonts

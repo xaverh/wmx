@@ -39,11 +39,11 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
     }
 #endif
  
-    if (e->button == Button4 && CONFIG_CHANNEL_SURF) {
+    if (e->button == PREV_CHANNEL_BUTTON && CONFIG_CHANNEL_SURF) {
         // wheel "up" - increase channel
         flipChannel(False, False, True, c);
         return ;
-    } else if (e->button == Button5 && CONFIG_CHANNEL_SURF) {
+    } else if (e->button == NEXT_CHANNEL_BUTTON && CONFIG_CHANNEL_SURF) {
         // wheel "down" - decrease channel
         flipChannel(False, True, True, c);
         return ;
@@ -163,7 +163,8 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 {
     enum {Vertical, Maximum, Horizontal};
     KeySym key = XKeycodeToKeysym(display(), ev->keycode, 0);
-    
+    char *command;
+
     if (CONFIG_USE_KEYBOARD) {
 
 	Client *c = windowToClient(ev->window);
@@ -239,7 +240,12 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 //                (long)ev->state, (long)m_altModMask);
            }
 
-           if (key >= XK_F1 && key <= XK_F12 &&
+	   command = key_binding_with_mod->command_for_keysym(key);
+	   if (command) {
+		 key_binding_with_mod->spawn(command, c ? c->window() : 0);
+	   }
+
+           else if (key >= XK_F1 && key <= XK_F12 &&
 		CONFIG_CHANNEL_SURF && CONFIG_USE_CHANNEL_KEYS) {
 
 		int channel = key - XK_F1 + 1;
@@ -342,6 +348,13 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 		    return;
 		}
 	    }
+	} else {
+
+	    command = key_binding_without_mod->command_for_keysym(key);
+	    if (command) {
+	      key_binding_without_mod->spawn(command, c ? c->window() : 0);
+	    }
+
 	}
 
 	XSync(display(), False);
