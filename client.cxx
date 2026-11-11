@@ -11,7 +11,7 @@
 // needed this to be able to use CARD32
 #include <X11/Xmd.h>
 
-char const *Client const::m_defaultLabel = "incognito";
+char const *const Client::m_defaultLabel = "incognito";
 
 
 
@@ -74,8 +74,6 @@ Client::Client(WindowManager *const wm, Window w, bool shaped) :
 
 	m_channel = wm->channel();
 	m_unmappedForChannel = false;
-
-			m_x, m_y, m_w, m_h, m_window, m_label);
 
 	m_speculating = m_levelRaised = false;
 
@@ -485,8 +483,6 @@ void Client::decorate(bool active)
 
 void Client::activate()
 {
-		this, (void *)m_window, (void *)parent());
-
 	if(isNonFocusable())
 		return;
 
