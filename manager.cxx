@@ -95,51 +95,11 @@ implementList(AtomList, Atom);
 implementList(AtomList, Atom);
 
 
-	remote_control = new Remote(this);
-
 	if (argc > 1) {
-
-implementList(AtomList, Atom);
-		{
-		int	c ;
-		int	port;
-		int	verbose = 0;
-
-		port = 0;
-		while ( (c = getopt(argc, argv, "rp:v")) != EOF ) {
-			switch(c) {
-			case 'r':
-			port = DEFAULT_PORT;
-			break ;
-			case 'p':
-			port = atoi(optarg) ;
-			break ;
-			case 'v':
-			verbose++ ;
-			break ;
-			case '?':
-			default:
-			fprintf(stderr, "bad option\n") ;
-			exit(1) ;
-			}
-		}
-
-		if (port > 0) {
-			remote_control->setup_port(port, verbose);
-		}
-
-
-		}
-
-
-		if (optind < argc) {
 		for (i = strlen(argv[0])-1; i > 0 && argv[0][i] != '/'; --i);
-		fprintf(stderr, "\nwmx: Usage: %s [-clientId id]\n",
+		fprintf(stderr, "\nwmx: Usage: %s\n",
 			argv[0] + (i > 0) + i);
 		exit(2);
-		}
-
-implementList(AtomList, Atom);
 	}
 
 	if (!setlocale(LC_ALL, ""))
@@ -861,10 +821,6 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = NULL*/)
 	if (fork() == 0) {
 
 		close(ConnectionNumber(m_display));
-		if (remote_control->RemoteControlIsOn()) {
-		  remote_control->close_all_sockets();
-		}
-
 		// conditional and its contents
 
 		if (displayName && (displayName[0] != '\0')) {

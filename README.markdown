@@ -12,7 +12,7 @@ The classic “eighth release” dates from November 2014. Since then the code h
 - 2014: notify window type, various warning fixes
 - 2019: further compiler-warning fixes
 - 2024: explicit licence (`COPYING`)
-- 2026: integration of the long-standing rsharman patches (client names on menus, arbitrary keybindings, remote control) and licence-text updates
+- 2026: integration of the long-standing rsharman patches (client names on menus, arbitrary keybindings) and licence-text updates
 
 ## Building wmx
 
@@ -33,8 +33,6 @@ Make sure no other window manager is running, `DISPLAY` is set, and the X server
 
 ### Command-line options
 
-- `-r` — enable remote control on the default port (6999)
-- `-p <port>` — enable remote control on the given port
 
 There are still no X resources and no startup file beyond the directories and the options symlink described below.
 
@@ -91,7 +89,7 @@ Example `~/.wmx/.mkeys/comma`:
 xwit -id $1 -rmove -50 0
 ```
 
-(`xwit` or similar tools are useful here.) See also the remote-control section for combining the two features.
+(`xwit` or similar tools are useful here.)
 
 ## Wheel mouse
 
@@ -123,23 +121,9 @@ sets runtime options. Recognised tokens include `menu`, `new`, `keyboard`, `feed
 
 ## Client menu enhancements
 
-With `class:on` the menu shows `[class] name` instead of just the label. With `sort:on` the entries are sorted (so all windows of the same class appear together). Both can be set in `config.hxx` or via the options symlink (or the remote-control `options` command).
-
-## Remote control
-
-Start wmx with `-r` (port 6999) or `-p <port>`. A simple line-oriented protocol is accepted on the socket. Replies always end with a blank line.
+With `class:on` the menu shows `[class] name` instead of just the label. With `sort:on` the entries are sorted (so all windows of the same class appear together). Both can be set in `config.hxx` or via the options symlink.
 
 Example:
-
-```
-$ telnet localhost 6999
-Welcome to wmx remote control.  Type help for commands
-channel 2
-OK
-
-```
-
-Useful with the `socket` program (or any equivalent) from keybinding scripts. Typical commands: `channel`, `wchannel`, `hide`, `warp`, `clients`, `options`, `help`, `quit`, …
 
 ## Pixmaps
 
@@ -182,7 +166,7 @@ wmx was written by Chris Cannam, recycling a lot of code and structure from 9wm 
 - Multi-head: Sven Oliver “SvOlli” Moll
 - NETWM: based on a 2000 patch by James Montgomery
 - Shaped clients / early GNOME: Henri Naccache
-- Keybindings, remote control, menu class/sort: Richard Sharman
+- Keybindings, menu class/sort: Richard Sharman
 - Many bug fixes and small features from Eric Marsden, Lasse Rasinen, Bill Spitzak, Jacques Garrigue, Martin Andrews, Glyn Faulkner, Zvezdan Petkovic, Damion Yates, Teemu Voipio, Ben Stern and others.
 
 Feel free to modify and redistribute, retaining the original copyrights as appropriate. See the `COPYING` file for the licence.

@@ -1,6 +1,5 @@
 #include "manager.hxx"
 #include "client.hxx"
-#include "remote.hxx"
 
 int WindowManager::loop()
 {
@@ -192,28 +191,13 @@ void WindowManager::nextEvent(XEvent *e)
 			(struct timeval *)NULL)) > 0) {
 
 		int f;
-		int did_something = 0;
 		for (f=0; f < max_fd; f++) {
 		  if (FD_ISSET(f, &rfds)) {
-
-			if (remote_control->isRemoteControlFd(f)) {
-				  did_something++;
-				  if (! remote_control->doRemoteControl(f) ) {
-					// If a connection has closed,  the
-					// active_fd set has changed
-					goto waiting;
-				  }
-			}
-
 			if (f == fd) {
 				  XNextEvent(m_display, e);
 				  return;
 			}
-
 		  }
-		} // for all fds in the set
-		if (did_something) {
-		  goto waiting;
 		}
 
 	} // if select found something

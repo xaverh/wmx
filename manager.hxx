@@ -4,10 +4,8 @@
 #include "general.hxx"
 #include "listmacro.hxx"
 #include "keybinding.hxx"
-#include "remote.hxx"
 
 class Client;
-class Remote;
 
 declarePList(ClientList, Client);
 
@@ -204,7 +202,6 @@ private:
 	Window m_netwmCheckWin;
 
 	int m_altModMask;
-	class Remote * remote_control;
 	fd_set active_fds;
 	int max_fd;
 

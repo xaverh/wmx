@@ -30,7 +30,6 @@ SRC = border.cxx \
       main.cxx \
       manager.cxx \
       menu.cxx \
-      remote.cxx
 
 OBJ = border.o \
       buttons.o \
@@ -42,7 +41,6 @@ OBJ = border.o \
       main.o \
       manager.o \
       menu.o \
-      remote.o
 
 all: wmx
 
@@ -54,27 +52,24 @@ wmx: $(OBJ)
 
 # Header dependencies
 border.o: border.cxx background.xpm border.hxx client.hxx config.hxx \
-	general.hxx keybinding.hxx listmacro.hxx manager.hxx remote.hxx
+	general.hxx keybinding.hxx listmacro.hxx manager.hxx
 buttons.o: buttons.cxx border.hxx client.hxx config.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx menu.hxx remote.hxx
+	keybinding.hxx listmacro.hxx manager.hxx menu.hxx
 channel.o: channel.cxx border.hxx client.hxx config.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx remote.hxx
+	keybinding.hxx listmacro.hxx manager.hxx
 client.o: client.cxx border.hxx client.hxx config.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx remote.hxx
+	keybinding.hxx listmacro.hxx manager.hxx
 config.o: config.cxx config.hxx
 events.o: events.cxx border.hxx client.hxx config.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx remote.hxx
+	keybinding.hxx listmacro.hxx manager.hxx
 keybinding.o: keybinding.cxx config.hxx general.hxx keybinding.hxx \
-	listmacro.hxx manager.hxx remote.hxx
+	listmacro.hxx manager.hxx
 main.o: main.cxx border.hxx client.hxx config.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx remote.hxx
+	keybinding.hxx listmacro.hxx manager.hxx
 manager.o: manager.cxx border.hxx client.hxx config.hxx cursors.hxx \
 	general.hxx keybinding.hxx listmacro.hxx manager.hxx menu.hxx \
-	remote.hxx
 menu.o: menu.cxx border.hxx client.hxx config.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx menu.hxx remote.hxx
-remote.o: remote.cxx border.hxx client.hxx config.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx remote.hxx
+	keybinding.hxx listmacro.hxx manager.hxx menu.hxx
 
 wmx.desktop: wmx.desktop.in
 	sed 's|@PREFIX@|$(PREFIX)|g' wmx.desktop.in > wmx.desktop
