@@ -42,7 +42,9 @@ DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
 	if (!home) m_impl->path[0] = 0;
 	else {
 		strcpy(m_impl->path, getenv("HOME"));  // Path to Options-Link
-		strcat(m_impl->path, "/" CONFIG_COMMAND_MENU "/options");
+		strcat(m_impl->path, "/");
+		strcat(m_impl->path, CONFIG_COMMAND_MENU);
+		strcat(m_impl->path, "/options");
 	}
 
 	} else {
