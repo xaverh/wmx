@@ -13,9 +13,7 @@
 #include "cursors.hxx"
 #include <X11/cursorfont.h>
 
-#ifdef CONFIG_USE_COMPOSITE
 #include <X11/extensions/Xcomposite.h>
-#endif
 implementList(AtomList, Atom);
 
 Atom    Atoms::wm_state;
@@ -282,7 +280,6 @@ implementList(AtomList, Atom);
 	if (m_screensTotal > 1) {
 	}
 
-#ifdef CONFIG_USE_COMPOSITE
 	int ev, er;
 	if (XCompositeQueryExtension(m_display, &ev, &er)) {
 		for (int i = 0; i < m_screensTotal; ++i) {
@@ -290,7 +287,6 @@ implementList(AtomList, Atom);
 										 CompositeRedirectAutomatic);
 		}
 	}
-#endif
 implementList(AtomList, Atom);
 
 	XSetSelectionOwner(m_display, Atoms::wmx_running,
