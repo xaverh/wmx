@@ -51,13 +51,6 @@ public:
 	NormalCursor, DeleteCursor, DownCursor, RightCursor, DownrightCursor
 	};
 
-#if CONFIG_USE_WINDOW_GROUPS
-	void withdrawGroup(Window groupParent, Client *omit,
-			   Boolean changeState = True);
-	void hideGroup(Window groupParent, Client *omit);
-	void unhideGroup(Window groupParent, Client *omit, Boolean map);
-	void killGroup(Window groupParent, Client *omit);
-#endif
 
 	void installCursor(RootCursor);
 	void installCursorOnWindow(RootCursor, Window);

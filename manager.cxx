@@ -830,53 +830,9 @@ Boolean WindowManager::isTop(Client *c)
 	return (m_orderedClients[layer].item(0) == c) ? True : False;
 }
 
-void WindowManager::withdrawGroup(Window groupParent, Client *omit, Boolean changeState)
-{
-	for (int layer = MAX_LAYER; layer >= 0; --layer)
-	for (int i = 0; i < m_orderedClients[layer].count(); ++i) {
-	Client *ic = m_orderedClients[layer].item(i);
-	if (ic->groupParent() == groupParent && !ic->isGroupParent() &&
-		ic != omit) {
-		ic->withdraw(changeState);
-	}
-	}
-}
 
-void WindowManager::hideGroup(Window groupParent, Client *omit)
-{    
-	for (int layer = MAX_LAYER; layer >= 0; --layer)
-	for (int i = 0; i < m_orderedClients[layer].count(); ++i) {
-	Client *ic = m_orderedClients[layer].item(i);
-	if (ic->groupParent() == groupParent && !ic->isGroupParent() &&
-		ic != omit) {
-		ic->hide();
-	}
-	}
-}
 
-void WindowManager::unhideGroup(Window groupParent, Client *omit, Boolean map)
-{
-	for (int layer = MAX_LAYER; layer >= 0; --layer)
-	for (int i = 0; i < m_orderedClients[layer].count(); ++i) {
-	Client *ic = m_orderedClients[layer].item(i);
-	if (ic->groupParent() == groupParent && !ic->isGroupParent() &&
-		ic != omit) {
-		ic->unhide(map);
-	}
-	}
-}
 
-void WindowManager::killGroup(Window groupParent, Client *omit)
-{
-	for (int layer = MAX_LAYER; layer >= 0; --layer)
-	for (int i = 0; i < m_orderedClients[layer].count(); ++i) {
-	Client *ic = m_orderedClients[layer].item(i);
-	if (ic->groupParent() == groupParent && !ic->isGroupParent() &&
-		ic != omit) {
-		ic->kill();
-	}
-	}
-}
 
 
 Boolean WindowManager::raiseTransients(Client *c)

@@ -19,7 +19,6 @@ implementList(EdgeRectList, EdgeRect);
 Client::Client(WindowManager *const wm, Window w, Boolean shaped) :
 	m_window(w),
 	m_transient(None),
-	m_groupParent(None),
 	m_border(0),
 	m_shaped(shaped),
 	m_revert(0),
@@ -382,11 +381,6 @@ void Client::manage(Boolean mapped)
 
 	hints = XGetWMHints(d, m_window);
 
-#if CONFIG_USE_WINDOW_GROUPS != False
-	m_groupParent = hints ? hints->window_group : None;
-	if (m_groupParent == None) m_groupParent = m_window;
-		this, m_name, m_window, m_groupParent);
-#endif
 
 	if (!getState(&state)) {
 	state = hints ? hints->initial_state : NormalState;
@@ -1130,11 +1124,6 @@ void Client::hide()
 	setState(IconicState);
 	windowManager()->addToHiddenList(this);
 
-#if CONFIG_USE_WINDOW_GROUPS != False
-	if (isGroupParent()) {
-	windowManager()->hideGroup(groupParent(), this);
-	}
-#endif
 }
 
 
@@ -1163,11 +1152,6 @@ void Client::unhide(Boolean map)
 	else if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick()) activate();
 	}
 
-#if CONFIG_USE_WINDOW_GROUPS != False
-	if (isGroupParent()) {
-	windowManager()->unhideGroup(groupParent(), this, map);
-	}
-#endif
 }
 
 
@@ -1205,11 +1189,6 @@ void Client::withdraw(Boolean changeState)
 	setState(WithdrawnState);
 	}
 
-#if CONFIG_USE_WINDOW_GROUPS != False
-	if (isGroupParent()) {
-	windowManager()->withdrawGroup(groupParent(), this, changeState);
-	}
-#endif
 
 	ignoreBadWindowErrors = True;
 	XSync(display(), False);
@@ -1258,11 +1237,6 @@ void Client::kill()
 	XKillClient(display(), m_window);
 	}
 
-#if CONFIG_USE_WINDOW_GROUPS != False
-	if (isGroupParent()) {
-	windowManager()->killGroup(groupParent(), this);
-	}
-#endif
 }
 
 

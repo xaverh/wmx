@@ -64,10 +64,6 @@ public:
 									  (layer() < FIRST_FOCUS_FOLLOWS_LAYER)); }
 	Boolean isMovable()     { return m_movable; }
 	Window  transientFor()  { return m_transient; }
-#if CONFIG_USE_WINDOW_GROUPS
-	Window  groupParent()   { return m_groupParent; }
-	Boolean isGroupParent() { return m_window == m_groupParent; }
-#endif
 	Boolean isFixedSize()   { return m_fixedSize; }
 	Boolean isShaped()      { return m_shaped; }
 
@@ -152,7 +148,6 @@ private:
 
 	Window m_window;
 	Window m_transient;
-	Window m_groupParent;
 	Border *m_border;
 
 	Boolean m_shaped;

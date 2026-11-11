@@ -142,16 +142,6 @@ private:
 
 #define CONFIG_RAISELOWER_ON_CLICK	False
 
-// If USE_WINDOW_GROUPS is True, then if an application marks a mapped
-// window as a group leader, when iconified, moved between desktops,
-// killed etc, the leader will take all the rest of its window group
-// with it.  Very few applications make any use of this -- indeed I
-// haven't found any to test it on yet, so it probably doesn't work.
-// This is different from the group stuff from Henri Naccache to be
-// found further down this file
-
-#define CONFIG_USE_WINDOW_GROUPS	True
-
 // Specify the maximum length of an entry in the client menu or the command
 // menu. Set this to zero if you want no limitation
 
