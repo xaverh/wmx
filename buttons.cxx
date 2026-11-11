@@ -330,12 +330,12 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 			break;
 
 		case CONFIG_CLIENT_MENU_KEY:
-			if (CONFIG_WANT_KEYBOARD_MENU) {
+			if constexpr (CONFIG_WANT_KEYBOARD_MENU) {
 			ClientMenu menu(this, (XEvent *)ev);
 			break;
 			}
 		case CONFIG_COMMAND_MENU_KEY:
-			if (CONFIG_WANT_KEYBOARD_MENU) {
+			if constexpr (CONFIG_WANT_KEYBOARD_MENU) {
 			CommandMenu menu(this, (XEvent *)ev);
 			break;
 			}
@@ -394,7 +394,7 @@ void Client::eventButton(XButtonEvent *e)
 	}
 	}
 
-	if (CONFIG_RAISELOWER_ON_CLICK && wasTop && !m_doSomething) {
+	if constexpr (CONFIG_RAISELOWER_ON_CLICK && wasTop && !m_doSomething) {
 	lower();
 	}
 
@@ -760,7 +760,7 @@ void Client::resize(XButtonEvent *e, bool horizontal, bool vertical)
 		fixResizeDimensions(w, h, dw, dh);
 		if (h == prevH && w == prevW) break;
 		m_border->configure(m_x, m_y, w, h, CWWidth | CWHeight, 0);
-		if (CONFIG_RESIZE_UPDATE)
+		if constexpr (CONFIG_RESIZE_UPDATE)
 			XResizeWindow(display(), m_window, w, h);
 		geometry.update(dw, dh);
 		m_doSomething = true;
@@ -770,7 +770,7 @@ void Client::resize(XButtonEvent *e, bool horizontal, bool vertical)
 		fixResizeDimensions(w, h, dw, dh);
 		if (h == prevH) break;
 		m_border->configure(m_x, m_y, w, h, CWHeight, 0);
-		if (CONFIG_RESIZE_UPDATE)
+		if constexpr (CONFIG_RESIZE_UPDATE)
 			XResizeWindow(display(), m_window, w, h);
 		geometry.update(dw, dh);
 		m_doSomething = true;
@@ -780,7 +780,7 @@ void Client::resize(XButtonEvent *e, bool horizontal, bool vertical)
 		fixResizeDimensions(w, h, dw, dh);
 		if (w == prevW) break;
 		m_border->configure(m_x, m_y, w, h, CWWidth, 0);
-		if (CONFIG_RESIZE_UPDATE)
+		if constexpr (CONFIG_RESIZE_UPDATE)
 			XResizeWindow(display(), m_window, w, h);
 		geometry.update(dw, dh);
 		m_doSomething = true;

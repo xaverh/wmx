@@ -284,7 +284,7 @@ void Client::manage(bool mapped)
 			 GrabModeAsync, GrabModeAsync);
 	}
 
-	if (CONFIG_USE_CHANNEL_KEYS) {
+	if constexpr (CONFIG_USE_CHANNEL_KEYS) {
 		for (i = 0; i < 12; ++i) {
 		keycode = XKeysymToKeycode(display(), XK_F1 + i);
 		if (keycode) {
@@ -1200,7 +1200,7 @@ void Client::maximise(int max)
 	if (m_fixedSize || (m_transient != None))
 		return;
 
-	if (CONFIG_SAME_KEY_MAX_UNMAX) {
+	if constexpr (CONFIG_SAME_KEY_MAX_UNMAX) {
 		if (m_isFullHeight && m_isFullWidth) {
 			unmaximise(max);
 			return;

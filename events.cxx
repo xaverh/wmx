@@ -142,7 +142,7 @@ void WindowManager::nextEvent(XEvent *e)
 		instateChannel();
 		}
 
-			if (CONFIG_CLOCK && (m_clockUpdateTime == CurrentTime ||
+			if constexpr (CONFIG_CLOCK && (m_clockUpdateTime == CurrentTime ||
 								 t >= m_clockUpdateTime + 60000)) {
 				m_clockUpdateTime = t;
 				updateClock();

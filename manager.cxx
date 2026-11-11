@@ -364,7 +364,7 @@ static Cursor makeCursor(Display *d, Window w,
 {
 	Cursor cursor;
 
-	if (CONFIG_USE_PLAIN_X_CURSORS) {
+	if constexpr (CONFIG_USE_PLAIN_X_CURSORS) {
 
 	cursor = XCreateFontCursor(d, fontIndex);
 

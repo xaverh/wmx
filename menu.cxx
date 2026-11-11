@@ -518,7 +518,7 @@ ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
 			cl->gotoClient();
 	}
 
-	if (CONFIG_WANT_KEYBOARD_MENU && e->type == KeyPress)
+	if constexpr (CONFIG_WANT_KEYBOARD_MENU && e->type == KeyPress)
 		cl->activateAndWarp();
 	}
 
