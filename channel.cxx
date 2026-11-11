@@ -2,7 +2,7 @@
 #include "client.hxx"
 #include <sys/time.h>
 
-static const char *numerals[10][7] = {
+static char const *numerals[10][7] = {
 	{ " ### ", "#   #", "#  ##", "# # #", "##  #", "#   #", " ### " },
 	{ "  #  ", " ##  ", "  #  ", "  #  ", "  #  ", "  #  ", " ### " },
 	{ " ### ", "#   #", "    #", "  ## ", " #   ", "#    ", "#####" },
@@ -16,7 +16,7 @@ static const char *numerals[10][7] = {
 };
 
 
-Window WindowManager::createNumberWindow(int screen, const char *colour)
+Window WindowManager::createNumberWindow(int screen, char const *colour)
 {
 	XColor nearest, ideal;
 

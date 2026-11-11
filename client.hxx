@@ -75,9 +75,9 @@ public:
 	// Client should not receive focus (panel, desktop etc.)
 	bool isNonFocusable(){ return ((layer() > LAST_FOCUSABLE_LAYER)); }
 
-	const char *label()     { return m_label;    }
-	const char *name()      { return m_name;     }
-	const char *iconName()  { return m_iconName; }
+	char const *label()     { return m_label;    }
+	char const *name()      { return m_name;     }
+	char const *iconName()  { return m_iconName; }
 
 	int layer()             { return m_layer; }
 
@@ -111,7 +111,7 @@ public:
 
 	/* for call from within: */
 
-	void fatal(const char *m)    { m_windowManager->fatal(m);              }
+	void fatal(char const *m)    { m_windowManager->fatal(m);              }
 	Display *display()     { return m_windowManager->display();      }
 	int screen();
 	Window parent()        { return m_border->parent();              }
@@ -201,8 +201,8 @@ private:
 
 	char *m_name;
 	char *m_iconName;
-	const char *m_label;	// alias: one of (instance,class,name,iconName)
-	static const char *const m_defaultLabel;
+	char const *m_label;	// alias: one of (instance,class,name,iconName)
+	static char const *const m_defaultLabel;
 
 	Colormap m_colormap;
 	int m_colormapWinCount;

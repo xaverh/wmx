@@ -15,7 +15,7 @@ public:
 	WindowManager(int argc, char **argv);
 	~WindowManager();
 
-	void fatal(const char *);
+	void fatal(char const *);
 
 	// for call from Client and within:
 
@@ -50,7 +50,7 @@ public:
 	void installCursor(RootCursor);
 	void installCursorOnWindow(RootCursor, Window);
 	void installColormap(Colormap);
-	unsigned long allocateColour(int, const char *, const char *);
+	unsigned long allocateColour(int, char const *, char const *);
 
 	void considerFocusChange(Client *, Window, Time timestamp);
 	void stopConsideringFocus();
@@ -141,7 +141,7 @@ private:
 	int m_currentChannel;	// from 1 to ...
 	void flipChannel(bool statusOnly, bool flipDown,
 			 bool quickFlip, Client *push); // bleah!
-	Window createNumberWindow(int screen, const char *colour);
+	Window createNumberWindow(int screen, char const *colour);
 	int shapeNumberWindow(Window w, int number, int minDigits); // returns width in pixels
 	void instateChannel();
 	void createNewChannel();

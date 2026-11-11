@@ -37,8 +37,8 @@
 #define CONFIG_EVERYTHING_ON_ROOT_MENU (DynamicConfig::config.fullMenu())
 
 // What to run to get a new window (from the "New" menu option)
-constexpr const char *CONFIG_NEW_WINDOW_LABEL = "New";
-constexpr const char *CONFIG_NEW_WINDOW_COMMAND = "x-terminal-emulator";
+constexpr char const *CONFIG_NEW_WINDOW_LABEL = "New";
+constexpr char const *CONFIG_NEW_WINDOW_COMMAND = "x-terminal-emulator";
 #define CONFIG_NEW_WINDOW_COMMAND_OPTIONS 0
 // or, for example,
 //#define CONFIG_NEW_WINDOW_COMMAND_OPTIONS "-ls","-sb","-sl","1024",0
@@ -51,7 +51,7 @@ constexpr int CONFIG_EXIT_CLICK_SIZE_Y = -3;
 
 // Directory under $HOME in which to look for commands for the
 // middle-button menu
-constexpr const char *CONFIG_COMMAND_MENU = ".wmx";
+constexpr char const *CONFIG_COMMAND_MENU = ".wmx";
 // append screennumber to COMMAND_MENU directory;
 // use non screen style as fallback
 constexpr bool CONFIG_ADD_SCREEN_TO_COMMAND_MENU = false;
@@ -171,7 +171,7 @@ constexpr bool CONFIG_WANT_SUNPOWERKEY = true;
 #define CONFIG_QUICKHEIGHT_KEY	XK_F13
 #define CONFIG_QUICKCLOSE_KEY	XK_F11
 constexpr bool CONFIG_QUICKRAISE_ALSO_LOWERS = true;
-constexpr const char *CONFIG_SUNPOWER_EXEC = "/usr/openwin/bin/sys-suspend";
+constexpr char const *CONFIG_SUNPOWER_EXEC = "/usr/openwin/bin/sys-suspend";
 #define CONFIG_SUNPOWER_OPTIONS	"-x","-h",0
 #define CONFIG_SUNPOWER_SHIFTOPTIONS	"-x","-n",0
 
@@ -201,10 +201,10 @@ constexpr int CONFIG_NO_BUTTON = 999;
 
 //!!! no proper way to handle italic/bold yet
 
-constexpr const char *CONFIG_FRAME_FONT = "Bitstream Vera Sans,Lucida Sans Unicode";
+constexpr char const *CONFIG_FRAME_FONT = "Bitstream Vera Sans,Lucida Sans Unicode";
 constexpr int CONFIG_FRAME_FONT_SIZE = 12;
 
-constexpr const char *CONFIG_MENU_FONT = "Bitstream Vera Sans,Lucida Sans Unicode";
+constexpr char const *CONFIG_MENU_FONT = "Bitstream Vera Sans,Lucida Sans Unicode";
 constexpr int CONFIG_MENU_FONT_SIZE = 12;
 
 // CONFIG_TAB_MARGIN defines the size of the gap on the left and right of the
@@ -229,13 +229,13 @@ constexpr bool CONFIG_USE_PLAIN_X_CURSORS = true;
 #define CONFIG_TAB_BACKGROUND     (DynamicConfig::config.tabBackground())
 #define CONFIG_FRAME_BACKGROUND   (DynamicConfig::config.frameBackground())
 #define CONFIG_BUTTON_BACKGROUND  (DynamicConfig::config.frameBackground())
-constexpr const char *CONFIG_BORDERS = "black";
-constexpr const char *CONFIG_CHANNEL_NUMBER = "green";
-constexpr const char *CONFIG_CLOCK_NUMBER = "gray90";
+constexpr char const *CONFIG_BORDERS = "black";
+constexpr char const *CONFIG_CHANNEL_NUMBER = "green";
+constexpr char const *CONFIG_CLOCK_NUMBER = "gray90";
 
 #define CONFIG_MENU_FOREGROUND    (DynamicConfig::config.tabForeground())
 #define CONFIG_MENU_BACKGROUND    (DynamicConfig::config.tabBackground())
-constexpr const char *CONFIG_MENU_BORDERS = "black";
+constexpr char const *CONFIG_MENU_BORDERS = "black";
 
 // Pixel width for the bit of frame to the left of the window and the
 // sum of the two bits at the top

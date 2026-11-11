@@ -581,7 +581,7 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 
 	if (m_allowExit) ++n;
 
-	const char **items = (const char **)malloc(n * sizeof(char *));
+	char const **items = (char const **)malloc(n * sizeof(char *));
 
 	for (i = 0; i < n; ++i) {
 
@@ -642,8 +642,8 @@ void ClientMenu::raiseFeedbackLevel(int item)
 CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	: Menu(manager, e)
 {
-	const char *home = getenv("HOME");
-	const char *wmxdir = getenv("WMXDIR");
+	char const *home = getenv("HOME");
+	char const *wmxdir = getenv("WMXDIR");
 
 	m_commandDir = nullptr;
 	m_hasSubmenus = true;
@@ -711,7 +711,7 @@ CommandMenu::~CommandMenu()
 	free(m_items);
 }
 
-static int sortstrs(const void *va, const void *vb)
+static int sortstrs(void const *va, void const *vb)
 {
 	char **a = (char **)va;
 	char **b = (char **)vb;    
@@ -762,7 +762,7 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 {
 	*niR = *nhR = 0;
 	DIR *dir;
-	const char *home;
+	char const *home;
 	char *dirpath;
 
 	if ((home = getenv("HOME")) == nullptr) return nullptr;

@@ -11,7 +11,7 @@
 // needed this to be able to use CARD32
 #include <X11/Xmd.h>
 
-const char *const Client::m_defaultLabel = "incognito";
+char const *Client const::m_defaultLabel = "incognito";
 
 implementList(EdgeRectList, EdgeRect);
 
@@ -862,7 +862,7 @@ void Client::gravitate(bool invert)
 
 bool Client::setLabel(void)
 {
-	const char *newLabel;
+	char const *newLabel;
 
 	if (m_name) newLabel = m_name;
 	else if (m_iconName) newLabel = m_iconName;

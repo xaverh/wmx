@@ -45,7 +45,7 @@ public:
 	BorderRectangleList() { }
 	virtual ~BorderRectangleList() { }
 
-	void append(const BorderRectangle &r) { RectangleList::append(r); }
+	void append(BorderRectangle const &r) { RectangleList::append(r); }
 	void append(int x, int y, int w, int h);
 	XRectangle *xrectangles() { return (XRectangle *)array(0, count()); }
 };

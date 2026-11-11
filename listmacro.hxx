@@ -28,14 +28,14 @@ public: \
 	return m_items + index; \
 	} \
 \
-	void append(const T &); \
+	void append(T const &); \
 	void remove(long index); \
 	void remove_all(); \
 	void move_to_start(long index); \
 	void move_to_end(long index); \
 \
 private: \
-	bool range_check(long, const char *) const; \
+	bool range_check(long, char const *) const; \
 	T *m_items; \
 	long m_count; \
 };
@@ -48,7 +48,7 @@ List::~List() { remove_all(); } \
 \
 void *operator new(size_t, void *m, List *) { return m; } \
 \
-void List::append(const T &item) { \
+void List::append(T const &item) { \
 	if (m_items) { \
 		m_items = (T *)realloc(m_items, (m_count + 1) * sizeof(T)); \
 	} else { \
@@ -91,7 +91,7 @@ void List::move_to_end(long index) { \
 	new (&m_items[m_count-1], this) T(temp); \
 }\
 \
-bool List::range_check(long index, const char *fn) const { \
+bool List::range_check(long index, char const *fn) const { \
 	if (index >= 0 && index < m_count) return true; \
 	fprintf(stderr, "wmx: ERROR: Index %ld out of range for %ld-valued list in %s::%s\n", index, m_count, #List, fn); \
 	return false; \

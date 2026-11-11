@@ -112,7 +112,7 @@ Keybinding::Keybinding(WindowManager *const w_mgr, char *dir,
 	char key_dir_name[1024];
 	int n;
 	char *home = getenv("HOME");
-	const char *keys_name = ".keys";
+	char const *keys_name = ".keys";
 
 	if (with_modifier) {
 	  keys_name = ".mkeys";

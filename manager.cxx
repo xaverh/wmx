@@ -317,7 +317,7 @@ void WindowManager::release()
 }
 
 
-void WindowManager::fatal(const char *message)
+void WindowManager::fatal(char const *message)
 {
 	fprintf(stderr, "wmx: ");
 	if (errno != 0) perror(message);
@@ -371,10 +371,10 @@ static Cursor makeCursor(Display *d, Window w,
 	} else {
 
 	Pixmap pixmap =
-		XCreateBitmapFromData(d, w, (const char *)bits, width, height);
+		XCreateBitmapFromData(d, w, (char const *)bits, width, height);
 
 	Pixmap mask =
-		XCreateBitmapFromData(d, w, (const char *)mask_bits, width,height);
+		XCreateBitmapFromData(d, w, (char const *)mask_bits, width,height);
 
 	cursor = XCreatePixmapCursor(d, pixmap, mask, fg, bg, xhot, yhot);
 
@@ -464,8 +464,8 @@ void WindowManager::initialiseScreen()
 }
 
 
-unsigned long WindowManager::allocateColour(int screen, const char *name,
-											const char *desc)
+unsigned long WindowManager::allocateColour(int screen, char const *name,
+											char const *desc)
 {
 	XColor nearest, ideal;
 
@@ -858,7 +858,7 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = nullptr*/)
 	wait((int *) 0);
 }
 
-int compare_client_names_a(const void *p, const void *q)
+int compare_client_names_a(void const *p, void const *q)
 {
 	// This is necessary because we get called the parameter void *
 	// needs to be derefenced twice to get a Client type.
@@ -876,7 +876,7 @@ void WindowManager::print_clients(int fd) {
 	  char buff[1024];
 	  Client *c;
 	  XTextProperty text_prop;
-	  const char *res_name = "?";
+	  char const *res_name = "?";
 
 	  //}
 
