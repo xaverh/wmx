@@ -89,11 +89,6 @@ private:
 // Directory under $HOME in which to look for commands for the
 // middle-button menu
 #define CONFIG_COMMAND_MENU       ".wmx"
-// only used if COMMAND_MENU is not found; ignored if invalid directory.
-// Normally supplied by the Makefile as -DCONFIG_SYSTEM_COMMAND_MENU=...
-// (derived from PREFIX).  Uncomment the line below only if you are
-// not using the Makefile.
-//#define CONFIG_SYSTEM_COMMAND_MENU	"/usr/local/lib/wmx/menu"
 // append screennumber to COMMAND_MENU directory;
 // use non screen style as fallback
 #define CONFIG_ADD_SCREEN_TO_COMMAND_MENU False

@@ -780,6 +780,9 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 	if (dir == NULL) {
 
 		free(m_commandDir);
+#ifndef CONFIG_SYSTEM_COMMAND_MENU
+#define CONFIG_SYSTEM_COMMAND_MENU "/usr/local/lib/wmx/menu"
+#endif
 		m_commandDir =
 		(char *)malloc(strlen(CONFIG_SYSTEM_COMMAND_MENU) + 1);
 		sprintf(m_commandDir, CONFIG_SYSTEM_COMMAND_MENU);
