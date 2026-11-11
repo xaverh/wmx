@@ -434,7 +434,6 @@ void Client::move(XButtonEvent *e)
 	bool found;
 	struct timeval sleepval;
 
-#ifdef CONFIG_BUMP_EVERYWHERE
 	EdgeRectList edges;
 	for (int i = 0; i < m_windowManager->clients().size(); ++i) {
 		m_windowManager->clients()[i]->appendEdges(edges);
@@ -517,7 +516,6 @@ void Client::move(XButtonEvent *e)
 						bumpedv = 1;
 					}
 
-#ifdef CONFIG_BUMP_EVERYWHERE
 					if (!isTransient()) {
 
 						if (!bumpedh) {
