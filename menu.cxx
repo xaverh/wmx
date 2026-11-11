@@ -518,7 +518,7 @@ ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
 			cl->gotoClient();
 	}
 
-	if constexpr (CONFIG_WANT_KEYBOARD_MENU && e->type == KeyPress)
+	if constexpr (CONFIG_WANT_KEYBOARD_MENU) if (e->type == KeyPress)
 		cl->activateAndWarp();
 	}
 
@@ -894,7 +894,6 @@ char **ChannelMenu::getItems(int *niR, int *nhR)
 	return m_items = items;
 }
 
-#endif
 
 // Fake geometry as a "menu" to save on code
 
