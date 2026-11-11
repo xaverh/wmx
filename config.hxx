@@ -130,13 +130,6 @@ private:
 
 #define CONFIG_BUMP_EVERYWHERE    True
 
-// If CONFIG_PROD_SHAPE is True, all frame element shapes will be
-// recalculated afresh every time their focus changes.  This will
-// probably slow things down hideously, but has been reported as
-// necessary on some systems (possibly SunOS 4.x with OpenWindows).
-
-#define CONFIG_PROD_SHAPE         False
-
 // If RESIZE_UPDATE is True, windows will opaque-resize "correctly";
 // if False, behaviour will be as in wm2 (stretching the background
 // image only).

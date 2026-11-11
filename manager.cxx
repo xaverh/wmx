@@ -202,16 +202,6 @@ implementList(AtomList, Atom);
 	fprintf(stderr, "\n     Hidden clients only on menu.");
 	}
 
-	} else {
-	fprintf(stderr, "  No session manager.");
-	}
-
-	if (CONFIG_PROD_SHAPE) {
-	fprintf(stderr, "\n     Shape prodding on.");
-	} else {
-	fprintf(stderr, "\n     Shape prodding off.");
-	}
-
 	if (CONFIG_USE_PIXMAPS) {
 	fprintf(stderr, "  Fancy borders.");
 	} else {
