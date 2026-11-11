@@ -268,7 +268,7 @@ void Client::manage(Boolean mapped)
 
 #if CONFIG_GROUPS != False
 	static KeySym numbers[] = {
-		XK_0, XK_1, XK_2, XK_3, XK_4, XK_5, XK_5, 
+		XK_0, XK_1, XK_2, XK_3, XK_4, XK_5, 
 		XK_6, XK_7, XK_8, XK_9 };
 
 	for (i = 0; i < (int)(sizeof(numbers)/sizeof(numbers[0])); ++i) {
