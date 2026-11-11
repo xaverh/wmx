@@ -755,11 +755,9 @@ void WindowManager::removeFromOrderedList(Client *c)
 {
 	int layer = c->layer();
 
-			c, layer);
-
 	for (int i = 0; i < m_orderedClients[layer].size(); ++i) {
 	if (m_orderedClients[layer][i] == c) {
-		m_orderedClients[layer].erase(i);
+		m_orderedClients[layer].erase(m_orderedClients[layer].begin() + i);
 		netwmUpdateWindowList(); 
 		return;
 	}
