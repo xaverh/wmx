@@ -220,7 +220,7 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 
 	} else
 #endif // CONFIG_QUICKHEIGHT_KEY
-	  if (key == SunXK_PowerSwitch) {
+	  if (key == CONFIG_SUNPOWER_KEY) {
 		   pid_t pid = fork();
 		   if(pid == 0)
 		   {
@@ -228,7 +228,7 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 					 CONFIG_SUNPOWER_OPTIONS, nullptr);
 		   }
 
-	   } else if (key == SunXK_PowerSwitchShift) {
+	   } else if (key == CONFIG_SUNPOWER_SHIFT_KEY) {
 		   pid_t pid = fork();
 		   if(pid == 0)
 		   {

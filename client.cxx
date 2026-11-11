@@ -284,6 +284,18 @@ void Client::manage(bool mapped)
 			 GrabModeAsync, GrabModeAsync);
 	}
 
+	keycode = XKeysymToKeycode(display(), CONFIG_SUNPOWER_KEY);
+	if (keycode) {
+		XGrabKey(display(), keycode, AnyModifier, m_window, true,
+			 GrabModeAsync, GrabModeAsync);
+	}
+
+	keycode = XKeysymToKeycode(display(), CONFIG_SUNPOWER_SHIFT_KEY);
+	if (keycode) {
+		XGrabKey(display(), keycode, AnyModifier, m_window, true,
+			 GrabModeAsync, GrabModeAsync);
+	}
+
 	if constexpr (CONFIG_USE_CHANNEL_KEYS) {
 		for (i = 0; i < 12; ++i) {
 		keycode = XKeysymToKeycode(display(), XK_F1 + i);
