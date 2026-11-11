@@ -862,6 +862,13 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = nullptr*/)
 	wait((int *) 0);
 }
 
+int compare_client_names(Client *c1, Client *c2)
+{
+	char const *n1 = c1->label() ? c1->label() : "";
+	char const *n2 = c2->label() ? c2->label() : "";
+	return strcmp(n1, n2);
+}
+
 int compare_client_names_a(void const *p, void const *q)
 {
 	// This is necessary because we get called the parameter void *
