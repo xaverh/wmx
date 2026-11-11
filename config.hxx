@@ -120,54 +120,54 @@ constexpr int MENU_ENTRY_MAXLENGTH = 80;
 // flip channels, and Alt/Tab to switch windows.  (On my 105-key
 // PC keyboard, Meta_L corresponds to the left Windows key.)
 
-#define CONFIG_ALT_KEY            XK_Super_L
+constexpr KeySym CONFIG_ALT_KEY = XK_Super_L;
 
 // And these define the rest of the keyboard controls, when the above
 // modifier is pressed; they're keysyms as defined in <X11/keysym.h>
 // and <X11/keysymdef.h>
 
-#define CONFIG_FLIP_UP_KEY        XK_Right
-#define CONFIG_FLIP_DOWN_KEY      XK_Left
-#define CONFIG_HIDE_KEY           XK_Return
-#define CONFIG_STICKY_KEY         XK_Pause
-#define CONFIG_RAISE_KEY          XK_Up
-#define CONFIG_LOWER_KEY          XK_Down
+constexpr KeySym CONFIG_FLIP_UP_KEY = XK_Right;
+constexpr KeySym CONFIG_FLIP_DOWN_KEY = XK_Left;
+constexpr KeySym CONFIG_HIDE_KEY = XK_Return;
+constexpr KeySym CONFIG_STICKY_KEY = XK_Pause;
+constexpr KeySym CONFIG_RAISE_KEY = XK_Up;
+constexpr KeySym CONFIG_LOWER_KEY = XK_Down;
 // Prior and Next should be the same as Page_Up and Page_Down in R6
-#define CONFIG_FULLHEIGHT_KEY     XK_Prior
-#define CONFIG_NORMALHEIGHT_KEY   XK_Next
-#define CONFIG_FULLWIDTH_KEY      XK_KP_Add
-#define CONFIG_NORMALWIDTH_KEY    XK_KP_Subtract
-#define CONFIG_MAXIMISE_KEY       XK_Home
-#define CONFIG_UNMAXIMISE_KEY     XK_End
+constexpr KeySym CONFIG_FULLHEIGHT_KEY = XK_Prior;
+constexpr KeySym CONFIG_NORMALHEIGHT_KEY = XK_Next;
+constexpr KeySym CONFIG_FULLWIDTH_KEY = XK_KP_Add;
+constexpr KeySym CONFIG_NORMALWIDTH_KEY = XK_KP_Subtract;
+constexpr KeySym CONFIG_MAXIMISE_KEY = XK_Home;
+constexpr KeySym CONFIG_UNMAXIMISE_KEY = XK_End;
 constexpr bool CONFIG_SAME_KEY_MAX_UNMAX = false;
 
 // The next two may clash badly with Emacs, if you use Alt as the
 // modifier.  The commented variants might work better for some.
-#define CONFIG_CIRCULATE_KEY	XK_Tab
-//#define CONFIG_CIRCULATE_KEY	XK_grave
-//#define CONFIG_CIRCULATE_KEY	XK_section
-#define CONFIG_DESTROY_KEY	XK_BackSpace
-//#define CONFIG_DESTROY_KEY	XK_Delete
-//#define CONFIG_DESTROY_KEY	XK_Insert
+constexpr KeySym CONFIG_CIRCULATE_KEY = XK_Tab;
+//constexpr KeySym CONFIG_CIRCULATE_KEY = XK_grave;
+//constexpr KeySym CONFIG_CIRCULATE_KEY = XK_section;
+constexpr KeySym CONFIG_DESTROY_KEY = XK_BackSpace;
+//constexpr KeySym CONFIG_DESTROY_KEY = XK_Delete;
+//constexpr KeySym CONFIG_DESTROY_KEY = XK_Insert;
 
 // If WANT_KEYBOARD_MENU is true, then the MENU_KEY, when pressed with
 // the modifier, will call up a client menu with keyboard navigation
 constexpr bool CONFIG_WANT_KEYBOARD_MENU = true;
-#define CONFIG_CLIENT_MENU_KEY		XK_Menu
-#define CONFIG_COMMAND_MENU_KEY		XK_Multi_key
+constexpr KeySym CONFIG_CLIENT_MENU_KEY = XK_Menu;
+constexpr KeySym CONFIG_COMMAND_MENU_KEY = XK_Multi_key;
 constexpr bool CONFIG_EXIT_ON_KBD_MENU = true;
 // these are for navigating on the menu; they don't require a modifier
-#define CONFIG_MENU_UP_KEY	XK_Up
-#define CONFIG_MENU_DOWN_KEY	XK_Down
-#define CONFIG_MENU_SELECT_KEY	XK_Return
-#define CONFIG_MENU_CANCEL_KEY	XK_Escape
+constexpr KeySym CONFIG_MENU_UP_KEY = XK_Up;
+constexpr KeySym CONFIG_MENU_DOWN_KEY = XK_Down;
+constexpr KeySym CONFIG_MENU_SELECT_KEY = XK_Return;
+constexpr KeySym CONFIG_MENU_CANCEL_KEY = XK_Escape;
 
 // Useful for fortunate people with Sun Type-5 keyboards.  These don't
 // require the modifier to be pressed.
-#define CONFIG_QUICKRAISE_KEY	XK_F15
-#define CONFIG_QUICKHIDE_KEY	XK_F17
-#define CONFIG_QUICKHEIGHT_KEY	XK_F13
-#define CONFIG_QUICKCLOSE_KEY	XK_F11
+constexpr KeySym CONFIG_QUICKRAISE_KEY = XK_F15;
+constexpr KeySym CONFIG_QUICKHIDE_KEY = XK_F17;
+constexpr KeySym CONFIG_QUICKHEIGHT_KEY = XK_F13;
+constexpr KeySym CONFIG_QUICKCLOSE_KEY = XK_F11;
 constexpr bool CONFIG_QUICKRAISE_ALSO_LOWERS = true;
 
 // Mouse Configuration
@@ -177,11 +177,11 @@ constexpr bool CONFIG_QUICKRAISE_ALSO_LOWERS = true;
 // To prevent one or more of these from being supported
 // at all, define it to CONFIG_NO_BUTTON.
 constexpr int CONFIG_NO_BUTTON = 999;
-#define CONFIG_CLIENTMENU_BUTTON  Button1
-#define CONFIG_COMMANDMENU_BUTTON Button2
-#define CONFIG_CIRCULATE_BUTTON   Button3 // switch window, when over frame
-#define CONFIG_PREVCHANNEL_BUTTON Button5 // flip channel, when over frame
-#define CONFIG_NEXTCHANNEL_BUTTON Button4 // flip channel, when over frame
+constexpr unsigned int CONFIG_CLIENTMENU_BUTTON = Button1;
+constexpr unsigned int CONFIG_COMMANDMENU_BUTTON = Button2;
+constexpr unsigned int CONFIG_CIRCULATE_BUTTON = Button3; // switch window, when over frame
+constexpr unsigned int CONFIG_PREVCHANNEL_BUTTON = Button5; // flip channel, when over frame
+constexpr unsigned int CONFIG_NEXTCHANNEL_BUTTON = Button4; // flip channel, when over frame
 
 
 // ==============================
