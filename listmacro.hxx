@@ -1,7 +1,7 @@
 #ifndef _LISTMACRO_H_
 #define _LISTMACRO_H_
 
-#include <assert.h>
+#include <cassert>
 
 // assumes efficient realloc()
 

@@ -111,7 +111,7 @@ public:
 
 	/* for call from within: */
 
-	void fatal(char *m)    { m_windowManager->fatal(m);              }
+	void fatal(const char *m)    { m_windowManager->fatal(m);              }
 	Display *display()     { return m_windowManager->display();      }
 	int screen();
 	Window parent()        { return m_border->parent();              }

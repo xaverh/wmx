@@ -5,10 +5,10 @@
 #include <sys/types.h>
 #include <sys/time.h>
 
-#include <stdio.h>
-#include <signal.h>
-#include <errno.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <csignal>
+#include <cerrno>
+#include <cstdlib>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

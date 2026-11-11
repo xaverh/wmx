@@ -61,7 +61,7 @@ public:
 	void releaseGrab(XButtonEvent *);
 	void releaseGrabKeyMode(XButtonEvent *);
 	void releaseGrabKeyMode(XKeyEvent *);
-	void spawn(char *, char *, char * = NULL);
+	void spawn(char *, char *, char * = nullptr);
 
 	int channel() { return m_currentChannel; }
 	int channels() { return m_channels; }

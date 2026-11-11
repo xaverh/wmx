@@ -505,7 +505,7 @@ ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
 	}
 
 	if (selecting == 0) {
-	m_windowManager->spawn((char *)CONFIG_NEW_WINDOW_COMMAND, NULL);
+	m_windowManager->spawn((char *)CONFIG_NEW_WINDOW_COMMAND, nullptr);
 	return;
 	}
 
@@ -607,18 +607,18 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 
 Client *ClientMenu::checkFeedback(int item)
 {
-	if (CONFIG_MAD_FEEDBACK == false) return NULL;
+	if (CONFIG_MAD_FEEDBACK == false) return nullptr;
 
 	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == false) {
 
-	if (item <= 0 || item > m_clients.count()+1) return NULL;
-	if (m_allowExit && item == m_clients.count() + 1) return NULL;
+	if (item <= 0 || item > m_clients.count()+1) return nullptr;
+	if (m_allowExit && item == m_clients.count() + 1) return nullptr;
 	return m_clients.item(item - 1);
 
 	} else {
 
-	if (item < 0 || item > m_clients.count()) return NULL;
-	if (m_allowExit && item == m_clients.count()) return NULL;
+	if (item < 0 || item > m_clients.count()) return nullptr;
+	if (m_allowExit && item == m_clients.count()) return nullptr;
 	return m_clients.item(item);
 	}
 }
@@ -645,22 +645,22 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	const char *home = getenv("HOME");
 	const char *wmxdir = getenv("WMXDIR");
 
-	m_commandDir = NULL;
+	m_commandDir = nullptr;
 	m_hasSubmenus = true;
 
-	if (otherdir == NULL)
+	if (otherdir == nullptr)
 	{
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
 	isRootDir = true;
 #endif
-	if (wmxdir == NULL)
+	if (wmxdir == nullptr)
 	{
-		if (home == NULL) return;
+		if (home == nullptr) return;
 		m_commandDir =
 		(char *)malloc(strlen(home) + strlen(CONFIG_COMMAND_MENU) + 2);
 		sprintf(m_commandDir, "%s/%s", home, CONFIG_COMMAND_MENU);
 	}
-	else // wmxdir != NULL
+	else // wmxdir != nullptr
 	{
 		if(wmxdir[0] == '/')
 		{
@@ -676,7 +676,7 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 		}
 	}
 	}
-	else // otherdir != NULL
+	else // otherdir != nullptr
 	{
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
 	isRootDir = false;
@@ -743,7 +743,7 @@ DIR *CommandMenu::screenopendir(char *m_commandDir,int *dirlen,int olddirlen)
 	for(p=m_commandDir;*p;p++);  // search end of m_commandDir
 	sprintf(p,".%d",screen());   // append screen number
 	dir = opendir(m_commandDir);
-	if (dir == NULL) {
+	if (dir == nullptr) {
 		m_commandDir[olddirlen] = '\0'; // strip of screen number
 		*dirlen = olddirlen;
 		dir = opendir(m_commandDir);
@@ -765,7 +765,7 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 	const char *home;
 	char *dirpath;
 
-	if ((home = getenv("HOME")) == NULL) return NULL;
+	if ((home = getenv("HOME")) == nullptr) return nullptr;
 
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
 	int olddirlen = strlen(m_commandDir);
@@ -777,7 +777,7 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 	dir = opendir(m_commandDir);
 #endif
 
-	if (dir == NULL) {
+	if (dir == nullptr) {
 
 		free(m_commandDir);
 #ifndef CONFIG_SYSTEM_COMMAND_MENU
@@ -796,8 +796,8 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 		dir = opendir(m_commandDir);
 #endif
 
-		if (dir == NULL) {
-		return NULL;
+		if (dir == nullptr) {
+		return nullptr;
 	}
 	}
 
@@ -812,7 +812,7 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 
 	char **items = 0;
 
-	while ((ent = readdir(dir)) != NULL) {
+	while ((ent = readdir(dir)) != nullptr) {
 
 	struct stat st;
 	sprintf(dirpath + dirlen, "/%s", ent->d_name);
@@ -832,7 +832,7 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 
 	rewinddir(dir);
 
-	while ((ent = readdir(dir)) != NULL) {
+	while ((ent = readdir(dir)) != nullptr) {
 
 	struct stat st;
 	sprintf(dirpath + dirlen, "/%s", ent->d_name);
@@ -959,7 +959,7 @@ ShowGeometry::~ShowGeometry()
 char **ShowGeometry::getItems(int *niR, int *nhR)
 {
 	niR = nhR = 0;
-	return NULL;
+	return nullptr;
 }
 
 

@@ -166,7 +166,7 @@ void WindowManager::nextEvent(XEvent *e)
 #define select(a,b,c,d,e) select((a),(int *)(b),(c),(d),(e))
 #endif
 
-	if (select(nfds, &rfds, NULL, NULL, &t) > 0) {
+	if (select(nfds, &rfds, nullptr, nullptr, &t) > 0) {
 
 		//!!! This two-select structure is getting disgusting;
 		// a marginal improvement would be to put this body in
@@ -186,9 +186,9 @@ void WindowManager::nextEvent(XEvent *e)
 	t.tv_sec = 0; t.tv_usec = 20000;
 
 
-	if ((r = select(max_fd, &rfds, NULL, NULL,
+	if ((r = select(max_fd, &rfds, nullptr, nullptr,
 			(m_channelChangeTime > 0 || m_focusChanging) ? &t :
-			(struct timeval *)NULL)) > 0) {
+			(struct timeval *)nullptr)) > 0) {
 
 		int f;
 		for (f=0; f < max_fd; f++) {

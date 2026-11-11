@@ -1,8 +1,8 @@
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/types.h>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -31,7 +31,7 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 	return -1;
 	}
 	dir = opendir(dir_name);
-	if (dir == NULL) {
+	if (dir == nullptr) {
 	printf("Could not open directory %s\n", dir_name);
 	return -1;
 	}
@@ -84,7 +84,7 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 		table_count = count;
 		p = table = (struct key_entry *)
 		malloc( count * sizeof(struct key_entry) );
-		if (table == NULL) {
+		if (table == nullptr) {
 		printf("Cannot allocate user key table\n");
 		exit(1);
 		}
@@ -112,7 +112,7 @@ Keybinding::Keybinding(WindowManager *const w_mgr, char *dir,
 	char key_dir_name[1024];
 	int n;
 	char *home = getenv("HOME");
-	char *keys_name = ".keys";
+	const char *keys_name = ".keys";
 
 	if (with_modifier) {
 	  keys_name = ".mkeys";
@@ -143,7 +143,7 @@ char *Keybinding::command_for_keysym(KeySym sym)
 		return table[i].command;
 	}
 	}
-	return NULL;
+	return nullptr;
 }
 
 

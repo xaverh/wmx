@@ -1,9 +1,9 @@
 #include "config.hxx"
 
-#include <string.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
 
 // 32 is enough to fit even "light goldenrod yellow" comfortably
@@ -191,7 +191,7 @@ void DynamicConfig::update(char *string)
 			"`%s' @ position %d", s, (int)(string - s));
 	}
 
-	} while ((s = strtok(NULL, "/")));
+	} while ((s = strtok(nullptr, "/")));
 
 	fprintf(stderr, "\n");
 

@@ -46,13 +46,13 @@ Client::Client(WindowManager *const wm, Window w, bool shaped) :
 	m_lastPopTime(0L),
 	m_isFullHeight(false),
 	m_isFullWidth(false),
-	m_name(NULL),
-	m_iconName(NULL),
-	m_label(NULL),
+	m_name(nullptr),
+	m_iconName(nullptr),
+	m_label(nullptr),
 	m_colormap(None),
 	m_colormapWinCount(0),
-	m_colormapWindows(NULL),
-	m_windowColormaps(NULL),
+	m_colormapWindows(nullptr),
+	m_windowColormaps(nullptr),
 	m_windowManager(wm)
 {
 	XWindowAttributes attr;
@@ -700,7 +700,7 @@ tryagain:
 			type = AnyPropertyType;
 			goto tryagain;
 		} else {
-			string = NULL;
+			string = nullptr;
 			n = 0;
 		}
 		if (*p) XFree((void *) *p);
@@ -720,7 +720,7 @@ char *Client::getProperty(Atom a)
 	// thanks to Bill Spitzak
 
 	if (getProperty_aux(display(), m_window, a, AnyPropertyType, 100L, &p) <= 0) {
-	return NULL;
+	return nullptr;
 	}
 	return (char *)p;
 }
@@ -731,7 +731,7 @@ char *Client::getProperty(Atom a, Atom type, int &length)
 
 	if ((length = getProperty_aux(display(), m_window, a, type, 100L, &p))
 		<= 0) {
-	return NULL;
+	return nullptr;
 	}
 
 	return (char *)p;

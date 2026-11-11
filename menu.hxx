@@ -89,7 +89,7 @@ class ChannelMenu : public Menu
 class CommandMenu : public Menu
 {
 public:
-	CommandMenu(WindowManager *, XEvent *e, char *otherdir = NULL);
+	CommandMenu(WindowManager *, XEvent *e, char *otherdir = nullptr);
 	virtual ~CommandMenu();
 
 private:

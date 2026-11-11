@@ -269,7 +269,7 @@ void Border::initialiseStatics(WindowManager *wm)
 				// (todo: omit compiling in default pixmap, and look for
 				//  it in systemwide directory)
 				if (XpmReadFileToPixmap (wm->display(), wm->root(), pixMapPath,
-										 &m_backgroundPixmap, NULL, &attrs)
+										 &m_backgroundPixmap, nullptr, &attrs)
 					!= XpmSuccess) {
 					use_dynamic = false;
 				}
@@ -280,7 +280,7 @@ void Border::initialiseStatics(WindowManager *wm)
 		if (use_dynamic == false) {
 			switch (XpmCreatePixmapFromData
 					(wm->display(), wm->root(), (char **)background,
-					 &m_backgroundPixmap, NULL, &attrs)) {
+					 &m_backgroundPixmap, nullptr, &attrs)) {
 			case XpmSuccess:
 				break;
 			case XpmColorError:

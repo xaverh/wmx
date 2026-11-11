@@ -233,7 +233,7 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 		   if(pid == 0)
 		   {
 			   execl(CONFIG_SUNPOWER_EXEC,CONFIG_SUNPOWER_EXEC,
-					 CONFIG_SUNPOWER_OPTIONS, NULL);
+					 CONFIG_SUNPOWER_OPTIONS, nullptr);
 		   }
 
 	   } else if (key == SunXK_PowerSwitchShift) {
@@ -241,7 +241,7 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 		   if(pid == 0)
 		   {
 			   execl(CONFIG_SUNPOWER_EXEC,CONFIG_SUNPOWER_EXEC,
-					 CONFIG_SUNPOWER_SHIFTOPTIONS, NULL);
+					 CONFIG_SUNPOWER_SHIFTOPTIONS, nullptr);
 		   }
 	   } else
 #endif // CONFIG_WANT_SUNPOWERKEY

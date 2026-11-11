@@ -4,7 +4,7 @@
 
 #include <X11/Xlocale.h>
 
-#include <string.h>
+#include <cstring>
 #include <X11/Xproto.h>
 #include <X11/keysym.h>
 #include <sys/types.h>
@@ -128,7 +128,7 @@ implementList(AtomList, Atom);
 	}
 	}
 
-	m_display = XOpenDisplay(NULL);
+	m_display = XOpenDisplay(nullptr);
 	if (!m_display) fatal("can't open display");
 
 	add_fd_to_watch(ConnectionNumber(m_display));
@@ -811,7 +811,7 @@ extern int putenv(char *);	/* not POSIX */
 #endif
 implementList(AtomList, Atom);
 
-void WindowManager::spawn(char *name, char *file, char *arg1 /* = NULL*/)
+void WindowManager::spawn(char *name, char *file, char *arg1 /* = nullptr*/)
 {
 	// strange code thieved from 9wm to avoid leaving zombies
 
@@ -840,10 +840,10 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = NULL*/)
 		}
 		else {
 		if (strcmp(CONFIG_NEW_WINDOW_COMMAND, name)) {
-			execlp(name, name, NULL);
+			execlp(name, name, nullptr);
 		}
 		else {
-			execlp(name, name, CONFIG_NEW_WINDOW_COMMAND_OPTIONS, NULL);
+			execlp(name, name, CONFIG_NEW_WINDOW_COMMAND_OPTIONS, nullptr);
 		}
 		}
 
@@ -876,7 +876,7 @@ void WindowManager::print_clients(int fd) {
 	  char buff[1024];
 	  Client *c;
 	  XTextProperty text_prop;
-	  char *res_name = "?";
+	  const char *res_name = "?";
 
 	  //}
 

@@ -72,7 +72,7 @@ private:
 	bool m_fedback;
 //#endif
 
-	void fatal(char *);
+	void fatal(const char *);
 
 	char *m_label;
 
