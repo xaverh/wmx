@@ -150,7 +150,6 @@ WindowManager::WindowManager(int argc, char **argv) :
 	}
 
 	if (!m_altModMask) {
-				CONFIG_ALT_KEY, alt, alt);
 		fatal("no modifier corresponds to the configured Alt keysym");
 	}
 	XFreeModifiermap(modmap);
@@ -941,7 +940,6 @@ void WindowManager::sort_clients(void)
 
 
 
-#if CONFIG_GNOME_COMPLIANCE != false
 
 void WindowManager::gnomeInitialiseCompliance()
 {
@@ -994,7 +992,7 @@ void WindowManager::gnomeInitialiseCompliance()
 	XChangeProperty
 		(m_display, m_root[0], Atoms::netwm_supported, XA_ATOM, 32,
 		 PropModeReplace,
-		 (unsigned char *)supported.array(0, supported.size()),
+		 (unsigned char *)supported.data(),
 		 supported.size());
 
 	netwmUpdateChannelList();
