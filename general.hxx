@@ -1,6 +1,5 @@
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
-#define CHECKPOINT fprintf(stderr,"%s:%d\n",__FILE__,__LINE__);
 
 #include <unistd.h>
 #include <sys/types.h>
