@@ -97,13 +97,8 @@ implementList(AtomList, Atom);
 		"     Multihead display code Copyright (c) 2000 Sven Oliver `SvOlli' Moll\n"
 		"     Original NETWM code Copyright (c) 2000 Jamie Montgomery\n"
 		"     See source distribution for other patch contributors\n"
-#ifdef CONFIG_USE_XFT
 		"     Copying and redistribution encouraged.  "
 		"No warranty.\n\n"
-#else
-		"     %s\n     Copying and redistribution encouraged.  "
-		"No warranty.\n\n", XV_COPYRIGHT
-#endif
 implementList(AtomList, Atom);
 		);
 
