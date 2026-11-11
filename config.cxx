@@ -1,5 +1,5 @@
 
-#include "Config.h"
+#include "config.hxx"
 
 #include <string.h>
 #include <stdio.h>

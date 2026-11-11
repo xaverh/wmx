@@ -24,8 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "Config.h"
-#include "Rotated.h"
+#include "config.hxx"
+#include "rotated.hxx"
 
 #ifndef CONFIG_USE_XFT
 

@@ -16,9 +16,9 @@
 #include <getopt.h>
 #include <ctype.h>
 
-#include "Remote.h"
-#include "Manager.h"
-#include "Client.h"
+#include "remote.hxx"
+#include "manager.hxx"
+#include "client.hxx"
 
 Boolean sigpipe_happened = False;
 

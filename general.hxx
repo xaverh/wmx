@@ -33,9 +33,9 @@
 // True and False are defined in Xlib.h
 typedef char Boolean;
 
-#include "Config.h"
+#include "config.hxx"
 
-#include "listmacro.h"
+#include "listmacro.hxx"
 
 #define NewString(x) (strcpy((char *)malloc(strlen(x)+1),(x)))
 
@@ -53,7 +53,7 @@ typedef char Boolean;
     (void)sigaction((x), &sAct, NULL); \
   } while (0)
 
-#include "Config.h"
+#include "config.hxx"
 
 #ifdef CONFIG_USE_XFT
 #include <ft2build.h>

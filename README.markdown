@@ -20,7 +20,7 @@ You need a Unix machine, X libraries (R4 or newer) with the Shape extension, and
 
 wmx makes relatively heavy demands on the plain 2D performance of your X server because of shaped windows.
 
-Edit `Config.h` (everything useful is documented there), then:
+Edit `config.hxx` (everything useful is documented there), then:
 
 ```sh
 ./configure
@@ -40,12 +40,12 @@ There are still no X resources and no startup file beyond the directories and th
 
 ### Window manipulations
 
-- **Focus**: depends on the policy set in `Config.h` (see below).
+- **Focus**: depends on the policy set in `config.hxx` (see below).
 - **Raise**: click on the tab or frame (unless auto-raise is on).
 - **Move**: drag the tab, or Alt-drag anywhere on the window.
 - **Hide**: click the button at the top of the tab.
 - **Restore a hidden window**: left-button root menu.
-- **New terminal**: first item on the left-button root menu (“New”), unless disabled in `Config.h`.
+- **New terminal**: first item on the left-button root menu (“New”), unless disabled in `config.hxx`.
 - **Delete**: click the tab button, hold ≥ 1.5 s until the cursor becomes a cross, then release (delay is configurable).
 - **Resize**: drag the bottom-right corner; constrained resize on the other corners.
 - **Circulate windows**: right-click on root, frame or tab.
@@ -57,7 +57,7 @@ All move and resize operations are opaque.
 
 ## Keyboard controls
 
-Hard-coded bindings (modifier is configurable via `CONFIG_ALT_KEY` in `Config.h`; default is now `Super_L`):
+Hard-coded bindings (modifier is configurable via `CONFIG_ALT_KEY` in `config.hxx`; default is now `Super_L`):
 
 - Alt/Up, Alt/Down — raise / lower focused window
 - Alt/Tab — circulate
@@ -73,7 +73,7 @@ Hard-coded bindings (modifier is configurable via `CONFIG_ALT_KEY` in `Config.h`
 - Alt/Menu — keyboard client menu
 - Alt/Multi_Key — keyboard application menu
 
-Some of these can be disabled in `Config.h`.
+Some of these can be disabled in `config.hxx`.
 
 ### Arbitrary keybindings
 
@@ -99,7 +99,7 @@ Wheel on the root changes channel; wheel on a window tab moves that window to an
 
 ## Focus policy
 
-Controlled in `Config.h` (and overridable at runtime via the options symlink):
+Controlled in `config.hxx` (and overridable at runtime via the options symlink):
 
 - `CONFIG_CLICK_TO_FOCUS`
 - `CONFIG_RAISE_ON_FOCUS`
@@ -119,11 +119,11 @@ A symbolic link `~/.wmx/options` (or in the command-menu directory) whose target
 menu:full/new:off/focus:delay-raise,100/class:on/sort:on
 ```
 
-sets runtime options. Recognised tokens include `menu`, `new`, `keyboard`, `feedback`, `focus` (click/raise/delay-raise/follow), `passclick`, `class`, `sort`, and others. Defaults live in `Config.C`.
+sets runtime options. Recognised tokens include `menu`, `new`, `keyboard`, `feedback`, `focus` (click/raise/delay-raise/follow), `passclick`, `class`, `sort`, and others. Defaults live in `config.cxx`.
 
 ## Client menu enhancements
 
-With `class:on` the menu shows `[class] name` instead of just the label. With `sort:on` the entries are sorted (so all windows of the same class appear together). Both can be set in `Config.h` or via the options symlink (or the remote-control `options` command).
+With `class:on` the menu shows `[class] name` instead of just the label. With `sort:on` the entries are sorted (so all windows of the same class appear together). Both can be set in `config.hxx` or via the options symlink (or the remote-control `options` command).
 
 ## Remote control
 

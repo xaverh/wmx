@@ -9,7 +9,7 @@
 
 #include <sys/wait.h>
 
-#include "Keybinding.h"
+#include "keybinding.hxx"
 
 int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 {

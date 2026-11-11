@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*-  vi:set ts=8 sts=4 sw=4: */
 
-#include "Manager.h"
-#include "Client.h"
+#include "manager.hxx"
+#include "client.hxx"
 
 #include <X11/Xutil.h>
 #include <X11/keysym.h>

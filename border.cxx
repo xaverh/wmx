@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*-  vi:set ts=8 sts=4 sw=4: */
 
-#include "Border.h"
-#include "Client.h"
-#include "Manager.h"
-#include "Rotated.h"
+#include "border.hxx"
+#include "client.hxx"
+#include "manager.hxx"
+#include "rotated.hxx"
 
 // Some shaping mods due to Jacques Garrigue, garrigue@kurims.kyoto-u.ac.jp
 

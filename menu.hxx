@@ -2,8 +2,8 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#include "General.h"
-#include "Manager.h"
+#include "general.hxx"
+#include "manager.hxx"
 #include <dirent.h>
 
 class Menu 

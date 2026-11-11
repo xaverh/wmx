@@ -16,9 +16,9 @@ LDFLAGS=@LDFLAGS@
 #CFLAGS = -g -O2 -I/usr/include -I/usr/openwin/include
 CXXFLAGS=@CXXFLAGS@ @XFT_CFLAGS@ @FT_CFLAGS@ @FC_CFLAGS@ -Wall
 
-OBJECTS	= Border.o Buttons.o Channel.o Client.o Config.o Events.o Main.o Manager.o Menu.o Rotated.o Session.o Keybinding.o Remote.o
+OBJECTS	= border.o buttons.o channel.o client.o config.o events.o main.o manager.o menu.o rotated.o session.o keybinding.o remote.o
 
-.C.o:
+.cxx.o:
 	$(CCC) -c $(CXXFLAGS) $<
 
 all:	wmx
@@ -30,7 +30,7 @@ wmx:	$(OBJECTS)
 depend:
 	-awk '{print;} /^# DO NOT DELETE/{exit}' Makefile>Makefile.dep
 	test -s Makefile.dep
-	mv Makefile.dep Makefile;g++ -MM $(CXXFLAGS) *.C>>Makefile
+	mv Makefile.dep Makefile;g++ -MM $(CXXFLAGS) *.cxx>>Makefile
 
 clean:
 	rm -f *.o core
@@ -51,27 +51,27 @@ install-rpm:
 
 
 # DO NOT DELETE -- make depend depends on it
-Border.o: Border.C Border.h General.h Config.h Rotated.h Client.h \
-  Manager.h listmacro.h Keybinding.h Remote.h background.xpm
-Buttons.o: Buttons.C Manager.h General.h Config.h listmacro.h \
-  Keybinding.h Remote.h Client.h Border.h Rotated.h Menu.h
-Channel.o: Channel.C Manager.h General.h Config.h listmacro.h \
-  Keybinding.h Remote.h Client.h Border.h Rotated.h
-Client.o: Client.C Manager.h General.h Config.h listmacro.h Keybinding.h \
-  Remote.h Client.h Border.h Rotated.h
-Config.o: Config.C Config.h
-Events.o: Events.C Manager.h General.h Config.h listmacro.h Keybinding.h \
-  Remote.h Client.h Border.h Rotated.h
-Keybinding.o: Keybinding.C Keybinding.h Manager.h General.h Config.h \
-  listmacro.h Remote.h
-Main.o: Main.C Manager.h General.h Config.h listmacro.h Keybinding.h \
-  Remote.h Client.h Border.h Rotated.h
-Manager.o: Manager.C Manager.h General.h Config.h listmacro.h \
-  Keybinding.h Remote.h Menu.h Client.h Border.h Rotated.h Cursors.h
-Menu.o: Menu.C Menu.h General.h Config.h Manager.h listmacro.h \
-  Keybinding.h Remote.h Client.h Border.h Rotated.h
-Remote.o: Remote.C Remote.h Manager.h General.h Config.h listmacro.h \
-  Keybinding.h Client.h Border.h Rotated.h
-Rotated.o: Rotated.C Config.h Rotated.h
-Session.o: Session.C Manager.h General.h Config.h listmacro.h \
-  Keybinding.h Remote.h
+border.o: border.cxx border.hxx general.hxx config.hxx rotated.hxx client.hxx \
+  manager.hxx listmacro.hxx keybinding.hxx remote.hxx background.xpm
+buttons.o: buttons.cxx manager.hxx general.hxx config.hxx listmacro.hxx \
+  keybinding.hxx remote.hxx client.hxx border.hxx rotated.hxx menu.hxx
+channel.o: channel.cxx manager.hxx general.hxx config.hxx listmacro.hxx \
+  keybinding.hxx remote.hxx client.hxx border.hxx rotated.hxx
+client.o: client.cxx manager.hxx general.hxx config.hxx listmacro.hxx keybinding.hxx \
+  remote.hxx client.hxx border.hxx rotated.hxx
+config.o: config.cxx config.hxx
+events.o: events.cxx manager.hxx general.hxx config.hxx listmacro.hxx keybinding.hxx \
+  remote.hxx client.hxx border.hxx rotated.hxx
+keybinding.o: keybinding.cxx keybinding.hxx manager.hxx general.hxx config.hxx \
+  listmacro.hxx remote.hxx
+main.o: main.cxx manager.hxx general.hxx config.hxx listmacro.hxx keybinding.hxx \
+  remote.hxx client.hxx border.hxx rotated.hxx
+manager.o: manager.cxx manager.hxx general.hxx config.hxx listmacro.hxx \
+  keybinding.hxx remote.hxx menu.hxx client.hxx border.hxx rotated.hxx cursors.hxx
+menu.o: menu.cxx menu.hxx general.hxx config.hxx manager.hxx listmacro.hxx \
+  keybinding.hxx remote.hxx client.hxx border.hxx rotated.hxx
+remote.o: remote.cxx remote.hxx manager.hxx general.hxx config.hxx listmacro.hxx \
+  keybinding.hxx client.hxx border.hxx rotated.hxx
+rotated.o: rotated.cxx config.hxx rotated.hxx
+session.o: session.cxx manager.hxx general.hxx config.hxx listmacro.hxx \
+  keybinding.hxx remote.hxx

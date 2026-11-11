@@ -2,7 +2,7 @@
 #ifndef __REMOTE_H_
 #define __REMOTE_H_
 
-#include "Manager.h"
+#include "manager.hxx"
 
 class WindowManager;
 

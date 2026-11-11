@@ -3,10 +3,10 @@
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
 
-#include "General.h"
-#include "listmacro.h"
-#include "Keybinding.h"
-#include "Remote.h"
+#include "general.hxx"
+#include "listmacro.hxx"
+#include "keybinding.hxx"
+#include "remote.hxx"
 
 class Client;
 class Remote;

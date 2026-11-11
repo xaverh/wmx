@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(Border.C)
+AC_INIT(border.cxx)
 
 dnl Checks for programs.
 AC_PROG_MAKE_SET
@@ -36,13 +36,13 @@ AC_CHECK_LIB(Xext, XShapeQueryExtension, [], [
 dnl Xpm is not strictly necessary
 AC_CHECK_LIB(Xpm, XpmCreatePixmapFromData, [], [
     echo "Warning: Xpm library not found"
-    echo "Please either install the Xpm library and headers, or ensure you have CONFIG_USE_PIXMAPS set to False in Config.h"
+    echo "Please either install the Xpm library and headers, or ensure you have CONFIG_USE_PIXMAPS set to False in config.hxx"
     ])
 
 dnl Composite is necessary if CONFIG_USE_COMPOSITE
 AC_CHECK_LIB(Xcomposite, XCompositeQueryExtension, [], [
     echo "Warning: Xcomposite library not found"
-    echo "Please either install the Xcomposite library and headers, or ensure you have CONFIG_USE_COMPOSITE set to False in Config.h"
+    echo "Please either install the Xcomposite library and headers, or ensure you have CONFIG_USE_COMPOSITE set to False in config.hxx"
     ])
 
 dnl SM and ICE are necessary if CONFIG_USE_SESSION_MANAGER
@@ -52,15 +52,15 @@ AC_CHECK_LIB(ICE, IceConnectionNumber)
 dnl Freetype: actually only needed if CONFIG_USE_XFT
 PKG_CHECK_MODULES([FT],[freetype2],[],[
     echo "Warning: Freetype library not found"
-    echo "Please either install Freetype, or ensure you have CONFIG_USE_XFT set to False in Config.h"
+    echo "Please either install Freetype, or ensure you have CONFIG_USE_XFT set to False in config.hxx"
     ])
 PKG_CHECK_MODULES([XFT],[xft],[],[
     echo "Warning: Xft library not found"
-    echo "Please either install Xft, or ensure you have CONFIG_USE_XFT set to False in Config.h"
+    echo "Please either install Xft, or ensure you have CONFIG_USE_XFT set to False in config.hxx"
     ])
 PKG_CHECK_MODULES([FC],[fontconfig],[],[
     echo "Warning: Fontconfig library not found"
-    echo "Please either install Fontconfig, or ensure you have CONFIG_USE_XFT set to False in Config.h"
+    echo "Please either install Fontconfig, or ensure you have CONFIG_USE_XFT set to False in config.hxx"
     ])
 AC_SUBST(FT_CFLAGS)
 AC_SUBST(FT_LIBS)

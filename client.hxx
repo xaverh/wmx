@@ -3,9 +3,9 @@
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
-#include "General.h"
-#include "Manager.h"
-#include "Border.h"
+#include "general.hxx"
+#include "manager.hxx"
+#include "border.hxx"
 
 class EdgeRect {
 public:

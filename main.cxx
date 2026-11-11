@@ -1,9 +1,9 @@
 
-#include "Manager.h"
+#include "manager.hxx"
 
-#include "Client.h"
-#include "Border.h"
-#include "Config.h"
+#include "client.hxx"
+#include "border.hxx"
+#include "config.hxx"
 
 int main(int argc, char **argv)
 {

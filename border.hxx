@@ -2,8 +2,8 @@
 #ifndef _BORDER_H_
 #define _BORDER_H_
 
-#include "General.h"
-#include "Rotated.h"
+#include "general.hxx"
+#include "rotated.hxx"
 
 class Client;
 class WindowManager;

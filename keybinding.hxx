@@ -2,7 +2,7 @@
 #ifndef __KEYBINDING_H_
 #define __KEYBINDING_H_
 
-#include "Manager.h"
+#include "manager.hxx"
 
 struct key_entry {
       KeySym	sym;

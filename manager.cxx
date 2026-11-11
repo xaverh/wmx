@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*-  vi:set ts=8 sts=4 sw=4: */
 
-#include "Manager.h"
-#include "Menu.h"
-#include "Client.h"
+#include "manager.hxx"
+#include "menu.hxx"
+#include "client.hxx"
 
 #include <X11/Xlocale.h>
 
@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "Cursors.h"
+#include "cursors.hxx"
 #include <X11/cursorfont.h>
 
 #ifdef CONFIG_USE_COMPOSITE
