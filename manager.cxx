@@ -276,8 +276,6 @@ implementList(AtomList, Atom);
 
 	add_fd_to_watch(ConnectionNumber(m_display));
 
-	m_shell = (char *)getenv("SHELL");
-	if (!m_shell) m_shell = NewString("/bin/sh");
 
 	// find out what the Alt keycode and thus modifier mask are
 	int kpk = 0;
@@ -1056,13 +1054,6 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = NULL*/)
 				  sprintf(c + 1, "%d", screen());
 				  putenv(pstring);
 				}
-		}
-
-		if (CONFIG_EXEC_USING_SHELL) {
-		if (file) execl(m_shell, m_shell, "-c", file, arg1, 0);
-		else execl(m_shell, m_shell, "-c", name, arg1, 0);
-		fprintf(stderr, "wmx: exec %s", m_shell);
-		perror(" failed");
 		}
 
 		if (file) {

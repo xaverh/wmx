@@ -142,7 +142,6 @@ private:
 	Cursor m_vhCursor;
 
 	char *m_terminal;
-	char *m_shell;
 
 	ClientList m_clients;
 	ClientList m_hiddenClients;

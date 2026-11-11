@@ -73,9 +73,6 @@ private:
 // ones will be towards the bottom of the menu, flush-right.)
 #define CONFIG_EVERYTHING_ON_ROOT_MENU (DynamicConfig::config.fullMenu())
 
-// Spawn a temporary new shell between the wm and each new process?
-#define CONFIG_EXEC_USING_SHELL   False
-
 // What to run to get a new window (from the "New" menu option)
 #define CONFIG_NEW_WINDOW_LABEL "New"
 #define CONFIG_NEW_WINDOW_COMMAND "x-terminal-emulator"
