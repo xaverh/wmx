@@ -4,11 +4,7 @@
 #include <X11/keysym.h>
 #include <sys/time.h>
 
-#if CONFIG_WANT_SUNKEYS
-#if CONFIG_WANT_SUNPOWERKEY
 #include <X11/Sunkeysym.h>
-#endif
-#endif
 
 void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 {
@@ -100,7 +96,6 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 			} else if (e->button == CONFIG_CLIENTMENU_BUTTON && m_channelChangeTime != 0) {
 
 				flipChannel(false, true, false, 0);
-#endif
 		}
 
 	} else if (e->button == CONFIG_COMMANDMENU_BUTTON && m_channelChangeTime == 0) {
@@ -116,7 +111,6 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 #else
 			if (m_channelChangeTime == 0) flipChannel(true, false, false, 0);
 			else flipChannel(false, false, false, c);
-#endif
 		return;
 	} else if (e->button == CONFIG_CLIENTMENU_BUTTON && m_channelChangeTime != 0) {
 		// allow left-button to push down a channel --cc 19991001
@@ -192,7 +186,6 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 			m_altStateRetained = false;
 		}
 
-#if CONFIG_WANT_SUNKEYS
 #ifdef CONFIG_QUICKRAISE_KEY
 	if (key == CONFIG_QUICKRAISE_KEY && c) {
 
@@ -227,7 +220,6 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 
 	} else
 #endif // CONFIG_QUICKHEIGHT_KEY
-#if CONFIG_WANT_SUNPOWERKEY
 	  if (key == SunXK_PowerSwitch) {
 		   pid_t pid = fork();
 		   if(pid == 0)
@@ -244,8 +236,6 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 					 CONFIG_SUNPOWER_SHIFTOPTIONS, nullptr);
 		   }
 	   } else
-#endif // CONFIG_WANT_SUNPOWERKEY
-#endif // CONFIG_WANT_SUNKEYS
 
 	   if (ev->state & m_altModMask) {
 
@@ -494,7 +484,6 @@ void Client::move(XButtonEvent *e)
 	for (int i = 0; i < m_windowManager->clients().count(); ++i) {
 		m_windowManager->clients().item(i)->appendEdges(edges);
 	}
-#endif
 
 	m_doSomething = false;
 	while (!done) {
@@ -610,7 +599,6 @@ void Client::move(XButtonEvent *e)
 							}
 						}
 					}
-#endif
 				}
 
 		x = nx;

@@ -164,8 +164,6 @@ constexpr bool CONFIG_EXIT_ON_KBD_MENU = true;
 
 // Useful for fortunate people with Sun Type-5 keyboards.  These don't
 // require the modifier to be pressed.
-constexpr bool CONFIG_WANT_SUNKEYS = true;
-constexpr bool CONFIG_WANT_SUNPOWERKEY = true;
 #define CONFIG_QUICKRAISE_KEY	XK_F15
 #define CONFIG_QUICKHIDE_KEY	XK_F17
 #define CONFIG_QUICKHEIGHT_KEY	XK_F13
