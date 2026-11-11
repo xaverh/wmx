@@ -586,22 +586,6 @@ void WindowManager::eventDestroy(XDestroyWindowEvent *e)
 
 		int there = -1;
 
-#if CONFIG_GROUPS != False
-	for (int y = 0; y < 10; y++) {
-		there = -1;
-
-		for (int i = 0; i < grouping.item(y)->count(); i++) {
-//  			grouping.item(y)->item(i),
-//  			c );
-         if (grouping.item(y)->item(i) == c) {
-			there = i;
-		}
-		}
-		if (there != -1) {
-		grouping.item(y)->remove(there);
-		}
-	}
-#endif
 
 	checkChannel(c->channel());
 	c->release();

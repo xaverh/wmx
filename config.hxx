@@ -336,20 +336,6 @@ private:
 #define CONFIG_GEOMETRY_X_POS     0
 #define CONFIG_GEOMETRY_Y_POS     0
 
-// Groups are fun. you can bind a bunch of windows to a number key
-// and when you press CONFIG_ALT_KEY_MASK and the number key
-// all the windows of that group are raised.
-
-// You bind a window to a group by pressing the 
-// CONFIG_ALT_KEY_MASK + CONFIG_GROUP_ADD + a number key
-
-// if you press CONFIG_ALT_KEY_MASK + CONFIG_GROUP_REMOVE_ALL
-// + a number key that group is cleared of all windows.
-
-#define CONFIG_GROUPS             True
-#define CONFIG_GROUP_ADD          ControlMask  
-#define CONFIG_GROUP_REMOVE_ALL   ShiftMask
-
 // Set CLOCK if you want wmx to display a clock permanently in the
 // background at top-left of screen 0.  Use CONFIG_CLOCK_NUMBER
 // to control the colour of the clock digits.

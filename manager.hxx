@@ -11,9 +11,6 @@ class Remote;
 
 declarePList(ClientList, Client);
 
-#if CONFIG_GROUPS != False
-declarePList(ListList, ClientList);
-#endif
 
 class WindowManager {
 public:
@@ -90,9 +87,6 @@ public:
 	// during menu display:
 	void dispatchEvent(XEvent *);
 
-#if CONFIG_GROUPS != False
-	void windowGrouping(XKeyEvent *ev, KeySym key, Client *c);
-#endif
 
 	void netwmUpdateWindowList();
 	void netwmUpdateStackingOrder();
@@ -141,9 +135,6 @@ private:
 									// Layer 4 (NORMAL_LAYER) is the default.
 	Client *m_activeClient;
 
-#if CONFIG_GROUPS != False
-	ListList grouping;
-#endif
 
 	int m_shapeEvent;
 	int m_currentTime;

@@ -59,9 +59,6 @@ Boolean ignoreBadWindowErrors;
 
 implementPList(ClientList, Client);
 
-#if CONFIG_GROUPS != False
-implementPList(ListList, ClientList);
-#endif
 implementList(AtomList, Atom);
 
 #define DEFAULT_PORT 6999
@@ -289,11 +286,6 @@ implementList(AtomList, Atom);
 
 	netwmInitialiseCompliance();
 
-#if CONFIG_GROUPS != False
-	for (int i = 0; i < 10; i++) {
-	grouping.append(new ClientList());
-	}
-#endif
 implementList(AtomList, Atom);
 
 	clearFocus();
