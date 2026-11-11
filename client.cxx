@@ -236,7 +236,7 @@ void Client::manage(Boolean mapped)
 		CONFIG_LOWER_KEY, CONFIG_FULLHEIGHT_KEY, CONFIG_NORMALHEIGHT_KEY,
 			CONFIG_FULLWIDTH_KEY, CONFIG_NORMALWIDTH_KEY,
 		CONFIG_MAXIMISE_KEY, CONFIG_UNMAXIMISE_KEY,
-			CONFIG_STICKY_KEY, CONFIG_DEBUG_KEY
+			CONFIG_STICKY_KEY
 
 #if CONFIG_WANT_KEYBOARD_MENU
 		, CONFIG_CLIENT_MENU_KEY, CONFIG_COMMAND_MENU_KEY
@@ -1706,44 +1706,4 @@ void Client::appendEdges(EdgeRectList &list)
 	list.append(r);
 }
 
-void Client::printClientData()
-{
-	printf("     * Window: %lx - Name: \"%s\"\n",
-		   window(), name() ? name() : "");
-
-	printf("     * Managed: %s - Reparenting: %s - Type: ", m_managed ? "Y" : "N", m_reparenting ? "Y" : "N");
-	switch (m_type) {
-	case NormalClient:  printf("Normal "); break;
-	case DialogClient:  printf("Dialog "); break;
-	case DesktopClient: printf("Desktop"); break;
-	case DockClient:    printf("Dock   "); break;
-	case ToolbarClient: printf("Toolbar"); break;
-	case MenuClient:    printf("Menu   "); break;
-	case UtilityClient: printf("Utility"); break;
-	case SplashClient:  printf("Splash "); break;
-	default:            printf("(unknown)"); break; // shouldn't happen
-	}
-
-	printf(" - State: ");
-
-	switch (m_state) {
-	case WithdrawnState: printf("Withdrawn (unmapped)"); break;
-	case NormalState: printf("Normal (visible)"); break;
-	case IconicState: printf("Iconic (hidden)"); break;
-	default: printf("Unexpected state %d", m_state);
-	}
-
-	printf("\n");
-
-	printf("     * Geometry: %dx%d%s%d%s%d - Shaped: %s - Screen: %d - Channel: %d - Layer: %d%s", m_w, m_h,
-		   (m_x >= 0 ? "+" : ""), m_x,
-		   (m_y >= 0 ? "+" : ""), m_y,
-		   m_shaped ? "Y" : "N",
-		   m_screen, m_channel, m_layer,
-		   m_unmappedForChannel ? " [unmapped]" : "");
-
-	printf("\n     * Transient for: %lx - Group parent: %lx - Revert to: %p (%lx)\n",
-		   m_transient, m_groupParent, m_revert,
-		   m_revert ? m_revert->window() : None);
-}
 

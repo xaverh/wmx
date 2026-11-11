@@ -1399,29 +1399,4 @@ void WindowManager::gnomeUpdateCurrentChannel()
 	netwmUpdateWindowList();
 }  
 
-void
-WindowManager::printClientList()
-{
-	printf("wmx: %ld client(s)\n", m_clients.count());
-
-	for (int i = 0; i < m_clients.count(); ++i) {
-
-		bool inHidden = false;
-
-		// we don't mind that this is so inefficient
-		for (int j = 0; j < m_hiddenClients.count(); ++j) {
-			if (m_hiddenClients.item(j) == m_clients.item(i)) {
-				inHidden = true;
-				break;
-			}
-		}
-		printf("wmx: Client %d (address %p)%s\n", i+1, m_clients.item(i), 
-			   inHidden ? " [hidden]" : "");
-
-		m_clients.item(i)->printClientData();
-
-		printf("\n");
-		fflush(stdout);
-	}
-}
 

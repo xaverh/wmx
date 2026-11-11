@@ -198,9 +198,6 @@ private:
 #define CONFIG_UNMAXIMISE_KEY     XK_End
 #define CONFIG_SAME_KEY_MAX_UNMAX False
 
-// With modifier, print a list of client data to stdout
-#define CONFIG_DEBUG_KEY          XK_Print
-
 // The next two may clash badly with Emacs, if you use Alt as the
 // modifier.  The commented variants might work better for some.
 #define CONFIG_CIRCULATE_KEY	XK_Tab

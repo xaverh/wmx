@@ -101,9 +101,6 @@ public:
 	void windowGrouping(XKeyEvent *ev, KeySym key, Client *c);
 #endif
 
-	// debug output:
-	void printClientList();
-
 	void netwmUpdateWindowList();
 	void netwmUpdateStackingOrder();
 	void netwmUpdateActiveClient();

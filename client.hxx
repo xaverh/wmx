@@ -139,7 +139,6 @@ public:
 	void eventExposure(XExposeEvent *);
 	void eventClient(XClientMessageEvent *);
 
-	void printClientData();
 
 	void netwmUpdateChannel();
 	Window window()        { return m_window; }

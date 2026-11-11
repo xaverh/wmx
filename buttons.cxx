@@ -349,12 +349,6 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 			break;
 			}
 
-#ifdef CONFIG_DEBUG_KEY
-				case CONFIG_DEBUG_KEY:
-					printClientList();
-					break;
-#endif
-
 #if CONFIG_GROUPS != False
 		case XK_0:
 		case XK_1:
