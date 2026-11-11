@@ -54,13 +54,13 @@
 #define CONFIG_COMMAND_MENU       ".wmx"
 // append screennumber to COMMAND_MENU directory;
 // use non screen style as fallback
-#define CONFIG_ADD_SCREEN_TO_COMMAND_MENU False
+#define CONFIG_ADD_SCREEN_TO_COMMAND_MENU false
 
 // Focus possibilities.
 // 
 // You can't have CLICK_TO_FOCUS without RAISE_ON_FOCUS, but the other
 // combinations should be okay.  If you set AUTO_RAISE you must leave
-// the other two False; you'll then get focus-follows, auto-raise, and
+// the other two false; you'll then get focus-follows, auto-raise, and
 // a delay on auto-raise as configured in the DELAY settings below.
 
 #define CONFIG_CLICK_TO_FOCUS     (DynamicConfig::config.clickFocus())
@@ -89,19 +89,19 @@
 // If CONFIG_BUMP_EVERYWHERE is defined, windows will "bump" against
 // other window edges as well as the edges of the screen
 
-#define CONFIG_BUMP_EVERYWHERE    True
+#define CONFIG_BUMP_EVERYWHERE    true
 
-// If RESIZE_UPDATE is True, windows will opaque-resize "correctly";
-// if False, behaviour will be as in wm2 (stretching the background
+// If RESIZE_UPDATE is true, windows will opaque-resize "correctly";
+// if false, behaviour will be as in wm2 (stretching the background
 // image only).
 
-#define CONFIG_RESIZE_UPDATE      True
+#define CONFIG_RESIZE_UPDATE      true
 
-// If RAISELOWER_ON_CLICK is True, clicking on the title of the
+// If RAISELOWER_ON_CLICK is true, clicking on the title of the
 // topmost window will lower instead of raising it (patch due to
 // Kazushi (Jam) Marukawa)
 
-#define CONFIG_RAISELOWER_ON_CLICK	False
+#define CONFIG_RAISELOWER_ON_CLICK	false
 
 // Specify the maximum length of an entry in the client menu or the command
 // menu. Set this to zero if you want no limitation
@@ -139,7 +139,7 @@
 #define CONFIG_NORMALWIDTH_KEY    XK_KP_Subtract
 #define CONFIG_MAXIMISE_KEY       XK_Home
 #define CONFIG_UNMAXIMISE_KEY     XK_End
-#define CONFIG_SAME_KEY_MAX_UNMAX False
+#define CONFIG_SAME_KEY_MAX_UNMAX false
 
 // The next two may clash badly with Emacs, if you use Alt as the
 // modifier.  The commented variants might work better for some.
@@ -150,12 +150,12 @@
 //#define CONFIG_DESTROY_KEY	XK_Delete
 //#define CONFIG_DESTROY_KEY	XK_Insert
 
-// If WANT_KEYBOARD_MENU is True, then the MENU_KEY, when pressed with
+// If WANT_KEYBOARD_MENU is true, then the MENU_KEY, when pressed with
 // the modifier, will call up a client menu with keyboard navigation
-#define CONFIG_WANT_KEYBOARD_MENU	True
+#define CONFIG_WANT_KEYBOARD_MENU	true
 #define CONFIG_CLIENT_MENU_KEY		XK_Menu
 #define CONFIG_COMMAND_MENU_KEY		XK_Multi_key
-#define CONFIG_EXIT_ON_KBD_MENU		True
+#define CONFIG_EXIT_ON_KBD_MENU		true
 // these are for navigating on the menu; they don't require a modifier
 #define CONFIG_MENU_UP_KEY	XK_Up
 #define CONFIG_MENU_DOWN_KEY	XK_Down
@@ -164,13 +164,13 @@
 
 // Useful for fortunate people with Sun Type-5 keyboards.  These don't
 // require the modifier to be pressed.
-#define CONFIG_WANT_SUNKEYS	True
-#define CONFIG_WANT_SUNPOWERKEY	True
+#define CONFIG_WANT_SUNKEYS	true
+#define CONFIG_WANT_SUNPOWERKEY	true
 #define CONFIG_QUICKRAISE_KEY	XK_F15
 #define CONFIG_QUICKHIDE_KEY	XK_F17
 #define CONFIG_QUICKHEIGHT_KEY	XK_F13
 #define CONFIG_QUICKCLOSE_KEY	XK_F11
-#define CONFIG_QUICKRAISE_ALSO_LOWERS True 
+#define CONFIG_QUICKRAISE_ALSO_LOWERS true 
 #define CONFIG_SUNPOWER_EXEC	"/usr/openwin/bin/sys-suspend"
 #define CONFIG_SUNPOWER_OPTIONS	"-x","-h",0
 #define CONFIG_SUNPOWER_SHIFTOPTIONS	"-x","-n",0
@@ -213,13 +213,13 @@
 #define CONFIG_TAB_MARGIN   (DynamicConfig::config.tabMargin())
 
 
-// If USE_PLAIN_X_CURSORS is True, wmx will use cursors from the
+// If USE_PLAIN_X_CURSORS is true, wmx will use cursors from the
 // standard X cursor font; otherwise it will install its own.  You may
 // wish to set this if your X client and server are on different
 // endian machines, or if you've aliased the cursor font to something
 // else you like better, or if you just prefer the plain X cursors
 
-#define CONFIG_USE_PLAIN_X_CURSORS	True
+#define CONFIG_USE_PLAIN_X_CURSORS	true
 
 // Colours for window decorations.  The BORDERS one is for the
 // one-pixel border around the edge of each piece of decoration, not
@@ -247,27 +247,27 @@
 // Section IV. Flashy stuff
 // ========================
 
-// If USE_PIXMAPS is True the frames will be decorated with the pixmap
-// in ./background.xpm; if USE_PIXMAP_MENUS is also True, the menus
+// If USE_PIXMAPS is true the frames will be decorated with the pixmap
+// in ./background.xpm; if USE_PIXMAP_MENUS is also true, the menus
 // will be too.  The latter screws up in palette-based visuals, but
 // should be okay in true-colour.
 
-#define CONFIG_USE_PIXMAPS        True
-#define CONFIG_USE_PIXMAP_MENUS   True
+#define CONFIG_USE_PIXMAPS        true
+#define CONFIG_USE_PIXMAP_MENUS   true
 
 // Set CHANNEL_SURF for multi-channel switching; CHANNEL_CLICK_SIZE is
 // how close you have to middle-button-click to the top-right corner
 // of the root window before the channel change happens.  Set
 // USE_CHANNEL_KEYS if you want Alt-F1, Alt-F2 etc for quick channel
-// changes, provided USE_KEYBOARD is also True.  Set USE_CHANNEL_MENU
+// changes, provided USE_KEYBOARD is also true.  Set USE_CHANNEL_MENU
 // if you want to change channels via a keyboard-controlled menu
 // instead of linearly up and down one at a time like TV.
 
-#define CONFIG_CHANNEL_SURF       True
+#define CONFIG_CHANNEL_SURF       true
 #define CONFIG_CHANNEL_CLICK_SIZE 120
 #define CONFIG_CHANNEL_NUMBER_SIZE 20
-#define CONFIG_USE_CHANNEL_KEYS   True
-#define CONFIG_USE_CHANNEL_MENU   False
+#define CONFIG_USE_CHANNEL_KEYS   true
+#define CONFIG_USE_CHANNEL_MENU   false
 
 // FLIP_DELAY is the length of time the big green number stays in the
 // top-right when flipping channels, before the windows reappear.
@@ -298,7 +298,7 @@
 // background at top-left of screen 0.  Use CONFIG_CLOCK_NUMBER
 // to control the colour of the clock digits.
 
-#define CONFIG_CLOCK              False
+#define CONFIG_CLOCK              false
 
 #endif
 

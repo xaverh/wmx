@@ -15,20 +15,20 @@ declareList(EdgeRectList, EdgeRect);
 
 class Client {
 public:
-	Client(WindowManager *const, Window, Boolean);
+	Client(WindowManager *const, Window, bool);
 	void release();
 
 	/* for call from WindowManager: */
 
 	void activate();		/* active() */
 	void deactivate();		/* setactive(0) */
-	void gravitate(Boolean invert);
+	void gravitate(bool invert);
 	void installColormap();
 	void unreparent();
-	void withdraw(Boolean changeState = True);
+	void withdraw(bool changeState = true);
 	void unwithdraw();          // when map event received w/o map request
 	void hide();
-	void unhide(Boolean map);
+	void unhide(bool map);
 	void rename();
 	void kill();
 	void mapRaised();		// without activating
@@ -37,7 +37,7 @@ public:
 				// otherwise lower.
 
 	void move(XButtonEvent *);		// event for grab timestamp & coords
-	void resize(XButtonEvent *, Boolean, Boolean);
+	void resize(XButtonEvent *, bool, bool);
 	void moveOrResize(XButtonEvent *);
 	void ensureVisible();	// make sure x, y are on-screen
 
@@ -45,35 +45,35 @@ public:
 	// should *not* call directly into the Border
 	void showFeedback();
 	void raiseFeedbackLevel();
-	void removeFeedback(Boolean mapped);
+	void removeFeedback(bool mapped);
 
-	void manage(Boolean mapped);
-	Boolean hasWindow(Window);
+	void manage(bool mapped);
+	bool hasWindow(Window);
 
 	Client *revertTo() { return m_revert; }
 	void setRevertTo(Client *c) { m_revert = c; }
 
-	Boolean isHidden()      { return (m_state == IconicState);    }
-	Boolean isWithdrawn()   { return (m_state == WithdrawnState); }
-	Boolean isNormal()      { return (m_state == NormalState);    }
-	Boolean isKilled()      { return (m_window == None);          }
-	Boolean isTransient()   { return ((m_transient != None) || (m_shaped)); }
-	Boolean isSticky()      { return m_sticky; }
-	Boolean skipsFocus()    { return m_skipFocus || isNonFocusable(); } //!!!merge
-	Boolean isFocusOnClick(){ return (m_focusOnClick ||
+	bool isHidden()      { return (m_state == IconicState);    }
+	bool isWithdrawn()   { return (m_state == WithdrawnState); }
+	bool isNormal()      { return (m_state == NormalState);    }
+	bool isKilled()      { return (m_window == None);          }
+	bool isTransient()   { return ((m_transient != None) || (m_shaped)); }
+	bool isSticky()      { return m_sticky; }
+	bool skipsFocus()    { return m_skipFocus || isNonFocusable(); } //!!!merge
+	bool isFocusOnClick(){ return (m_focusOnClick ||
 									  (layer() < FIRST_FOCUS_FOLLOWS_LAYER)); }
-	Boolean isMovable()     { return m_movable; }
+	bool isMovable()     { return m_movable; }
 	Window  transientFor()  { return m_transient; }
-	Boolean isFixedSize()   { return m_fixedSize; }
-	Boolean isShaped()      { return m_shaped; }
+	bool isFixedSize()   { return m_fixedSize; }
+	bool isShaped()      { return m_shaped; }
 
 	// Client is borderless (like things on desktop or at 'dock' layer
 	// or above.
-	Boolean isBorderless()  { return ((layer() < FIRST_DECORATED_LAYER) ||
+	bool isBorderless()  { return ((layer() < FIRST_DECORATED_LAYER) ||
 									  (layer() > LAST_DECORATED_LAYER)); }
 
 	// Client should not receive focus (panel, desktop etc.)
-	Boolean isNonFocusable(){ return ((layer() > LAST_FOCUSABLE_LAYER)); }
+	bool isNonFocusable(){ return ((layer() > LAST_FOCUSABLE_LAYER)); }
 
 	const char *label()     { return m_label;    }
 	const char *name()      { return m_name;     }
@@ -84,13 +84,13 @@ public:
 	ClientType type()       { return m_type; }
 
 	int channel() { return m_channel;  }
-	void flipChannel(Boolean leaving, int newChannel);
-	Boolean isNormalButElsewhere() { return isNormal()||m_unmappedForChannel; }
+	void flipChannel(bool leaving, int newChannel);
+	bool isNormalButElsewhere() { return isNormal()||m_unmappedForChannel; }
 	void setChannel(int channel) { m_channel = channel; netwmUpdateChannel(); }
-	void setSticky(Boolean sticky);
-	void setSkipFocus(Boolean);
-	void setFocusOnClick(Boolean);
-	void setMovable(Boolean);
+	void setSticky(bool sticky);
+	void setSkipFocus(bool);
+	void setFocusOnClick(bool);
+	void setMovable(bool);
 	void setLayer(int newLayer);
 
 	void sendMessage(Atom, long);
@@ -98,16 +98,16 @@ public:
 
 	void warpPointer();
 	void activateAndWarp();
-	void focusIfAppropriate(Boolean);
-	void selectOnMotion(Window, Boolean);
+	void focusIfAppropriate(bool);
+	void selectOnMotion(Window, bool);
 
 	void gotoClient(); // when activated from e.g. menu or netwm task bar
 
 	void maximise(int);
 	void unmaximise(int);
-	Boolean isFullHeight() { return m_isFullHeight; }
-	void makeThisNormalHeight() { m_isFullHeight = False; }
-	void makeThisNormalWidth() { m_isFullWidth = False; }
+	bool isFullHeight() { return m_isFullHeight; }
+	void makeThisNormalHeight() { m_isFullHeight = false; }
+	void makeThisNormalWidth() { m_isFullWidth = false; }
 
 	/* for call from within: */
 
@@ -117,7 +117,7 @@ public:
 	Window parent()        { return m_border->parent();              }
 	Window root();
 	Client *activeClient() { return m_windowManager->activeClient(); }
-	Boolean isActive()     { return (activeClient() == this);        }
+	bool isActive()     { return (activeClient() == this);        }
 
 	WindowManager *windowManager() { return m_windowManager; }
 
@@ -150,7 +150,7 @@ private:
 	Window m_transient;
 	Border *m_border;
 
-	Boolean m_shaped;
+	bool m_shaped;
 
 	Client *m_revert;
 
@@ -161,39 +161,39 @@ private:
 	int m_bw;
 	Window m_wroot;
 	int m_screen;
-	Boolean m_doSomething;	// Become true if move() or resize() made
+	bool m_doSomething;	// Become true if move() or resize() made
 				// effect to this client.
 
 	int m_channel;
-	Boolean m_unmappedForChannel;
-	Boolean m_sticky;
-	Boolean m_skipFocus;
-	Boolean m_focusOnClick;
+	bool m_unmappedForChannel;
+	bool m_sticky;
+	bool m_skipFocus;
+	bool m_focusOnClick;
 	int m_layer;
 	ClientType m_type;
 
 //#if CONFIG_MAD_FEEDBACK != 0
-	Boolean m_levelRaised;
-	Boolean m_speculating;
+	bool m_levelRaised;
+	bool m_speculating;
 //#endif
 
 	XSizeHints m_sizeHints;
-	Boolean m_fixedSize;
-	Boolean m_movable;
+	bool m_fixedSize;
+	bool m_movable;
 	int m_minWidth;
 	int m_minHeight;
 	void fixResizeDimensions(int &, int &, int &, int &);
-	Boolean coordsInHole(int, int);
+	bool coordsInHole(int, int);
 
 	int m_state;
 	int m_protocol;
-	Boolean m_managed;
-	Boolean m_reparenting;
-	Boolean m_stubborn;		// keeps popping itself to the front
+	bool m_managed;
+	bool m_reparenting;
+	bool m_stubborn;		// keeps popping itself to the front
 	Time m_lastPopTime;
 
-	Boolean m_isFullHeight;
-	Boolean m_isFullWidth;
+	bool m_isFullHeight;
+	bool m_isFullWidth;
 	int m_normalH;
 	int m_normalY;
 	int m_normalW;
@@ -215,20 +215,20 @@ private:
 	char *getProperty(Atom name, Atom requiredType, int &length);
 
 	// accessors 
-	Boolean getState(int *);
+	bool getState(int *);
 	void setState(int);
-	void setNetwmProperty(Atom, unsigned char, Boolean);
+	void setNetwmProperty(Atom, unsigned char, bool);
 
 
 	// internal instantiation requests
-	Boolean setLabel(void);	// returns True if changed
+	bool setLabel(void);	// returns true if changed
 	void getColormaps(void);
 	void getProtocols(void);
 	void getTransient(void);
 	void getClientType(void);
 	void getChannel(void);
 
-	void decorate(Boolean active);
+	void decorate(bool active);
 };
 
 #define Pdelete    1

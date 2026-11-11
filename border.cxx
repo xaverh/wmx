@@ -4,7 +4,7 @@
 
 // Some shaping mods due to Jacques Garrigue, garrigue@kurims.kyoto-u.ac.jp
 
-#if CONFIG_USE_PIXMAPS != False
+#if CONFIG_USE_PIXMAPS != false
 #include <X11/xpm.h>
 #include "background.xpm"
 #endif
@@ -67,7 +67,7 @@ Border::Border(Client *const c, Window child) :
 
 
 	m_feedback = 0;
-	m_fedback = False;
+	m_fedback = false;
 }
 
 
@@ -240,8 +240,8 @@ void Border::initialiseStatics(WindowManager *wm)
 		wm->fatal("couldn't allocate border GC");
 	}
 
-#if CONFIG_USE_PIXMAPS != False
-		int use_dynamic = True;
+#if CONFIG_USE_PIXMAPS != false
+		int use_dynamic = true;
 		XpmAttributes attrs;
 
 
@@ -271,13 +271,13 @@ void Border::initialiseStatics(WindowManager *wm)
 				if (XpmReadFileToPixmap (wm->display(), wm->root(), pixMapPath,
 										 &m_backgroundPixmap, NULL, &attrs)
 					!= XpmSuccess) {
-					use_dynamic = False;
+					use_dynamic = false;
 				}
 				free (pixMapPath);
 			}
 		}
 
-		if (use_dynamic == False) {
+		if (use_dynamic == false) {
 			switch (XpmCreatePixmapFromData
 					(wm->display(), wm->root(), (char **)background,
 					 &m_backgroundPixmap, NULL, &attrs)) {
@@ -309,7 +309,7 @@ void Border::initialiseStatics(WindowManager *wm)
 }
 
 
-Boolean Border::hasWindow(Window w)
+bool Border::hasWindow(Window w)
 {
 	return (w != root() && (w == m_parent || (!m_client->isBorderless() && (w == m_tab ||
 				 w == m_button || w == m_resize))));
@@ -401,13 +401,13 @@ void Border::drawLabel()
 }
 
 
-Boolean Border::isTransient(void)
+bool Border::isTransient(void)
 {
 	return m_client->isTransient();
 }
 
 
-Boolean Border::isFixedSize(void)
+bool Border::isFixedSize(void)
 {
 	return m_client->isFixedSize();
 }
@@ -517,7 +517,7 @@ void Border::shapeTransientParent(int w, int h)
 }
 
 
-void Border::setTransientFrameVisibility(Boolean visible, int w, int h)
+void Border::setTransientFrameVisibility(bool visible, int w, int h)
 {
 	if (m_client->isBorderless())
 	return;
@@ -815,7 +815,7 @@ void Border::shapeResize()
 }
 
 
-void Border::setFrameVisibility(Boolean visible, int w, int h)
+void Border::setFrameVisibility(bool visible, int w, int h)
 {
 	if (isTransient()) {
 		setTransientFrameVisibility(visible, w, h);
@@ -893,7 +893,7 @@ void Border::setFrameVisibility(Boolean visible, int w, int h)
 
 void Border::configure(int x, int y, int w, int h,
 			   unsigned long mask, int detail,
-			   Boolean force) // must reshape everything
+			   bool force) // must reshape everything
 {
 	if (!m_parent || m_parent == root()) {
 
@@ -956,7 +956,7 @@ void Border::configure(int x, int y, int w, int h,
 
 	if (CONFIG_MAD_FEEDBACK && !m_client->isBorderless()) {
 		wa.save_under =
-		(DoesSaveUnders(ScreenOfDisplay(display(), 0)) ? True : False);
+		(DoesSaveUnders(ScreenOfDisplay(display(), 0)) ? true : false);
 		if (m_backgroundPixmap) {
 		XChangeWindowAttributes
 			(display(), m_feedback, CWSaveUnder | CWBackPixmap, &wa);
@@ -1096,7 +1096,7 @@ void Border::unmap()
 }
 
 
-void Border::decorate(Boolean active, int w, int h)
+void Border::decorate(bool active, int w, int h)
 {
 	setFrameVisibility(active, w, h);
 }

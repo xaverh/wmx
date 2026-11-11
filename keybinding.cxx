@@ -164,19 +164,19 @@ void Keybinding::grab_each_key(Display *display, Window window, int mask) {
 	keycode = XKeysymToKeycode(display, table[i].sym);
 	XGrabKey(display, keycode,
 		 mask,
-		 window, False,
+		 window, false,
 		 GrabModeAsync, GrabModeAsync);
 	XGrabKey(display, keycode,
 		 mask|LockMask|Mod2Mask,
-		 window, False,
+		 window, false,
 		 GrabModeAsync, GrabModeAsync);
 	XGrabKey(display, keycode,
 		 mask|LockMask,
-		 window, False,
+		 window, false,
 		 GrabModeAsync, GrabModeAsync);
 	XGrabKey(display, keycode,
 		 mask|Mod2Mask,
-		 window, False,
+		 window, false,
 		 GrabModeAsync, GrabModeAsync);
 	}
 }

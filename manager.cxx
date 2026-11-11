@@ -52,10 +52,10 @@ Atom    Atoms::netwm_winType_combo;
 Atom    Atoms::netwm_winType_dnd;    
 Atom    Atoms::netwm_winType_normal; 
 
-int     WindowManager::m_signalled = False;
-int     WindowManager::m_restart   = False;
-Boolean WindowManager::m_initialising = False;
-Boolean ignoreBadWindowErrors;
+int     WindowManager::m_signalled = false;
+int     WindowManager::m_restart   = false;
+bool WindowManager::m_initialising = false;
+bool ignoreBadWindowErrors;
 
 implementPList(ClientList, Client);
 
@@ -63,10 +63,10 @@ implementList(AtomList, Atom);
 
 #define DEFAULT_PORT 6999
 WindowManager::WindowManager(int argc, char **argv) :
-	m_focusChanging(False),
+	m_focusChanging(false),
 implementList(AtomList, Atom);
-	m_altPressed(False),
-	m_altStateRetained(False),
+	m_altPressed(false),
+	m_altStateRetained(false),
 	m_netwmCheckWin(0),
 	m_altModMask(0) // later
 {
@@ -160,9 +160,9 @@ implementList(AtomList, Atom);
 	}
 	XFreeModifiermap(modmap);
 
-	m_initialising = True;
+	m_initialising = true;
 	XSetErrorHandler(errorHandler);
-	ignoreBadWindowErrors = False;
+	ignoreBadWindowErrors = false;
 
 	key_binding_with_mod = new Keybinding(this, wmxdir, true);
 	key_binding_without_mod = new Keybinding(this, wmxdir, false);
@@ -237,9 +237,9 @@ implementList(AtomList, Atom);
 implementList(AtomList, Atom);
 
 	XSetSelectionOwner(m_display, Atoms::wmx_running,
-			   None, timestamp(True)); // used to have m_menuWindow
+			   None, timestamp(true)); // used to have m_menuWindow
 	XSync(m_display, False);
-	m_initialising = False;
+	m_initialising = false;
 	m_returnCode = 0;
 
 implementList(AtomList, Atom);
@@ -252,7 +252,7 @@ implementList(AtomList, Atom);
 	scanInitialWindows();
 	updateStackingOrder();
 	loop();
-	if (m_restart == True){
+	if (m_restart == true){
 	execv(argv[0],argv);
 	}
 }
@@ -302,7 +302,7 @@ void WindowManager::release()
 	}
 
 	XSetInputFocus(m_display, PointerRoot, RevertToPointerRoot,
-		   timestamp(False));
+		   timestamp(false));
 	installColormap(None);
 
 	XFreeCursor(m_display, m_cursor);
@@ -336,7 +336,7 @@ int WindowManager::errorHandler(Display *d, XErrorEvent *e)
 	}
 
 	// ugh
-	if (ignoreBadWindowErrors == True && e->error_code == BadWindow) return 0;
+	if (ignoreBadWindowErrors == true && e->error_code == BadWindow) return 0;
 
 	char msg[100], number[30], request[100];
 	XGetErrorText(d, e->error_code, msg, 100);
@@ -504,7 +504,7 @@ void WindowManager::installCursorOnWindow(RootCursor c, Window w)
 }
 
 
-Time WindowManager::timestamp(Boolean reset)
+Time WindowManager::timestamp(bool reset)
 {
 	if (reset) m_currentTime = CurrentTime;
 
@@ -524,9 +524,9 @@ Time WindowManager::timestamp(Boolean reset)
 
 void WindowManager::sigHandler(int signal)
 {
-	m_signalled = True;
+	m_signalled = true;
 	if (signal == SIGHUP)
-	m_restart = True;
+	m_restart = true;
 }
 
 void WindowManager::scanInitialWindows()
@@ -544,7 +544,7 @@ void WindowManager::scanInitialWindows()
 
 		XGetWindowAttributes(m_display, wins[i], &attr);
 		if (attr.override_redirect) continue;
-		(void)windowToClient(wins[i], True);
+		(void)windowToClient(wins[i], true);
 	}
 
 		XFree((void *)wins);
@@ -552,7 +552,7 @@ void WindowManager::scanInitialWindows()
 }
 
 
-Client *WindowManager::windowToClient(Window w, Boolean create)
+Client *WindowManager::windowToClient(Window w, bool create)
 {
 	if (w == 0) return 0;
 
@@ -653,7 +653,7 @@ void WindowManager::clearFocus()
 	XMapWindow(display(), w);
 	}
 
-	XSetInputFocus(display(), w, RevertToPointerRoot, timestamp(False));
+	XSetInputFocus(display(), w, RevertToPointerRoot, timestamp(false));
 }
 
 
@@ -691,11 +691,11 @@ void WindowManager::removeFromHiddenList(Client *c)
 
 		while (c->channel() != m_currentChannel) {
 			if (m_currentChannel < c->channel()) {
-			flipChannel(False, False, True, 0);
+			flipChannel(false, false, true, 0);
 			} else {
-			flipChannel(False, True, True, 0);
+			flipChannel(false, true, true, 0);
 			}
-			XSync(display(), False);
+			XSync(display(), false);
 		}
 		} else {
 		netwmUpdateWindowList(); 
@@ -760,16 +760,16 @@ void WindowManager::removeFromOrderedList(Client *c)
 }
 
 
-Boolean WindowManager::isTop(Client *c)
+bool WindowManager::isTop(Client *c)
 {
 	int layer = c->layer();
 
 	if (m_orderedClients[layer].count() == 0) {
 		fprintf(stderr, "Warning: ordered clients list for layer %d is empty even though client %p thinks it's in this layer\n", layer, c);
-		return False;
+		return false;
 	}
 
-	return (m_orderedClients[layer].item(0) == c) ? True : False;
+	return (m_orderedClients[layer].item(0) == c) ? true : false;
 }
 
 
@@ -777,11 +777,11 @@ Boolean WindowManager::isTop(Client *c)
 
 
 
-Boolean WindowManager::raiseTransients(Client *c)
+bool WindowManager::raiseTransients(Client *c)
 {
 	Client *first = 0;
 
-	if (!c->isNormal()) return False;
+	if (!c->isNormal()) return false;
 
 	for (int i = 0; i < m_clients.count(); ++i) {
 
@@ -798,9 +798,9 @@ Boolean WindowManager::raiseTransients(Client *c)
 
 	if (first) {
 	first->mapRaised();
-	return True;
+	return true;
 	} else {
-	return False;
+	return false;
 	}
 }
 
@@ -924,7 +924,7 @@ void WindowManager::sort_clients(void)
 
 
 
-#if CONFIG_GNOME_COMPLIANCE != False
+#if CONFIG_GNOME_COMPLIANCE != false
 
 void WindowManager::gnomeInitialiseCompliance()
 {

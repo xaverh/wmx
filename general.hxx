@@ -19,8 +19,6 @@
 
 #include <X11/extensions/shape.h>
 
-// True and False are defined in Xlib.h
-typedef char Boolean;
 
 #include "config.hxx"
 
@@ -124,7 +122,7 @@ declareList(AtomList, Atom);
 
 #define MAX_LAYER    13
 
-extern Boolean ignoreBadWindowErrors; // tidiness hack
+extern bool ignoreBadWindowErrors; // tidiness hack
 
 #define AllButtonMask	( Button1Mask | Button2Mask | Button3Mask \
 			| Button4Mask | Button5Mask )

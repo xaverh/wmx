@@ -16,7 +16,7 @@ const char *const Client::m_defaultLabel = "incognito";
 implementList(EdgeRectList, EdgeRect);
 
 
-Client::Client(WindowManager *const wm, Window w, Boolean shaped) :
+Client::Client(WindowManager *const wm, Window w, bool shaped) :
 	m_window(w),
 	m_transient(None),
 	m_border(0),
@@ -24,28 +24,28 @@ Client::Client(WindowManager *const wm, Window w, Boolean shaped) :
 	m_revert(0),
 	m_wroot(None),
 	m_screen(0),
-	m_doSomething(False),
+	m_doSomething(false),
 	m_channel(0),
-	m_unmappedForChannel(False),
-	m_sticky(False),
-	m_skipFocus(False),
-	m_focusOnClick(False),
+	m_unmappedForChannel(false),
+	m_sticky(false),
+	m_skipFocus(false),
+	m_focusOnClick(false),
 	m_layer(NORMAL_LAYER),
 	m_type(NormalClient),
-	m_levelRaised(False),
-	m_speculating(False),
-	m_fixedSize(False),
-	m_movable(True),
+	m_levelRaised(false),
+	m_speculating(false),
+	m_fixedSize(false),
+	m_movable(true),
 	m_minWidth(0),
 	m_minHeight(0),
 	m_state(WithdrawnState),
 	m_protocol(0),
-	m_managed(False),
-	m_reparenting(False),
-	m_stubborn(False),
+	m_managed(false),
+	m_reparenting(false),
+	m_stubborn(false),
 	m_lastPopTime(0L),
-	m_isFullHeight(False),
-	m_isFullWidth(False),
+	m_isFullHeight(false),
+	m_isFullWidth(false),
 	m_name(NULL),
 	m_iconName(NULL),
 	m_label(NULL),
@@ -74,13 +74,13 @@ Client::Client(WindowManager *const wm, Window w, Boolean shaped) :
 	m_border = new Border(this, w);
 
 	m_channel = wm->channel();
-	m_unmappedForChannel = False;
+	m_unmappedForChannel = false;
 
 			m_x, m_y, m_w, m_h, m_window, m_label);
 
-	m_speculating = m_levelRaised = False;
+	m_speculating = m_levelRaised = false;
 
-	if (attr.map_state == IsViewable) manage(True);
+	if (attr.map_state == IsViewable) manage(true);
 
 	netwmUpdateChannel();
 
@@ -89,9 +89,9 @@ Client::Client(WindowManager *const wm, Window w, Boolean shaped) :
 			if (activeClient() == this) {
 				wm->setActiveClient(0);
 			}
-			m_unmappedForChannel = True;
+			m_unmappedForChannel = true;
 			XUnmapWindow(display(), m_window);
-			withdraw(False);
+			withdraw(false);
 		}
 	}
 }
@@ -103,7 +103,7 @@ Client::~Client()
 }    
 
 
-Boolean Client::hasWindow(Window w)
+bool Client::hasWindow(Window w)
 {
 	return ((m_window == w) || m_border->hasWindow(w));
 }
@@ -131,7 +131,7 @@ void Client::release()
 
 	windowManager()->skipInRevert(this, m_revert);
 
-	if (isHidden()) unhide(False);
+	if (isHidden()) unhide(false);
 	windowManager()->removeFromOrderedList(this);
 
 	if (isActive()) {
@@ -165,14 +165,14 @@ void Client::unreparent()
 	XWindowChanges wc;
 
 	if (!isWithdrawn()) {
-	gravitate(True);
+	gravitate(true);
 	XReparentWindow(display(), m_window, root(), m_x, m_y);
 	}
 
 	wc.border_width = m_bw;
 	XConfigureWindow(display(), m_window, CWBorderWidth, &wc);
 
-	XSync(display(), True);
+	XSync(display(), true);
 }
 
 
@@ -204,10 +204,10 @@ void Client::installColormap()
 }
 
 
-void Client::manage(Boolean mapped)
+void Client::manage(bool mapped)
 {
 	static int lastX = 0, lastY = 0;
-	Boolean shouldHide, reshape;
+	bool shouldHide, reshape;
 	XWMHints *hints;
 	Display *d = display();
 	long mSize;
@@ -238,10 +238,10 @@ void Client::manage(Boolean mapped)
 	};
 
 		XGrabKey(display(), XKeysymToKeycode(display(), CONFIG_ALT_KEY),
-				 0, m_window, True, GrabModeAsync, GrabModeAsync);
+				 0, m_window, true, GrabModeAsync, GrabModeAsync);
 
 	XGrabButton(display(), Button1,
-			m_windowManager->altModMask(), m_window, False, 0,
+			m_windowManager->altModMask(), m_window, false, 0,
 			GrabModeAsync, GrabModeSync, None, None);
 
 	for (i = 0; i < (int)(sizeof(keys)/sizeof(keys[0])); ++i) {
@@ -249,38 +249,38 @@ void Client::manage(Boolean mapped)
 		if (keycode) {
 		XGrabKey(display(), keycode,
 			 m_windowManager->altModMask()|LockMask|Mod2Mask,
-			 m_window, True,
+			 m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 		XGrabKey(display(), keycode,
 			 m_windowManager->altModMask()|LockMask,
-			 m_window, True,
+			 m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 		XGrabKey(display(), keycode,
 			 m_windowManager->altModMask()|Mod2Mask,
-			 m_window, True,
+			 m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 		XGrabKey(display(), keycode,
 			 m_windowManager->altModMask(),
-			 m_window, True,
+			 m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 		}
 	}
 
 	keycode = XKeysymToKeycode(display(), CONFIG_QUICKRAISE_KEY);
 	if (keycode) {
-		XGrabKey(display(), keycode, AnyModifier, m_window, True,
+		XGrabKey(display(), keycode, AnyModifier, m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 	}
 
 	keycode = XKeysymToKeycode(display(), CONFIG_QUICKHIDE_KEY);
 	if (keycode) {
-		XGrabKey(display(), keycode, AnyModifier, m_window, True,
+		XGrabKey(display(), keycode, AnyModifier, m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 	}
 
 	keycode = XKeysymToKeycode(display(), CONFIG_QUICKHEIGHT_KEY);
 	if (keycode) {
-		XGrabKey(display(), keycode, AnyModifier, m_window, True,
+		XGrabKey(display(), keycode, AnyModifier, m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 	}
 
@@ -289,7 +289,7 @@ void Client::manage(Boolean mapped)
 		keycode = XKeysymToKeycode(display(), XK_F1 + i);
 		if (keycode) {
 			XGrabKey(display(), keycode,
-				 m_windowManager->altModMask(), m_window, True,
+				 m_windowManager->altModMask(), m_window, true,
 				 GrabModeAsync, GrabModeAsync);
 		}
 		}
@@ -323,17 +323,17 @@ void Client::manage(Boolean mapped)
 	m_sizeHints.flags = PSize;
 	}
 
-	m_fixedSize = False;
+	m_fixedSize = false;
 	if ((m_sizeHints.flags & (PMinSize | PMaxSize)) == (PMinSize | PMaxSize) &&
 	(m_sizeHints.min_width  == m_sizeHints.max_width &&
-	 m_sizeHints.min_height == m_sizeHints.max_height)) m_fixedSize = True;
+	 m_sizeHints.min_height == m_sizeHints.max_height)) m_fixedSize = true;
 
 	reshape = !mapped;
 
 	if (m_fixedSize) {
-	if ((m_sizeHints.flags & USPosition)) reshape = False;
-	if ((m_sizeHints.flags & PPosition) && shouldHide) reshape = False;
-	if ((m_transient != None)) reshape = False;
+	if ((m_sizeHints.flags & USPosition)) reshape = false;
+	if ((m_sizeHints.flags & PPosition) && shouldHide) reshape = false;
+	if ((m_transient != None)) reshape = false;
 	}
 
 	if ((m_sizeHints.flags & PBaseSize)) {
@@ -352,16 +352,16 @@ void Client::manage(Boolean mapped)
 
 	if (!isBorderless()) {
 
-		gravitate(False);
+		gravitate(false);
 
 		// zeros are iffy, should be calling some Manager method
 		int dw = DisplayWidth(display(), 0), dh = DisplayHeight(display(), 0);
 
 		if (m_w < m_minWidth) {
-			m_w = m_minWidth; m_fixedSize = False; reshape = True;
+			m_w = m_minWidth; m_fixedSize = false; reshape = true;
 		}
 		if (m_h < m_minHeight) {
-			m_h = m_minHeight; m_fixedSize = False; reshape = True;
+			m_h = m_minHeight; m_fixedSize = false; reshape = true;
 		}
 
 		if (m_w > dw - 8) m_w = dw - 8;
@@ -393,12 +393,12 @@ void Client::manage(Boolean mapped)
 		if (m_y < m_border->yIndent()) m_y = m_border->yIndent();
 
 	} else {
-		reshape = False;
+		reshape = false;
 	}
 
 	m_border->configure(m_x, m_y, m_w, m_h, 0L, Above);
 
-	if (mapped) m_reparenting = True;
+	if (mapped) m_reparenting = true;
 	if (reshape && !m_fixedSize) XResizeWindow(d, m_window, m_w, m_h);
 	XSetWindowBorderWidth(d, m_window, 0);
 
@@ -407,7 +407,7 @@ void Client::manage(Boolean mapped)
 	// (support for shaped windows absent)
 
 	XAddToSaveSet(d, m_window);
-	m_managed = True;
+	m_managed = true;
 
 	if (shouldHide) hide();
 	else {
@@ -431,7 +431,7 @@ void Client::manage(Boolean mapped)
 
 	if (CONFIG_AUTO_RAISE) {
 	m_windowManager->stopConsideringFocus();
-	focusIfAppropriate(False);
+	focusIfAppropriate(false);
 	}
 
 	char *property = 0;
@@ -443,7 +443,7 @@ void Client::manage(Boolean mapped)
 }
 
 
-void Client::selectOnMotion(Window w, Boolean select)
+void Client::selectOnMotion(Window w, bool select)
 {
 	if (!CONFIG_AUTO_RAISE) return;
 	if (!w || w == root()) return;
@@ -468,7 +468,7 @@ void Client::gotoClient()
 		windowManager()->gotoChannel(m_channel, 0);
 	}
 	if (isHidden()) {
-		unhide(True);
+		unhide(true);
 	} else {
 		if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick()) activate();
 		else mapRaised();
@@ -476,7 +476,7 @@ void Client::gotoClient()
 	}
 }
 
-void Client::decorate(Boolean active)
+void Client::decorate(bool active)
 {
 	m_border->decorate(active, m_w, m_h);
 }
@@ -497,7 +497,7 @@ void Client::activate()
 	(m_channel != windowManager()->channel())) return;
 
 	if (isActive()) {
-	decorate(True);
+	decorate(true);
 	if (CONFIG_AUTO_RAISE || CONFIG_RAISE_ON_FOCUS) mapRaised();
 	return;
 	}
@@ -514,7 +514,7 @@ void Client::activate()
 	XUngrabButton(display(), AnyButton, AnyModifier, parent());
 
 	XSetInputFocus(display(), m_window, RevertToPointerRoot,
-		   windowManager()->timestamp(False));
+		   windowManager()->timestamp(false));
 
 	if (m_protocol & PtakeFocus) {
 	sendMessage(Atoms::wm_protocols, Atoms::wm_takeFocus);
@@ -533,7 +533,7 @@ void Client::activate()
 	}
 
 //!!!    windowManager()->setActiveClient(this);
-	decorate(True);
+	decorate(true);
 
 	installColormap();		// new!
 }
@@ -545,34 +545,34 @@ void Client::deactivate()	// called from wm?
 	return;
 	}
 
-	XGrabButton(display(), AnyButton, AnyModifier, parent(), False,
+	XGrabButton(display(), AnyButton, AnyModifier, parent(), false,
 			ButtonPressMask | ButtonReleaseMask,
 		GrabModeSync, GrabModeSync, None, None);
 
-	decorate(False);
+	decorate(false);
 }
 
-void Client::setSticky(Boolean sticky) 
+void Client::setSticky(bool sticky) 
 {    
 	m_sticky = sticky;
 }
 
-void Client::setMovable(Boolean movable) 
+void Client::setMovable(bool movable) 
 { 
 	m_movable = movable;
 }
 
-void Client::setSkipFocus(Boolean skipFocus) 
+void Client::setSkipFocus(bool skipFocus) 
 { 
 	m_skipFocus = skipFocus;
 }
 
-void Client::setFocusOnClick(Boolean focusOnClick) 
+void Client::setFocusOnClick(bool focusOnClick) 
 { 
 	m_focusOnClick = focusOnClick;
 }
 
-void Client::setNetwmProperty(Atom property, unsigned char state, Boolean to) {
+void Client::setNetwmProperty(Atom property, unsigned char state, bool to) {
 
 
 
@@ -585,7 +585,7 @@ void Client::setNetwmProperty(Atom property, unsigned char state, Boolean to) {
 	unsigned long bytes_remain;
 	unsigned char *prop;
 	if(XGetWindowProperty(display(), window(), property, 0, 1,    
-						  False, XA_CARDINAL, &returnType, &returnFormat,
+						  false, XA_CARDINAL, &returnType, &returnFormat,
 						  &count, &bytes_remain, &prop) == Success) {
 		if (returnType == XA_CARDINAL && returnFormat == 32 && count == 1) {
 			unsigned char oldProp = *prop;
@@ -634,9 +634,9 @@ void Client::sendMessage(Atom a, long l)
 	ev.xclient.message_type = a;
 	ev.xclient.format = 32;
 	ev.xclient.data.l[0] = l;
-	ev.xclient.data.l[1] = windowManager()->timestamp(False);
+	ev.xclient.data.l[1] = windowManager()->timestamp(false);
 	mask = 0L;
-	status = XSendEvent(display(), m_window, False, mask, &ev);
+	status = XSendEvent(display(), m_window, false, mask, &ev);
 
 	if (status == 0) {
 	}
@@ -650,7 +650,7 @@ static int getProperty_aux(Display *d, Window w, Atom a, Atom type, long len,
 	int format;
 	unsigned long n, extra;
 	int status;
-	Boolean retried = False;
+	bool retried = false;
 
 tryagain:
 	status = XGetWindowProperty(d, w, a, 0L, len, False, type, &realType,
@@ -696,7 +696,7 @@ tryagain:
 			XFreeStringList(list);
 			n = n;
 		} else if (!retried) {
-			retried = True;
+			retried = true;
 			type = AnyPropertyType;
 			goto tryagain;
 		} else {
@@ -750,18 +750,18 @@ void Client::setState(int state)
 }
 
 
-Boolean Client::getState(int *state)
+bool Client::getState(int *state)
 {
 	CARD32 *p = 0;
 
 	if (getProperty_aux(display(), m_window, Atoms::wm_state, Atoms::wm_state,
 			2L, (unsigned char **)&p) <= 0) {
-	return False;
+	return false;
 	}
 
 	*state = (int) *p;
 	XFree((char *)p);
-	return True;
+	return true;
 }
 
 
@@ -788,7 +788,7 @@ void Client::getProtocols()
 }
 
 
-void Client::gravitate(Boolean invert)
+void Client::gravitate(bool invert)
 {
 	int gravity;
 	int w = 0, h = 0, xdelta, ydelta;
@@ -860,7 +860,7 @@ void Client::gravitate(Boolean invert)
 }
 
 
-Boolean Client::setLabel(void)
+bool Client::setLabel(void)
 {
 	const char *newLabel;
 
@@ -871,15 +871,15 @@ Boolean Client::setLabel(void)
 	if (!m_label) {
 
 	m_label = NewString(newLabel);
-	return True;
+	return true;
 
 	} else if (strcmp(m_label, newLabel)) {
 
 	free((void *)m_label);
 	m_label = NewString(newLabel);
-	return True;
+	return true;
 
-	} else return True;//False;// dammit!
+	} else return true;//false;// dammit!
 }
 
 
@@ -950,12 +950,12 @@ void Client::getClientType()
 			if (typeAtom == Atoms::netwm_winType_desktop) {
 				m_type = DesktopClient;
 				m_layer = DESKTOP_LAYER;
-				setSticky(True);
+				setSticky(true);
 				break;
 			} else if (typeAtom == Atoms::netwm_winType_dock) {
 				m_type = DockClient;
 				m_layer = DOCK_LAYER;
-				setSticky(True);
+				setSticky(true);
 				break;
 			} else if (typeAtom == Atoms::netwm_winType_toolbar) {
 				m_type = ToolbarClient;
@@ -1041,10 +1041,10 @@ void Client::hide()
 }
 
 
-void Client::unhide(Boolean map)
+void Client::unhide(bool map)
 {
 	if (CONFIG_MAD_FEEDBACK) {
-	m_speculating = False;
+	m_speculating = false;
 	if (!isHidden()) return;
 	}
 
@@ -1062,7 +1062,7 @@ void Client::unhide(Boolean map)
 	}
 	mapRaised();
 
-	if (CONFIG_AUTO_RAISE) focusIfAppropriate(False);
+	if (CONFIG_AUTO_RAISE) focusIfAppropriate(false);
 	else if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick()) activate();
 	}
 
@@ -1085,18 +1085,18 @@ void Client::sendConfigureNotify()
 	ce.above = None;
 	ce.override_redirect = 0;
 
-	XSendEvent(display(), m_window, False, StructureNotifyMask, (XEvent*)&ce);
+	XSendEvent(display(), m_window, false, StructureNotifyMask, (XEvent*)&ce);
 }
 
 
-void Client::withdraw(Boolean changeState)
+void Client::withdraw(bool changeState)
 {
 	m_border->unmap();
 
-	gravitate(True);
+	gravitate(true);
 	XReparentWindow(display(), m_window, root(), m_x, m_y);
 
-	gravitate(False);
+	gravitate(false);
 
 	if (changeState) {
 	XRemoveFromSaveSet(display(), m_window);
@@ -1104,9 +1104,9 @@ void Client::withdraw(Boolean changeState)
 	}
 
 
-	ignoreBadWindowErrors = True;
-	XSync(display(), False);
-	ignoreBadWindowErrors = False;
+	ignoreBadWindowErrors = true;
+	XSync(display(), false);
+	ignoreBadWindowErrors = false;
 
 }
 
@@ -1115,7 +1115,7 @@ void Client::unwithdraw()
 {
 	if (!m_managed) {
 		if (!m_reparenting) {
-			manage(True);
+			manage(true);
 		}
 		return;
 	}
@@ -1242,7 +1242,7 @@ void Client::maximise(int max)
 		m_y -= (m_h - m_normalH);
 		if (m_y < m_border->yIndent()) m_y = m_border->yIndent();
 	}
-	m_isFullHeight = True;
+	m_isFullHeight = true;
 	}
 
 	if (w) {
@@ -1250,7 +1250,7 @@ void Client::maximise(int max)
 		m_x -= (m_w - m_normalW);
 		if (m_x < m_border->xIndent()) m_x = m_border->xIndent();
 	}
-	m_isFullWidth = True;
+	m_isFullWidth = true;
 	}
 
 	unsigned long mask;
@@ -1262,7 +1262,7 @@ void Client::maximise(int max)
 	else
 	mask = CWX | CWWidth;
 
-	m_border->configure(m_x, m_y, m_w, m_h, mask, 0, True);
+	m_border->configure(m_x, m_y, m_w, m_h, mask, 0, true);
 
 	XResizeWindow(display(), m_window, m_w, m_h);
 	sendConfigureNotify();
@@ -1287,12 +1287,12 @@ void Client::unmaximise(int max)
 	if (h) {
 		m_h = m_normalH;
 	m_y = m_normalY;
-	m_isFullHeight = False;
+	m_isFullHeight = false;
 	}
 	if (w) {
 	m_w = m_normalW;
 	m_x = m_normalX;
-	m_isFullWidth = False;
+	m_isFullWidth = false;
 	}
 
 	unsigned long mask;
@@ -1304,7 +1304,7 @@ void Client::unmaximise(int max)
 	else
 	mask = CWX | CWWidth;
 
-	m_border->configure(m_x, m_y, m_w, m_h, mask, 0, True);
+	m_border->configure(m_x, m_y, m_w, m_h, mask, 0, true);
 
 	XResizeWindow(display(), m_window, m_w, m_h);
 	sendConfigureNotify();
@@ -1318,7 +1318,7 @@ void Client::warpPointer()
 }
 
 
-void Client::flipChannel(Boolean leaving, int newChannel)
+void Client::flipChannel(bool leaving, int newChannel)
 {
 
 	if (m_channel != windowManager()->channel()) {
@@ -1343,9 +1343,9 @@ void Client::flipChannel(Boolean leaving, int newChannel)
 	if (activeClient() == this) {
 		windowManager()->setActiveClient(0);
 	}
-	m_unmappedForChannel = True;
+	m_unmappedForChannel = true;
 	XUnmapWindow(display(), m_window);
-	withdraw(False);
+	withdraw(false);
 	return;
 
 	} else {
@@ -1359,7 +1359,7 @@ void Client::flipChannel(Boolean leaving, int newChannel)
 		return;
 	}
 
-	m_unmappedForChannel = False;
+	m_unmappedForChannel = false;
 
 	setState(WithdrawnState);
 	m_border->reparent();
@@ -1376,7 +1376,7 @@ void Client::flipChannel(Boolean leaving, int newChannel)
 void Client::showFeedback()
 {
 	if (CONFIG_MAD_FEEDBACK) {
-	if (m_speculating || m_levelRaised) removeFeedback(False);
+	if (m_speculating || m_levelRaised) removeFeedback(false);
 	m_border->showFeedback(m_x, m_y, m_w, m_h);
 	}
 }
@@ -1386,18 +1386,18 @@ void Client::raiseFeedbackLevel()
 	if (CONFIG_MAD_FEEDBACK) {
 
 	m_border->removeFeedback();
-	m_levelRaised = True;
+	m_levelRaised = true;
 
 	if (isNormal()) {
 		mapRaised();
 	} else if (isHidden()) {
-		unhide(True);
-		m_speculating = True;
+		unhide(true);
+		m_speculating = true;
 	}
 	}
 }
 
-void Client::removeFeedback(Boolean mapped)
+void Client::removeFeedback(bool mapped)
 {
 	if (CONFIG_MAD_FEEDBACK) {
 
@@ -1406,13 +1406,13 @@ void Client::removeFeedback(Boolean mapped)
 	if (m_levelRaised) {
 		if (m_speculating) {
 		if (!mapped) hide();
-		XSync(display(), False);
+		XSync(display(), false);
 		} else {
 		// not much we can do
 		}
 	}
 
-	m_speculating = m_levelRaised = False;
+	m_speculating = m_levelRaised = false;
 	}
 }
 

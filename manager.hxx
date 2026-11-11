@@ -19,10 +19,10 @@ public:
 
 	// for call from Client and within:
 
-	Client *windowToClient(Window, Boolean create = False);
+	Client *windowToClient(Window, bool create = false);
 	Client *activeClient() { return m_activeClient; }
-	Boolean raiseTransients(Client *); // true if raised any
-	Time timestamp(Boolean reset);
+	bool raiseTransients(Client *); // true if raised any
+	Time timestamp(bool reset);
 	void clearFocus();
 
 	void setActiveClient(Client *const c);
@@ -65,7 +65,7 @@ public:
 
 	int channel() { return m_currentChannel; }
 	int channels() { return m_channels; }
-	void setSignalled() { m_looping = False; } // ...
+	void setSignalled() { m_looping = false; } // ...
 	void gotoChannel(int channel, Client *push);
 	void ensureChannelExists(int channel);
 
@@ -75,7 +75,7 @@ public:
 	void hoistToTop(Client *);
 	void hoistToBottom(Client *);
 	void removeFromOrderedList(Client *);
-	Boolean isTop(Client *);
+	bool isTop(Client *);
 
 	// Instruct the X-Server to reorder the windows to match our ordering.
 	// Takes account of layering.
@@ -139,8 +139,8 @@ private:
 
 	int m_channels;
 	int m_currentChannel;	// from 1 to ...
-	void flipChannel(Boolean statusOnly, Boolean flipDown,
-			 Boolean quickFlip, Client *push); // bleah!
+	void flipChannel(bool statusOnly, bool flipDown,
+			 bool quickFlip, Client *push); // bleah!
 	Window createNumberWindow(int screen, const char *colour);
 	int shapeNumberWindow(Window w, int number, int minDigits); // returns width in pixels
 	void instateChannel();
@@ -153,10 +153,10 @@ private:
 	Window *m_clockWindow;
 	Time m_clockUpdateTime;
 
-	Boolean m_looping;
+	bool m_looping;
 	int m_returnCode;
 
-	static Boolean m_initialising;
+	static bool m_initialising;
 	static int errorHandler(Display *, XErrorEvent *);
 	static void sigHandler(int);
 	static int m_signalled;
@@ -165,14 +165,14 @@ private:
 	void initialiseScreen();
 	void scanInitialWindows();
 
-	void circulate(Boolean activeFirst);
+	void circulate(bool activeFirst);
 
-	Boolean m_focusChanging;	// checking times for focus change
+	bool m_focusChanging;	// checking times for focus change
 	Client *m_focusCandidate;
 	Window  m_focusCandidateWindow;
 	Time    m_focusTimestamp;	// time of last crossing event
-	Boolean m_focusPointerMoved;
-	Boolean m_focusPointerNowStill;
+	bool m_focusPointerMoved;
+	bool m_focusPointerNowStill;
 	void checkDelaysForFocus();
 
 
@@ -194,8 +194,8 @@ private:
 	void eventFocusIn(XFocusInEvent *);
 	void eventExposure(XExposeEvent *);
 
-	Boolean m_altPressed;
-	Boolean m_altStateRetained;
+	bool m_altPressed;
+	bool m_altStateRetained;
 	void eventKeyPress(XKeyEvent *);
 
 	void netwmInitialiseCompliance();

@@ -4,7 +4,7 @@
 int WindowManager::loop()
 {
 	XEvent ev;
-	m_looping = True;
+	m_looping = true;
 
 	while (m_looping) {
 
@@ -97,8 +97,8 @@ void WindowManager::dispatchEvent(XEvent *ev)
 
 	case MotionNotify:
 	if (CONFIG_AUTO_RAISE && m_focusChanging) {
-		if (!m_focusPointerMoved) m_focusPointerMoved = True;
-		else m_focusPointerNowStill = False;
+		if (!m_focusPointerMoved) m_focusPointerMoved = true;
+		else m_focusPointerNowStill = false;
 	}
 	break;
 
@@ -136,7 +136,7 @@ void WindowManager::nextEvent(XEvent *e)
 
 	if (m_channelChangeTime > 0 || CONFIG_CLOCK) {
 
-		Time t = timestamp(True);
+		Time t = timestamp(true);
 
 		if (m_channelChangeTime > 0 && t >= m_channelChangeTime) {
 		instateChannel();
@@ -210,13 +210,13 @@ void WindowManager::nextEvent(XEvent *e)
 
 	if (errno != EINTR || !m_signalled) {
 		perror("wmx: select failed");
-		m_looping = False;
+		m_looping = false;
 	}
 	}
 
 	fprintf(stderr, "wmx: signal caught, exiting\n");
-	ignoreBadWindowErrors = True;
-	m_looping = False;
+	ignoreBadWindowErrors = true;
+	m_looping = false;
 	m_returnCode = 0;
 }
 
@@ -225,7 +225,7 @@ void WindowManager::checkDelaysForFocus()
 {
 	if (!CONFIG_AUTO_RAISE) return;
 
-	Time t = timestamp(True);
+	Time t = timestamp(true);
 
 	if (m_focusPointerMoved) {	// only raise when pointer stops
 
@@ -233,16 +233,16 @@ void WindowManager::checkDelaysForFocus()
 		t - m_focusTimestamp > CONFIG_POINTER_STOPPED_DELAY) {
 
 		if (m_focusPointerNowStill) {
-		m_focusPointerMoved = False;
+		m_focusPointerMoved = false;
 
-		} else m_focusPointerNowStill = True; // until proven false
+		} else m_focusPointerNowStill = true; // until proven false
 	}
 	} else {
 
 	if (t < m_focusTimestamp ||
 		t - m_focusTimestamp > (Time)CONFIG_AUTO_RAISE_DELAY) {
 
-		m_focusCandidate->focusIfAppropriate(True);
+		m_focusCandidate->focusIfAppropriate(true);
 
 	}
 	}
@@ -257,7 +257,7 @@ void WindowManager::considerFocusChange(Client *c, Window w, Time timestamp)
 	stopConsideringFocus();
 	}
 
-	m_focusChanging = True;
+	m_focusChanging = true;
 	m_focusTimestamp = timestamp;
 	m_focusCandidate = c;
 	m_focusCandidateWindow = w;
@@ -267,9 +267,9 @@ void WindowManager::considerFocusChange(Client *c, Window w, Time timestamp)
 	// stopped moving -- otherwise we'll be caught out by all the
 	// windows for which we don't get motion events at all
 
-	m_focusPointerMoved = False;
-	m_focusPointerNowStill = False;
-	m_focusCandidate->selectOnMotion(m_focusCandidateWindow, True);
+	m_focusPointerMoved = false;
+	m_focusPointerNowStill = false;
+	m_focusCandidate->selectOnMotion(m_focusCandidateWindow, true);
 }
 
 
@@ -277,14 +277,14 @@ void WindowManager::stopConsideringFocus()
 {
 	if (!CONFIG_AUTO_RAISE) return;
 
-	m_focusChanging = False;
+	m_focusChanging = false;
 	if (m_focusChanging && m_focusCandidateWindow) {
-	m_focusCandidate->selectOnMotion(m_focusCandidateWindow, False);
+	m_focusCandidate->selectOnMotion(m_focusCandidateWindow, false);
 	}
 }
 
 
-void Client::focusIfAppropriate(Boolean ifActive)
+void Client::focusIfAppropriate(bool ifActive)
 {
 	if (!CONFIG_AUTO_RAISE) return;
 	if (!m_managed || !isNormal()) return;
@@ -341,11 +341,11 @@ void WindowManager::eventConfigureRequest(XConfigureRequestEvent *e)
 void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 {
 	XWindowChanges wc;
-	Boolean raise = False;
+	bool raise = false;
 
 	e->value_mask &= ~CWSibling;
 
-	gravitate(True);
+	gravitate(true);
 
 	if (e->value_mask & CWX)      m_x = e->x;
 	if (e->value_mask & CWY)      m_y = e->y;
@@ -353,10 +353,10 @@ void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 	if (e->value_mask & CWHeight) m_h = e->height;
 	if (e->value_mask & CWBorderWidth) m_bw = e->border_width;
 
-	gravitate(False);
+	gravitate(false);
 
 	if (e->value_mask & CWStackMode) {
-	if (e->detail == Above) raise = True;
+	if (e->detail == Above) raise = true;
 	e->value_mask &= ~CWStackMode;
 	}
 
@@ -390,12 +390,12 @@ void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 		m_windowManager->stopConsideringFocus();
 
 		if (!m_stubborn) { // outstubborn stubborn windows
-		Time popTime = windowManager()->timestamp(True);
+		Time popTime = windowManager()->timestamp(true);
 
 		if (m_lastPopTime > 0L &&
 			popTime > m_lastPopTime &&
 			popTime - m_lastPopTime < 2000) { // 2 pops in 2 seconds
-			m_stubborn = True;
+			m_stubborn = true;
 			m_lastPopTime = 0L;
 
 				label());
@@ -421,7 +421,7 @@ void WindowManager::eventMapRequest(XMapRequestEvent *e)
 
 	// JG
 	if (!c) {
-	c = windowToClient(e->window, True);
+	c = windowToClient(e->window, true);
 	if (c) {
 		c->eventMapRequest(e);
 		c->sendConfigureNotify();
@@ -445,7 +445,7 @@ void Client::eventMapRequest(XMapRequestEvent *)
 
 	case WithdrawnState:
 	if (parent() == root()) {
-		manage(False);
+		manage(false);
 		return;
 	}
 
@@ -471,7 +471,7 @@ void Client::eventMapRequest(XMapRequestEvent *)
 
 	case IconicState:
 	if (CONFIG_AUTO_RAISE) m_windowManager->stopConsideringFocus();
-	unhide(True);
+	unhide(true);
 	break;
 	}
 }
@@ -498,7 +498,7 @@ void Client::eventUnmap(XUnmapEvent *e)
 
 	case IconicState:
 	if (e->send_event) {
-		unhide(False);
+		unhide(false);
 		withdraw();
 	}
 	break;
@@ -523,14 +523,14 @@ void Client::eventUnmap(XUnmapEvent *e)
 	if (c && !c->isActive() && !CONFIG_CLICK_TO_FOCUS && !c->isFocusOnClick()) {
 		c->activate();
 		if (CONFIG_AUTO_RAISE) {
-		c->windowManager()->considerFocusChange(this, c->m_window, windowManager()->timestamp(False));
+		c->windowManager()->considerFocusChange(this, c->m_window, windowManager()->timestamp(false));
 		} else if (CONFIG_RAISE_ON_FOCUS) {
 		c->mapRaised();
 		}
 	}
 	}
 
-	m_stubborn = False;
+	m_stubborn = false;
 }
 
 
@@ -558,7 +558,7 @@ void WindowManager::eventDestroy(XDestroyWindowEvent *e)
 	if (c) {
 
 	if (CONFIG_AUTO_RAISE && m_focusChanging && c == m_focusCandidate) {
-		m_focusChanging = False;
+		m_focusChanging = false;
 	}
 
 	for (int i = m_clients.count()-1; i >= 0; --i) {
@@ -574,10 +574,10 @@ void WindowManager::eventDestroy(XDestroyWindowEvent *e)
 	checkChannel(c->channel());
 	c->release();
 
-	ignoreBadWindowErrors = True;
-	XSync(display(), False
+	ignoreBadWindowErrors = true;
+	XSync(display(), false
 				);
-	ignoreBadWindowErrors = False;
+	ignoreBadWindowErrors = false;
 	}
 }
 
@@ -694,7 +694,7 @@ void WindowManager::eventProperty(XPropertyEvent *e)
 void Client::eventProperty(XPropertyEvent *e)
 {
 	Atom a = e->atom;
-	Boolean shouldDelete = (e->state == PropertyDelete);
+	bool shouldDelete = (e->state == PropertyDelete);
 
 	switch (a) {
 
@@ -725,7 +725,7 @@ void Client::eventProperty(XPropertyEvent *e)
 void WindowManager::eventReparent(XReparentEvent *e)
 {
 	// not currently used! map events used instead, only
-//    (void)windowToClient(e->window, True); // create if absent
+//    (void)windowToClient(e->window, true); // create if absent
 
 	// odd screen complications, omitted
 }
@@ -750,7 +750,7 @@ void WindowManager::eventEnter(XCrossingEvent *e)
 	if (e->same_screen == 0) {
 		if (m_activeClient) m_activeClient->deactivate();
 		m_activeClient = 0;
-		XSetInputFocus(m_display, PointerRoot, None, timestamp(False));
+		XSetInputFocus(m_display, PointerRoot, None, timestamp(false));
 	}
 	return;
 	}
@@ -793,13 +793,13 @@ void Client::eventEnter(XCrossingEvent *e)
 }
 
 
-Boolean Client::coordsInHole(int x, int y)	// relative to parent
+bool Client::coordsInHole(int x, int y)	// relative to parent
 {
 	return m_border->coordsInHole(x, y);
 }
 
 
-Boolean Border::coordsInHole(int x, int y)	// this is all a bit of a hack
+bool Border::coordsInHole(int x, int y)	// this is all a bit of a hack
 {
 	return (x > 1 && x < m_tabWidth[screen()]-1 &&
 		y > 1 && y < m_tabWidth[screen()]-1);

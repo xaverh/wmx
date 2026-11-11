@@ -32,7 +32,7 @@ Window WindowManager::createNumberWindow(int screen, const char *colour)
 
 	XSetWindowAttributes wa;
 	wa.background_pixel = nearest.pixel;
-	wa.override_redirect = True;
+	wa.override_redirect = true;
 
 	Window w = XCreateWindow
 		(display(), mroot(screen),
@@ -47,7 +47,7 @@ int WindowManager::shapeNumberWindow(Window w, int n, int minDigits)
 {
 	int i, x, y;
 	XRectangle r;
-	Boolean first = True;
+	bool first = true;
 	char number[7];
 	sprintf(number, "%0*d", minDigits, n);
 
@@ -65,7 +65,7 @@ int WindowManager::shapeNumberWindow(Window w, int n, int minDigits)
 						   0, 0, &r, 1, first ? ShapeSet : ShapeUnion,
 						   YXBanded);
 
-			first = False;
+			first = false;
 		}
 		}
 	}
@@ -75,8 +75,8 @@ int WindowManager::shapeNumberWindow(Window w, int n, int minDigits)
 }
 
 
-void WindowManager::flipChannel(Boolean statusOnly, Boolean flipDown,
-				Boolean quickFlip, Client *push)
+void WindowManager::flipChannel(bool statusOnly, bool flipDown,
+				bool quickFlip, Client *push)
 {
 	int wid, i, sc;
 	if (!CONFIG_CHANNEL_SURF) return;
@@ -126,7 +126,7 @@ void WindowManager::flipChannel(Boolean statusOnly, Boolean flipDown,
 		) {
 		considering.item(i)->setChannel(nextChannel);
 		} else {
-		considering.item(i)->flipChannel(True, nextChannel);
+		considering.item(i)->flipChannel(true, nextChannel);
 		}
 	}
 
@@ -134,7 +134,7 @@ void WindowManager::flipChannel(Boolean statusOnly, Boolean flipDown,
 	}
 
 	m_currentChannel = nextChannel;
-	m_channelChangeTime = timestamp(True) +
+	m_channelChangeTime = timestamp(true) +
 	(quickFlip ? CONFIG_QUICK_FLIP_DELAY : CONFIG_FLIP_DELAY);
 
 	netwmUpdateChannelList();
@@ -159,7 +159,7 @@ void WindowManager::instateChannel()
 	}
 
 	for (i = 0; i < considering.count(); ++i) {
-	considering.item(i)->flipChannel(False, m_currentChannel);
+	considering.item(i)->flipChannel(false, m_currentChannel);
 	if ((considering.item(i)->channel() == m_channels) &&
 		!considering.item(i)->isSticky()) createNewChannel();
 	}
@@ -167,7 +167,7 @@ void WindowManager::instateChannel()
 	if (m_activeClient && (m_activeClient->channel() != channel())) {
 		if (m_activeClient) m_activeClient->deactivate();
 	m_activeClient = 0;
-		XSetInputFocus(m_display, PointerRoot, None, timestamp(False));
+		XSetInputFocus(m_display, PointerRoot, None, timestamp(false));
 	}
 
 	checkChannel(m_channels-1);
@@ -203,7 +203,7 @@ void WindowManager::createNewChannel()
 void WindowManager::gotoChannel(int channel, Client *push)
 {
 	if (channel == m_currentChannel) {
-	flipChannel(True, False, False, 0);
+	flipChannel(true, false, false, 0);
 	return;
 	}
 
@@ -211,11 +211,11 @@ void WindowManager::gotoChannel(int channel, Client *push)
 
 	while (m_currentChannel != channel) {
 		if (m_channels < channel) {
-		flipChannel(False, False, True, push);
+		flipChannel(false, false, true, push);
 		} else {
-		flipChannel(False, True, True, push);
+		flipChannel(false, true, true, push);
 		}
-		XSync(display(), False);
+		XSync(display(), false);
 	}
 	}
 }

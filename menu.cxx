@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <X11/keysym.h>
 
-Boolean       Menu::m_initialised = False;
+bool       Menu::m_initialised = false;
 GC           *Menu::m_menuGC;
 XftFont      *Menu::m_font;
 XftColor     *Menu::m_xftColour;
@@ -26,7 +26,7 @@ Window       *Menu::m_window;
 
 Menu::Menu(WindowManager *manager, XEvent *e)
 	: m_items(0), m_nItems(0), m_nHidden(0),
-	  m_hasSubmenus(False),
+	  m_hasSubmenus(false),
 	  m_windowManager(manager),
 	  m_event(e)
 {
@@ -107,14 +107,14 @@ Menu::Menu(WindowManager *manager, XEvent *e)
 		   m_border, m_background);
 
 
-#if ( CONFIG_USE_PIXMAPS != False ) && ( CONFIG_USE_PIXMAP_MENUS != False )
+#if ( CONFIG_USE_PIXMAPS != false ) && ( CONFIG_USE_PIXMAP_MENUS != false )
 		attr[i].background_pixmap = Border::backgroundPixmap(manager);
 #endif
 		attr[i].save_under =
 		  (DoesSaveUnders(ScreenOfDisplay(display(), i)) ?
-		 True : False);
+		 true : false);
 
-#if ( CONFIG_USE_PIXMAPS != False ) && ( CONFIG_USE_PIXMAP_MENUS != False )
+#if ( CONFIG_USE_PIXMAPS != false ) && ( CONFIG_USE_PIXMAP_MENUS != false )
 		XChangeWindowAttributes
 		  (display(), m_window[i], CWBackPixmap, &attr[i]);
 #endif
@@ -132,7 +132,7 @@ Menu::Menu(WindowManager *manager, XEvent *e)
 					 XDefaultVisual(display(), i),
 					 XDefaultColormap(display(), i));
 	}
-	m_initialised = True;
+	m_initialised = true;
 	}
 }
 
@@ -180,7 +180,7 @@ int Menu::getSelection()
 	}
 	maxWidth += 32;
 
-	Boolean isKeyboardMenu = isKeyboardMenuEvent(m_event);
+	bool isKeyboardMenu = isKeyboardMenuEvent(m_event);
 	int selecting = isKeyboardMenu ? 0 : -1, prev = -1;
 	int entryHeight = m_font->ascent + m_font->descent + 4;
 	int totalHeight = entryHeight * m_nItems + 13;
@@ -198,26 +198,26 @@ int Menu::getSelection()
 	x = xbev->x - maxWidth/2;
 	y = xbev->y - 2;
 
-	Boolean warp = False;
+	bool warp = false;
 
 	if (x < 0) {
 		xbev->x -= x;
 		x = 0;
-		warp = True;
+		warp = true;
 	} else if (x + maxWidth >= mx) {
 		xbev->x -= x + maxWidth - mx;
 		x = mx - maxWidth;
-		warp = True;
+		warp = true;
 	}
 
 	if (y < 0) {
 		xbev->y -= y;
 		y = 0;
-		warp = True;
+		warp = true;
 	} else if (y + totalHeight >= my) {
 		xbev->y -= y + totalHeight - my;
 		y = my - totalHeight;
-		warp = True;
+		warp = true;
 	}
 
 	if (warp) XWarpPointer(display(), None, root(), None, None,
@@ -243,18 +243,18 @@ int Menu::getSelection()
 	}
 	}	    
 
-	Boolean done = False;
-	Boolean drawn = False;
+	bool done = false;
+	bool drawn = false;
 	XEvent event;
 	struct timeval sleepval;
 	unsigned long tdiff = 0L;
-	Boolean speculating = False;
-	Boolean foundEvent;
+	bool speculating = false;
+	bool foundEvent;
 
 	while (!done)
 	{
 	int i;
-	foundEvent = False;
+	foundEvent = false;
 
 	if (CONFIG_FEEDBACK_DELAY >= 0 &&
 		tdiff > (unsigned long)CONFIG_FEEDBACK_DELAY &&
@@ -266,14 +266,14 @@ int Menu::getSelection()
 		XRaiseWindow(display(), m_window[screen()]);
 		}
 
-		speculating = True;
+		speculating = true;
 	}
 
 	//!!! MenuMask | ??? suggests MenuMask is wrong
 	while (XCheckMaskEvent
 		   (display(), MenuMask | StructureNotifyMask |
 		KeyPressMask | KeyReleaseMask, &event)) {
-		foundEvent = True;
+		foundEvent = true;
 		if (event.type != MotionNotify) break;
 	}
 
@@ -316,7 +316,7 @@ int Menu::getSelection()
 		m_windowManager->releaseGrab(&event.xbutton);
 		XUnmapWindow(display(), m_window[screen()]);
 		selecting = i;
-		done = True;
+		done = true;
 		break;
 
 	case MotionNotify:
@@ -337,7 +337,7 @@ int Menu::getSelection()
 		xbev->y += event.xbutton.y;
 
 		createSubmenu ((XEvent *)xbev, selecting);
-		done = True;
+		done = true;
 		break;
 		}
 
@@ -345,7 +345,7 @@ int Menu::getSelection()
 		else if (selecting < 0 || selecting > m_nItems) selecting = -1;
 
 		if (selecting == prev) break;
-		tdiff = 0; speculating = False;
+		tdiff = 0; speculating = false;
 
 		if (prev >= 0 && prev < m_nItems) {
 		removeFeedback(prev, speculating);
@@ -402,7 +402,7 @@ int Menu::getSelection()
 				   maxWidth - 8, entryHeight);
 		}
 
-		drawn = True;
+		drawn = true;
 		break;
 
 	case KeyPress:
@@ -422,7 +422,7 @@ int Menu::getSelection()
 		}
 		m_windowManager->releaseGrabKeyMode(&event.xkey);
 		XUnmapWindow(display(), m_window[screen()]);
-		done = True;
+		done = true;
 		break;
 
 		} else if (key == CONFIG_MENU_CANCEL_KEY) {
@@ -431,7 +431,7 @@ int Menu::getSelection()
 		XUnmapWindow(display(), m_window[screen()]);
 		if (selecting >= 0) removeFeedback(selecting, speculating);
 		selecting = -1;
-		done = True;
+		done = true;
 		break;
 
 		} else if (key != CONFIG_MENU_UP_KEY &&
@@ -453,7 +453,7 @@ int Menu::getSelection()
 		else selecting = prev + 1;
 		}
 
-		tdiff = 0; speculating = False;
+		tdiff = 0; speculating = false;
 
 		if (prev >= 0 && prev < m_nItems) {
 			removeFeedback(prev, speculating);
@@ -488,7 +488,7 @@ int Menu::getSelection()
 
 
 ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
-	: Menu(manager, e), m_allowExit(False)
+	: Menu(manager, e), m_allowExit(false)
 {
 	//!!! this is effectively calling a pure virtual from a constructor,
 	// which is a bit gross
@@ -513,7 +513,7 @@ ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
 
 	Client *cl = m_clients.item(selecting - 1);
 
-	if (selecting < m_nHidden) cl->unhide(True);
+	if (selecting < m_nHidden) cl->unhide(true);
 	else if (selecting < m_nItems) {
 			cl->gotoClient();
 	}
@@ -585,7 +585,7 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 
 	for (i = 0; i < n; ++i) {
 
-	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == False) {
+	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == false) {
 
 		if (i == 0) items[i] = CONFIG_NEW_WINDOW_LABEL;
 		else if (m_allowExit && i > m_clients.count()) items[i] = "[Exit wmx]";
@@ -607,9 +607,9 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 
 Client *ClientMenu::checkFeedback(int item)
 {
-	if (CONFIG_MAD_FEEDBACK == False) return NULL;
+	if (CONFIG_MAD_FEEDBACK == false) return NULL;
 
-	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == False) {
+	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == false) {
 
 	if (item <= 0 || item > m_clients.count()+1) return NULL;
 	if (m_allowExit && item == m_clients.count() + 1) return NULL;
@@ -628,7 +628,7 @@ void ClientMenu::showFeedback(int item)
 	if (Client *c = checkFeedback(item)) c->showFeedback();
 }
 
-void ClientMenu::removeFeedback(int item, Boolean mapped)
+void ClientMenu::removeFeedback(int item, bool mapped)
 {
 	if (Client *c = checkFeedback(item)) c->removeFeedback(mapped);
 }
@@ -646,12 +646,12 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	const char *wmxdir = getenv("WMXDIR");
 
 	m_commandDir = NULL;
-	m_hasSubmenus = True;
+	m_hasSubmenus = true;
 
 	if (otherdir == NULL)
 	{
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-	isRootDir = True;
+	isRootDir = true;
 #endif
 	if (wmxdir == NULL)
 	{
@@ -679,7 +679,7 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	else // otherdir != NULL
 	{
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-	isRootDir = False;
+	isRootDir = false;
 #endif
 	m_commandDir = (char *)malloc(strlen(otherdir) + 1);
 	strcpy(m_commandDir, otherdir);

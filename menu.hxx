@@ -18,7 +18,7 @@ public:
  protected:
 	static Window *m_window;
 
-	static Boolean m_initialised;
+	static bool m_initialised;
 	static GC *m_menuGC;
 	static XftFont *m_font;
 	static XftColor *m_xftColour;
@@ -33,7 +33,7 @@ public:
 	int m_nItems;
 	int m_nHidden;
 
-	Boolean m_hasSubmenus;
+	bool m_hasSubmenus;
 	virtual void createSubmenu (XEvent *e, int i) {};
 
 	WindowManager *m_windowManager;
@@ -44,12 +44,12 @@ public:
 	Display *display() { return m_windowManager->display(); }
 	Window root()      { return m_windowManager->root();    }
 
-	Boolean isKeyboardMenuEvent (XEvent *e) {
+	bool isKeyboardMenuEvent (XEvent *e) {
 		return (CONFIG_WANT_KEYBOARD_MENU && (e->type == KeyPress));
 	}
 
 	virtual void showFeedback(int) { }
-	virtual void removeFeedback(int, Boolean) { }
+	virtual void removeFeedback(int, bool) { }
 	virtual void raiseFeedbackLevel(int) { }
 
 };
@@ -63,11 +63,11 @@ public:
 private:
 	virtual char **getItems(int *, int *);
 	ClientList m_clients;
-	Boolean m_allowExit;
+	bool m_allowExit;
 
 	Client *checkFeedback(int);
 	virtual void showFeedback(int);
-	virtual void removeFeedback(int, Boolean);
+	virtual void removeFeedback(int, bool);
 	virtual void raiseFeedbackLevel(int);
 };
 
@@ -98,7 +98,7 @@ private:
 	char *m_commandDir;
 
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-	Boolean isRootDir;
+	bool isRootDir;
 	DIR *screenopendir(char *,int *,int);
 #endif
 };

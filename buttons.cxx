@@ -54,11 +54,11 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 	if (!furniture) {
 		if (e->button == CONFIG_NEXTCHANNEL_BUTTON && CONFIG_CHANNEL_SURF) {
 			// wheel "up" - increase channel
-			flipChannel(False, False, True, c);
+			flipChannel(false, false, true, c);
 			return ;
 		} else if (e->button == CONFIG_PREVCHANNEL_BUTTON && CONFIG_CHANNEL_SURF) {
 			// wheel "down" - decrease channel
-			flipChannel(False, True, True, c);
+			flipChannel(false, true, true, c);
 			return ;
 		}
 	}
@@ -94,12 +94,12 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 #if CONFIG_USE_CHANNEL_MENU	
 				ChannelMenu(this, (XEvent *)e);
 #else
-				if (m_channelChangeTime == 0) flipChannel(True, False, False, 0);
-				else flipChannel(False, False, False, 0);
+				if (m_channelChangeTime == 0) flipChannel(true, false, false, 0);
+				else flipChannel(false, false, false, 0);
 
 			} else if (e->button == CONFIG_CLIENTMENU_BUTTON && m_channelChangeTime != 0) {
 
-				flipChannel(False, True, False, 0);
+				flipChannel(false, true, false, 0);
 #endif
 		}
 
@@ -114,13 +114,13 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 #if CONFIG_USE_CHANNEL_MENU	
 		ChannelMenu menu(this, (XEvent *)e);
 #else
-			if (m_channelChangeTime == 0) flipChannel(True, False, False, 0);
-			else flipChannel(False, False, False, c);
+			if (m_channelChangeTime == 0) flipChannel(true, false, false, 0);
+			else flipChannel(false, false, false, c);
 #endif
 		return;
 	} else if (e->button == CONFIG_CLIENTMENU_BUTTON && m_channelChangeTime != 0) {
 		// allow left-button to push down a channel --cc 19991001
-		flipChannel(False, True, False, c);
+		flipChannel(false, true, false, c);
 		return;
      }
 
@@ -131,7 +131,7 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 }
 
 
-void WindowManager::circulate(Boolean activeFirst)
+void WindowManager::circulate(bool activeFirst)
 {
 	Client *c = 0;
 	if (m_clients.count() == 0) return;
@@ -141,7 +141,7 @@ void WindowManager::circulate(Boolean activeFirst)
 
 	static int direction = 1;
 	if (!m_altStateRetained) direction = -direction;
-	m_altStateRetained = True;
+	m_altStateRetained = true;
 
 	if (!c) {
 
@@ -188,15 +188,15 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 	Client *c = windowToClient(ev->window);
 
 		if (key == CONFIG_ALT_KEY) {
-			m_altPressed = True;
-			m_altStateRetained = False;
+			m_altPressed = true;
+			m_altStateRetained = false;
 		}
 
 #if CONFIG_WANT_SUNKEYS
 #ifdef CONFIG_QUICKRAISE_KEY
 	if (key == CONFIG_QUICKRAISE_KEY && c) {
 
-		if (isTop(c) && (CONFIG_QUICKRAISE_ALSO_LOWERS == True)) {
+		if (isTop(c) && (CONFIG_QUICKRAISE_ALSO_LOWERS == true)) {
 		c->lower();
 		} else {
 		c->mapRaised();
@@ -251,8 +251,8 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 
 		   if (!m_altPressed) {
 			   // oops! bug
-			   m_altPressed = True;
-			   m_altStateRetained = False;
+			   m_altPressed = true;
+			   m_altStateRetained = false;
 //                (long)ev->state, (long)m_altModMask);
 		   }
 
@@ -271,15 +271,15 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 		switch (key) {
 
 		case CONFIG_FLIP_DOWN_KEY:
-			flipChannel(False, True, True, 0);
+			flipChannel(false, true, true, 0);
 			break;
 
 		case CONFIG_FLIP_UP_KEY:
-			flipChannel(False, False, True, 0);
+			flipChannel(false, false, true, 0);
 			break;
 
 		case CONFIG_CIRCULATE_KEY:
-			circulate(False);
+			circulate(false);
 			break;
 
 		case CONFIG_HIDE_KEY:
@@ -346,7 +346,7 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 		}
 	}
 
-	XSync(display(), False);
+	XSync(display(), false);
 	XUngrabKeyboard(display(), CurrentTime);
 	}
 
@@ -358,8 +358,8 @@ void WindowManager::eventKeyRelease(XKeyEvent *ev)
 	KeySym key = XKeycodeToKeysym(display(), ev->keycode, 0);
 
 	if (key == CONFIG_ALT_KEY) {
-		m_altPressed = False;
-		m_altStateRetained = False;
+		m_altPressed = false;
+		m_altStateRetained = false;
 
 //                (long)ev->state, (long)m_altModMask);
 	}
@@ -379,7 +379,7 @@ void Client::eventButton(XButtonEvent *e)
 {
 	if (e->type != ButtonPress) return;
 
-	Boolean wasTop = windowManager()->isTop(this);
+	bool wasTop = windowManager()->isTop(this);
 
 	if(!wasTop)
 		mapRaised();
@@ -406,8 +406,8 @@ void Client::eventButton(XButtonEvent *e)
 int WindowManager::attemptGrab(Window w, Window constrain, int mask, int t)
 {
 	int status;
-	if (t == 0) t = timestamp(False);
-	status = XGrabPointer(display(), w, False, mask, GrabModeAsync,
+	if (t == 0) t = timestamp(false);
+	status = XGrabPointer(display(), w, false, mask, GrabModeAsync,
 			  GrabModeAsync, constrain, None, t);
 	return status;
 }
@@ -415,8 +415,8 @@ int WindowManager::attemptGrab(Window w, Window constrain, int mask, int t)
 
 int WindowManager::attemptGrabKey(Window w, int t)
 {
-	if (t == 0) t = timestamp(False);
-	return XGrabKeyboard(display(), w, False, GrabModeAsync, GrabModeAsync, t);
+	if (t == 0) t = timestamp(false);
+	return XGrabKeyboard(display(), w, false, GrabModeAsync, GrabModeAsync, t);
 }
 
 
@@ -468,7 +468,7 @@ void WindowManager::releaseGrabKeyMode(XKeyEvent* e)
 void Client::move(XButtonEvent *e)
 {
 	int x = -1, y = -1;
-	Boolean done = False;
+	bool done = false;
 	ShowGeometry geometry(m_windowManager, (XEvent *)e);
 
 	if(!isMovable())
@@ -486,7 +486,7 @@ void Client::move(XButtonEvent *e)
 	int ft = CONFIG_FRAME_THICKNESS;
 
 	XEvent event;
-	Boolean found;
+	bool found;
 	struct timeval sleepval;
 
 #ifdef CONFIG_BUMP_EVERYWHERE
@@ -496,13 +496,13 @@ void Client::move(XButtonEvent *e)
 	}
 #endif
 
-	m_doSomething = False;
+	m_doSomething = false;
 	while (!done) {
 
-	found = False;
+	found = false;
 
 	while (XCheckMaskEvent(display(), DragMask | ExposureMask, &event)) {
-		found = True;
+		found = true;
 		if (event.type != MotionNotify) break;
 	}
 
@@ -525,16 +525,16 @@ void Client::move(XButtonEvent *e)
 	case ButtonPress:
 		// don't like this
 		XUngrabPointer(display(), event.xbutton.time);
-		m_doSomething = False;
-		done = True;
+		m_doSomething = false;
+		done = true;
 		break;
 
 	case ButtonRelease:
 
-		if (!nobuttons(&event.xbutton)) m_doSomething = False;
+		if (!nobuttons(&event.xbutton)) m_doSomething = false;
 
 		m_windowManager->releaseGrab(&event.xbutton);
-		done = True;
+		done = true;
 		break;
 
 	case MotionNotify:
@@ -618,7 +618,7 @@ void Client::move(XButtonEvent *e)
 
 		geometry.update(x, y);
 		m_border->moveTo(x + xi, y + yi);
-		m_doSomething = True;
+		m_doSomething = true;
 		}
 		break;
 	}
@@ -665,7 +665,7 @@ void Client::fixResizeDimensions(int &w, int &h, int &dw, int &dh)
 }
 
 
-void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
+void Client::resize(XButtonEvent *e, bool horizontal, bool vertical)
 {
 	if (isFixedSize()) return;
 	ShowGeometry geometry(m_windowManager, (XEvent *)e);
@@ -705,17 +705,17 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 	int dw, dh;
 
 	XEvent event;
-	Boolean found;
-	Boolean done = False;
+	bool found;
+	bool done = false;
 	struct timeval sleepval;
 
-	m_doSomething = False;
+	m_doSomething = false;
 	while (!done) {
 
-	found = False;
+	found = false;
 
 	while (XCheckMaskEvent(display(), DragMask | ExposureMask, &event)) {
-		found = True;
+		found = true;
 		if (event.type != MotionNotify) break;
 	}
 
@@ -738,7 +738,7 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 	case ButtonPress:
 		// don't like this
 		XUngrabPointer(display(), event.xbutton.time);
-		done = True;
+		done = true;
 		break;
 
 	case ButtonRelease:
@@ -748,7 +748,7 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 		if (!nobuttons(&event.xbutton)) x = -1;
 		m_windowManager->releaseGrab(&event.xbutton);
 
-		done = True;
+		done = true;
 		break;
 
 	case MotionNotify:
@@ -763,7 +763,7 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 		if (CONFIG_RESIZE_UPDATE)
 			XResizeWindow(display(), m_window, w, h);
 		geometry.update(dw, dh);
-		m_doSomething = True;
+		m_doSomething = true;
 
 		} else if (vertical) {
 		prevH = h; h = y - m_y;
@@ -773,7 +773,7 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 		if (CONFIG_RESIZE_UPDATE)
 			XResizeWindow(display(), m_window, w, h);
 		geometry.update(dw, dh);
-		m_doSomething = True;
+		m_doSomething = true;
 
 		} else {
 		prevW = w; w = x - m_x;
@@ -783,7 +783,7 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 		if (CONFIG_RESIZE_UPDATE)
 			XResizeWindow(display(), m_window, w, h);
 		geometry.update(dw, dh);
-		m_doSomething = True;
+		m_doSomething = true;
 		}
 
 		break;
@@ -798,15 +798,15 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 		m_w = x - m_x;
 		m_h = y - m_y;
 		fixResizeDimensions(m_w, m_h, dw, dh);
-		m_border->configure(m_x, m_y, m_w, m_h, CWWidth|CWHeight, 0, True);
+		m_border->configure(m_x, m_y, m_w, m_h, CWWidth|CWHeight, 0, true);
 	} else if (vertical) {
 		m_h = y - m_y;
 		fixResizeDimensions(m_w, m_h, dw, dh);
-		m_border->configure(m_x, m_y, m_w, m_h, CWHeight, 0, True);
+		m_border->configure(m_x, m_y, m_w, m_h, CWHeight, 0, true);
 	} else {
 		m_w = x - m_x;
 		fixResizeDimensions(m_w, m_h, dw, dh);
-		m_border->configure(m_x, m_y, m_w, m_h, CWWidth, 0, True);
+		m_border->configure(m_x, m_y, m_w, m_h, CWWidth, 0, true);
 	}
 
 	XMoveResizeWindow(display(), m_window,
@@ -830,10 +830,10 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 void Client::moveOrResize(XButtonEvent *e)
 {
 	if (e->x < m_border->xIndent() && e->y > m_h) {
-	resize(e, False, True);
+	resize(e, false, true);
 	} else if (e->y < m_border->yIndent() &&
 		   e->x > m_w + m_border->xIndent() - m_border->yIndent()) { //hack
-	resize(e, True, False);
+	resize(e, true, false);
 	} else {
 	move(e);
 	}
@@ -863,7 +863,7 @@ void Border::eventButton(XButtonEvent *e)
 	}
 
 	if (e->window == m_resize) {
-	m_client->resize(e, True, True);
+	m_client->resize(e, true, true);
 	return;
 	}
 
@@ -875,8 +875,8 @@ void Border::eventButton(XButtonEvent *e)
 	}
 
 	XEvent event;
-	Boolean found;
-	Boolean done = False;
+	bool found;
+	bool done = false;
 	struct timeval sleepval;
 	unsigned long tdiff = 0L;
 	int x = e->x;
@@ -889,7 +889,7 @@ void Border::eventButton(XButtonEvent *e)
 
 	while (!done) {
 
-	found = False;
+	found = false;
 
 	if (tdiff > CONFIG_DESTROY_WINDOW_DELAY && action == 1) {
 		windowManager()->installCursor(WindowManager::DeleteCursor);
@@ -897,7 +897,7 @@ void Border::eventButton(XButtonEvent *e)
 	}
 
 	while (XCheckMaskEvent(display(), MenuMask, &event)) {
-		found = True;
+		found = true;
 		if (event.type != MotionNotify) break;
 	}
 
@@ -932,7 +932,7 @@ void Border::eventButton(XButtonEvent *e)
 		}
 
 		windowManager()->releaseGrab(&event.xbutton);
-		done = True;
+		done = true;
 		break;
 
 	case MotionNotify:

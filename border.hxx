@@ -24,10 +24,10 @@ public:
 	void unmap();
 	//void lower();
 	//void mapRaised();
-	void decorate(Boolean active, int w, int h);
+	void decorate(bool active, int w, int h);
 	void reparent();
 	void configure(int x, int y, int w, int h, unsigned long mask, int detail,
-		   Boolean force = False);
+		   bool force = false);
 	void moveTo(int x, int y);
 
 //#if CONFIG_MAD_FEEDBACK != 0
@@ -39,10 +39,10 @@ public:
 //#endif
 
 	WindowManager *windowManager(); // calls into Client
-	Boolean isTransient();	// calls into Client
-	Boolean isFixedSize();	// calls into Client
+	bool isTransient();	// calls into Client
+	bool isFixedSize();	// calls into Client
 	Window parent() { return m_parent; }
-	Boolean hasWindow(Window);
+	bool hasWindow(Window);
 
 	Display *display();
 	int screen();
@@ -54,7 +54,7 @@ public:
 	int yIndent();
 	int xIndent();
 
-	Boolean coordsInHole(int, int); // in Events.C of all places
+	bool coordsInHole(int, int); // in Events.C of all places
 	static Pixmap backgroundPixmap(WindowManager *);
 	static GC drawGC(WindowManager *,int);
 
@@ -69,7 +69,7 @@ private:
 
 //#if CONFIG_MAD_FEEDBACK != 0
 	Window m_feedback;
-	Boolean m_fedback;
+	bool m_fedback;
 //#endif
 
 	void fatal(char *);
@@ -82,8 +82,8 @@ private:
 	int getRotatedTextWidth(char *);
 	void drawLabel();
 
-	void setFrameVisibility(Boolean, int, int);
-	void setTransientFrameVisibility(Boolean, int, int);
+	void setFrameVisibility(bool, int, int);
+	void setTransientFrameVisibility(bool, int, int);
 	void shapeParent(int, int);
 	void shapeTransientParent(int, int);
 	void shapeTab(int, int);
