@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "manager.hxx"
 #include "menu.hxx"
 #include "client.hxx"
@@ -14,7 +15,6 @@
 #include <X11/cursorfont.h>
 
 #include <X11/extensions/Xcomposite.h>
-implementList(AtomList, Atom);
 
 Atom    Atoms::wm_state;
 Atom    Atoms::wm_changeState;
@@ -57,14 +57,11 @@ int     WindowManager::m_restart   = false;
 bool WindowManager::m_initialising = false;
 bool ignoreBadWindowErrors;
 
-implementPList(ClientList, Client);
 
-implementList(AtomList, Atom);
 
 #define DEFAULT_PORT 6999
 WindowManager::WindowManager(int argc, char **argv) :
 	m_focusChanging(false),
-implementList(AtomList, Atom);
 	m_altPressed(false),
 	m_altStateRetained(false),
 	m_netwmCheckWin(0),
@@ -88,11 +85,9 @@ implementList(AtomList, Atom);
 		"     See source distribution for other patch contributors\n"
 		"     Copying and redistribution encouraged.  "
 		"No warranty.\n\n"
-implementList(AtomList, Atom);
 		);
 
 	int i, j;
-implementList(AtomList, Atom);
 
 
 	if (argc > 1) {
@@ -234,7 +229,6 @@ implementList(AtomList, Atom);
 										 CompositeRedirectAutomatic);
 		}
 	}
-implementList(AtomList, Atom);
 
 	XSetSelectionOwner(m_display, Atoms::wmx_running,
 			   None, timestamp(true)); // used to have m_menuWindow
@@ -242,11 +236,9 @@ implementList(AtomList, Atom);
 	m_initialising = false;
 	m_returnCode = 0;
 
-implementList(AtomList, Atom);
 
 	netwmInitialiseCompliance();
 
-implementList(AtomList, Atom);
 
 	clearFocus();
 	scanInitialWindows();
@@ -282,23 +274,23 @@ void WindowManager::release()
 	Client *c;
 	int i;
 
-	for (i = 0; i < m_clients.count(); ++i) {
-	c = m_clients.item(i);
+	for (i = 0; i < m_clients.size(); ++i) {
+	c = m_clients[i];
 
-	if (c->isNormal() || c->isNormalButElsewhere()) normalList.append(c);
-	else unparentList.append(c);
+	if (c->isNormal() || c->isNormalButElsewhere()) normalList.push_back(c);
+	else unparentList.push_back(c);
 	}
 
-	for (i = normalList.count()-1; i >= 0; --i) {
-	unparentList.append(normalList.item(i));
+	for (i = normalList.size()-1; i >= 0; --i) {
+	unparentList.push_back(normalList[i]);
 	}
 
-	m_clients.remove_all();
-	m_hiddenClients.remove_all();
+	m_clients.clear();
+	m_hiddenClients.clear();
 
-	for (i = 0; i < unparentList.count(); ++i) {
-	unparentList.item(i)->unreparent();
-	unparentList.item(i)->release();
+	for (i = 0; i < unparentList.size(); ++i) {
+	unparentList[i]->unreparent();
+	unparentList[i]->release();
 	}
 
 	XSetInputFocus(m_display, PointerRoot, RevertToPointerRoot,
@@ -556,10 +548,10 @@ Client *WindowManager::windowToClient(Window w, bool create)
 {
 	if (w == 0) return 0;
 
-	for (int i = m_clients.count()-1; i >= 0; --i) {
+	for (int i = m_clients.size()-1; i >= 0; --i) {
 
-	if (m_clients.item(i)->hasWindow(w)) {
-		return m_clients.item(i);
+	if (m_clients[i]->hasWindow(w)) {
+		return m_clients[i];
 	}
 	}
 
@@ -585,7 +577,7 @@ Client *WindowManager::windowToClient(Window w, bool create)
 				 &x_clip, &y_clip, &w_clip, &h_clip);
 
 	newC = new Client(this, w, bounding_shape==1);
-	m_clients.append(newC);
+	m_clients.push_back(newC);
 
 	if (m_currentChannel == m_channels) {
 		createNewChannel();
@@ -659,10 +651,10 @@ void WindowManager::clearFocus()
 
 void WindowManager::skipInRevert(Client *c, Client *myRevert)
 {
-	for (int i = 0; i < m_clients.count(); ++i) {
-	if (m_clients.item(i) != c &&
-		m_clients.item(i)->revertTo() == c) {
-		m_clients.item(i)->setRevertTo(myRevert);
+	for (int i = 0; i < m_clients.size(); ++i) {
+	if (m_clients[i] != c &&
+		m_clients[i]->revertTo() == c) {
+		m_clients[i]->setRevertTo(myRevert);
 	}
 	}
 }
@@ -670,11 +662,11 @@ void WindowManager::skipInRevert(Client *c, Client *myRevert)
 
 void WindowManager::addToHiddenList(Client *c)
 {
-	for (int i = 0; i < m_hiddenClients.count(); ++i) {
-	if (m_hiddenClients.item(i) == c) return;
+	for (int i = 0; i < m_hiddenClients.size(); ++i) {
+	if (m_hiddenClients[i] == c) return;
 	}
 
-	m_hiddenClients.append(c);
+	m_hiddenClients.push_back(c);
 
 	netwmUpdateWindowList(); 
 }
@@ -683,9 +675,9 @@ void WindowManager::addToHiddenList(Client *c)
 void WindowManager::removeFromHiddenList(Client *c)
 {
 
-	for (int i = 0; i < m_hiddenClients.count(); ++i) {
-	if (m_hiddenClients.item(i) == c) {
-		m_hiddenClients.remove(i);
+	for (int i = 0; i < m_hiddenClients.size(); ++i) {
+	if (m_hiddenClients[i] == c) {
+		m_hiddenClients.erase(m_hiddenClients.begin() + i);
 
 		if (c->channel() != m_currentChannel) {
 
@@ -712,16 +704,26 @@ void WindowManager::hoistToTop(Client *c)
 	int i;
 	int layer = c->layer();
 
-	for (i = 0; i < m_orderedClients[layer].count(); ++i) {
-	if (m_orderedClients[layer].item(i) == c) {
-		m_orderedClients[layer].move_to_start(i);
+	for (i = 0; i < m_orderedClients[layer].size(); ++i) {
+	if (m_orderedClients[layer][i] == c) {
+		{
+			auto &v = m_orderedClients[layer];
+			auto val = v[i];
+			v.erase(v.begin() + i);
+			v.insert(v.begin(), val);
+		}
 			netwmUpdateWindowList();
 			return;
 	}
 	}
 
-	m_orderedClients[layer].append(c);
-	m_orderedClients[layer].move_to_start(m_orderedClients[layer].count()-1);
+	m_orderedClients[layer].push_back(c);
+	{
+			auto &v = m_orderedClients[layer];
+			auto val = v.back();
+			v.pop_back();
+			v.insert(v.begin(), val);
+		}
 	netwmUpdateWindowList(); 
 }
 
@@ -731,15 +733,20 @@ void WindowManager::hoistToBottom(Client *c)
 	int i;
 	int layer=c->layer();
 
-	for (i = 0; i < m_orderedClients[layer].count(); ++i) {
-	if (m_orderedClients[layer].item(i) == c) {
-		m_orderedClients[layer].move_to_end(i);
+	for (i = 0; i < m_orderedClients[layer].size(); ++i) {
+	if (m_orderedClients[layer][i] == c) {
+		{
+			auto &v = m_orderedClients[layer];
+			auto val = v[i];
+			v.erase(v.begin() + i);
+			v.push_back(val);
+		}
 			netwmUpdateWindowList();
 			return;
 	}
 	}
 
-	m_orderedClients[layer].append(c);
+	m_orderedClients[layer].push_back(c);
 	netwmUpdateWindowList();
 }
 
@@ -750,9 +757,9 @@ void WindowManager::removeFromOrderedList(Client *c)
 
 			c, layer);
 
-	for (int i = 0; i < m_orderedClients[layer].count(); ++i) {
-	if (m_orderedClients[layer].item(i) == c) {
-		m_orderedClients[layer].remove(i);
+	for (int i = 0; i < m_orderedClients[layer].size(); ++i) {
+	if (m_orderedClients[layer][i] == c) {
+		m_orderedClients[layer].erase(i);
 		netwmUpdateWindowList(); 
 		return;
 	}
@@ -764,12 +771,12 @@ bool WindowManager::isTop(Client *c)
 {
 	int layer = c->layer();
 
-	if (m_orderedClients[layer].count() == 0) {
+	if (m_orderedClients[layer].size() == 0) {
 		fprintf(stderr, "Warning: ordered clients list for layer %d is empty even though client %p thinks it's in this layer\n", layer, c);
 		return false;
 	}
 
-	return (m_orderedClients[layer].item(0) == c) ? true : false;
+	return (m_orderedClients[layer][0] == c) ? true : false;
 }
 
 
@@ -783,15 +790,15 @@ bool WindowManager::raiseTransients(Client *c)
 
 	if (!c->isNormal()) return false;
 
-	for (int i = 0; i < m_clients.count(); ++i) {
+	for (int i = 0; i < m_clients.size(); ++i) {
 
-	if (m_clients.item(i)->isNormal() &&
-		m_clients.item(i)->isTransient()) {
+	if (m_clients[i]->isNormal() &&
+		m_clients[i]->isTransient()) {
 
-		if (c->hasWindow(m_clients.item(i)->transientFor())) {
+		if (c->hasWindow(m_clients[i]->transientFor())) {
 
-		if (!first) first = m_clients.item(i);
-		else m_clients.item(i)->mapRaised();
+		if (!first) first = m_clients[i];
+		else m_clients[i]->mapRaised();
 		}
 	}
 	}
@@ -809,7 +816,6 @@ extern "C" {
 extern int putenv(char *);	/* not POSIX */
 }
 #endif
-implementList(AtomList, Atom);
 
 void WindowManager::spawn(char *name, char *file, char *arg1 /* = nullptr*/)
 {
@@ -880,12 +886,12 @@ void WindowManager::print_clients(int fd) {
 
 	  //}
 
-	  if (m_clients.count() == 0) {
+	  if (m_clients.size() == 0) {
 	  sprintf(buff, "No clients!\n");
 	  write(fd, buff, strlen(buff));
 	  }
-	  for (i = 0; i < m_clients.count(); ++i) {
-	  c = clients().item(i);
+	  for (i = 0; i < m_clients.size(); ++i) {
+	  c = clients()[i];
 	  if (XGetTextProperty(c->display(), c->window(), 
 				   &text_prop, XA_WM_CLASS)) {
 		  res_name = (char *)text_prop.value;
@@ -918,8 +924,14 @@ void WindowManager::remove_fd_from_watch(int fd)
 
 void WindowManager::sort_clients(void)
 {
-	m_clients.sort(compare_client_names_a);
-	m_hiddenClients.sort(compare_client_names_a);
+	std::sort(m_clients.begin(), m_clients.end(),
+		[](Client *a, Client *b) {
+			return compare_client_names_a(&a, &b) < 0;
+		});
+	std::sort(m_hiddenClients.begin(), m_hiddenClients.end(),
+		[](Client *a, Client *b) {
+			return compare_client_names_a(&a, &b) < 0;
+		});
 }
 
 
@@ -963,22 +975,22 @@ void WindowManager::gnomeInitialiseCompliance()
 	// some day we will be more compliant
 	AtomList supported;
 
-	supported.append(Atoms::netwm_clientList);
-	supported.append(Atoms::netwm_clientListStacking);
-	supported.append(Atoms::netwm_desktop);
-	supported.append(Atoms::netwm_desktopCount);
-	supported.append(Atoms::netwm_desktopNames);
-	supported.append(Atoms::netwm_activeWindow);
-	supported.append(Atoms::netwm_winState);
-	supported.append(Atoms::netwm_winDesktop);
-	supported.append(Atoms::netwm_winType);
-	supported.append(Atoms::netwm_supportingWmCheck);
+	supported.push_back(Atoms::netwm_clientList);
+	supported.push_back(Atoms::netwm_clientListStacking);
+	supported.push_back(Atoms::netwm_desktop);
+	supported.push_back(Atoms::netwm_desktopCount);
+	supported.push_back(Atoms::netwm_desktopNames);
+	supported.push_back(Atoms::netwm_activeWindow);
+	supported.push_back(Atoms::netwm_winState);
+	supported.push_back(Atoms::netwm_winDesktop);
+	supported.push_back(Atoms::netwm_winType);
+	supported.push_back(Atoms::netwm_supportingWmCheck);
 
 	XChangeProperty
 		(m_display, m_root[0], Atoms::netwm_supported, XA_ATOM, 32,
 		 PropModeReplace,
-		 (unsigned char *)supported.array(0, supported.count()),
-		 supported.count());
+		 (unsigned char *)supported.array(0, supported.size()),
+		 supported.size());
 
 	netwmUpdateChannelList();
 }
@@ -987,22 +999,21 @@ void WindowManager::updateStackingOrder()
 {
 	int orderedCount = 0;
 	for (int i = MAX_LAYER; i >= 0; --i)
-		orderedCount += m_orderedClients[i].count();
+		orderedCount += m_orderedClients[i].size();
 
 	Window* windows = new Window[orderedCount];
 	Window* windowIter = windows;
 
 	for(int layer = MAX_LAYER; layer >= 0; --layer) {
-		int top = m_orderedClients[layer].count();
+		int top = m_orderedClients[layer].size();
 		for (int i = 0; i < top; ++i) {
-			Client *c = m_orderedClients[layer].item(i);
+			Client *c = m_orderedClients[layer][i];
 		if (!c->isKilled() && (c->channel()==channel()  || c->isSticky()) && !c->isHidden()) {
 				*(windowIter++)=c->parent();
 		}
 		}
 	}
 
-implementList(AtomList, Atom);
 
 	XRestackWindows(display(), windows, windowIter-windows);
 
@@ -1013,20 +1024,20 @@ implementList(AtomList, Atom);
 
 void WindowManager::netwmUpdateWindowList()
 {
-	int count = m_clients.count() + m_hiddenClients.count();
+	int count = m_clients.size() + m_hiddenClients.size();
 
 	Window *byAge = new Window[count];
 
 	count = 0;
 
-	for (int i = 0; i < m_hiddenClients.count(); ++i) {
-		Client *c = m_hiddenClients.item(i);
+	for (int i = 0; i < m_hiddenClients.size(); ++i) {
+		Client *c = m_hiddenClients[i];
 		if (c->isKilled()) continue;
 		byAge[count++] = c->window();
 	}
 
-	for (int i = 0; i < m_clients.count(); ++i) {
-		Client *c = m_clients.item(i);
+	for (int i = 0; i < m_clients.size(); ++i) {
+		Client *c = m_clients[i];
 		if (!c->isNormal() || c->isKilled()) continue;
 		byAge[count++] = c->window();
 	}
@@ -1044,10 +1055,10 @@ void WindowManager::netwmUpdateWindowList()
 
 void WindowManager::netwmUpdateStackingOrder()
 {
-	int count = m_hiddenClients.count();
+	int count = m_hiddenClients.size();
 
 	for (int i = MAX_LAYER; i >= 0; --i) {
-		count += m_orderedClients[i].count();
+		count += m_orderedClients[i].size();
 	}
 
 	Window *byStacking = new Window[count];
@@ -1060,16 +1071,16 @@ void WindowManager::netwmUpdateStackingOrder()
 	// in the stacking list as well as in the client list, otherwise
 	// nobody will ever believe anything we say.
 
-	for (int i = 0; i < m_hiddenClients.count(); ++i) {
-		Client *c = m_hiddenClients.item(i);
+	for (int i = 0; i < m_hiddenClients.size(); ++i) {
+		Client *c = m_hiddenClients[i];
 		if (c->isKilled()) continue;
 		byStacking[count++] = c->window();
 	}
 
 	for (int layer = 0; layer < MAX_LAYER; ++layer) {
-		int top = m_orderedClients[layer].count();
+		int top = m_orderedClients[layer].size();
 		for (int i = top - 1; i >= 0; --i) {
-			Client *c = m_orderedClients[layer].item(i);
+			Client *c = m_orderedClients[layer][i];
 		if (c->isWithdrawn() || c->isKilled() || c->isHidden()) continue;
 			byStacking[count++] = c->window();
 		}

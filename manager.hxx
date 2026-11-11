@@ -2,12 +2,11 @@
 #define _MANAGER_H_
 
 #include "general.hxx"
-#include "listmacro.hxx"
 #include "keybinding.hxx"
 
 class Client;
 
-declarePList(ClientList, Client);
+using ClientList = std::vector<Client *>;
 
 
 class WindowManager {

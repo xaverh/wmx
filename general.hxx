@@ -9,6 +9,7 @@
 #include <csignal>
 #include <cerrno>
 #include <cstdlib>
+#include <vector>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -22,7 +23,6 @@
 
 #include "config.hxx"
 
-#include "listmacro.hxx"
 
 #define NewString(x) (strcpy((char *)malloc(strlen(x)+1),(x)))
 
@@ -100,7 +100,7 @@ enum ClientType
 	NotifyClient    // netwm_winType_notify
 };
 
-declareList(AtomList, Atom);
+using AtomList = std::vector<Atom>;
 
 constexpr int DESKTOP_LAYER = 0;
 

@@ -52,24 +52,24 @@ wmx: $(OBJ)
 
 # Header dependencies
 border.o: border.cxx background.xpm border.hxx client.hxx config.hxx dynamicconfig.hxx \
-	general.hxx keybinding.hxx listmacro.hxx manager.hxx
+	general.hxx keybinding.hxx manager.hxx
 buttons.o: buttons.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx menu.hxx
+	keybinding.hxx manager.hxx menu.hxx
 channel.o: channel.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx
+	keybinding.hxx manager.hxx
 client.o: client.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx
+	keybinding.hxx manager.hxx
 config.o: config.cxx config.hxx dynamicconfig.hxx
 events.o: events.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx
+	keybinding.hxx manager.hxx
 keybinding.o: keybinding.cxx config.hxx dynamicconfig.hxx general.hxx keybinding.hxx \
-	listmacro.hxx manager.hxx
+	manager.hxx
 main.o: main.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx
+	keybinding.hxx manager.hxx
 manager.o: manager.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx cursors.hxx \
-	general.hxx keybinding.hxx listmacro.hxx manager.hxx menu.hxx \
+	general.hxx keybinding.hxx manager.hxx menu.hxx \
 menu.o: menu.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
-	keybinding.hxx listmacro.hxx manager.hxx menu.hxx
+	keybinding.hxx manager.hxx menu.hxx
 
 wmx.desktop: wmx.desktop.in
 	sed 's|@PREFIX@|$(PREFIX)|g' wmx.desktop.in > wmx.desktop

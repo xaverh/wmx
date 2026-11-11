@@ -127,7 +127,7 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 void WindowManager::circulate(bool activeFirst)
 {
 	Client *c = 0;
-	if (m_clients.count() == 0) return;
+	if (m_clients.size() == 0) return;
 	if (activeFirst) c = m_activeClient;
 
 	// cc 2000/05/11: change direction each time we release Alt
@@ -141,31 +141,31 @@ void WindowManager::circulate(bool activeFirst)
 	int i, j;
 
 	if (!m_activeClient) {
-			i = (direction > 0 ? -1 : m_clients.count());
+			i = (direction > 0 ? -1 : m_clients.size());
 		} else {
-		for (i = 0; i < m_clients.count(); ++i) {
-		if (m_clients.item(i)->channel() != channel()) continue;
-		if (m_clients.item(i) == m_activeClient) break;
+		for (i = 0; i < m_clients.size(); ++i) {
+		if (m_clients[i]->channel() != channel()) continue;
+		if (m_clients[i] == m_activeClient) break;
 		}
 
-		if (i >= m_clients.count() - 1 && direction > 0) i = -1;
-			else if (i == 0 && direction < 0) i = m_clients.count();
+		if (i >= m_clients.size() - 1 && direction > 0) i = -1;
+			else if (i == 0 && direction < 0) i = m_clients.size();
 	}
 
 	for (j = i + direction;
-			 (!m_clients.item(j)->isNormal() ||
-			   m_clients.item(j)->isTransient() ||
-			   m_clients.item(j)->channel() != channel() ||
-			   m_clients.item(j)->skipsFocus());
+			 (!m_clients[j]->isNormal() ||
+			   m_clients[j]->isTransient() ||
+			   m_clients[j]->channel() != channel() ||
+			   m_clients[j]->skipsFocus());
 			 j += direction) {
 
-		if (direction > 0 && j >= m_clients.count() - 1) j = -1;
-			if (direction < 0 && j <= 0) j = m_clients.count();
+		if (direction > 0 && j >= m_clients.size() - 1) j = -1;
+			if (direction < 0 && j <= 0) j = m_clients.size();
 
 		if (j == i) return; // no suitable clients
 	}
 
-	c = m_clients.item(j);
+	c = m_clients[j];
 	}
 
 	c->activateAndWarp();
@@ -436,8 +436,8 @@ void Client::move(XButtonEvent *e)
 
 #ifdef CONFIG_BUMP_EVERYWHERE
 	EdgeRectList edges;
-	for (int i = 0; i < m_windowManager->clients().count(); ++i) {
-		m_windowManager->clients().item(i)->appendEdges(edges);
+	for (int i = 0; i < m_windowManager->clients().size(); ++i) {
+		m_windowManager->clients()[i]->appendEdges(edges);
 	}
 
 	m_doSomething = false;
@@ -521,34 +521,34 @@ void Client::move(XButtonEvent *e)
 					if (!isTransient()) {
 
 						if (!bumpedh) {
-							for (int i = 0; i < edges.count(); ++i) {
+							for (int i = 0; i < edges.size(); ++i) {
 								if (nx < x &&
-									nx <= edges.item(i).right - xi + ft &&
-									nx  > edges.item(i).right - xi + ft - bd) {
-									nx  = edges.item(i).right - xi + ft;
+									nx <= edges[i].right - xi + ft &&
+									nx  > edges[i].right - xi + ft - bd) {
+									nx  = edges[i].right - xi + ft;
 									bumpedh = 1;
 								}
 								if (nx > x &&
-									nx >= edges.item(i).left - m_w - xi &&
-									nx  < edges.item(i).left - m_w - xi + bd) {
-									nx  = edges.item(i).left - m_w - xi;
+									nx >= edges[i].left - m_w - xi &&
+									nx  < edges[i].left - m_w - xi + bd) {
+									nx  = edges[i].left - m_w - xi;
 									bumpedh = 1;
 								}
 							}
 						}
 
 						if (!bumpedv) {
-							for (int i = 0; i < edges.count(); ++i) {
+							for (int i = 0; i < edges.size(); ++i) {
 								if (ny < y &&
-									ny <= edges.item(i).bottom &&
-									ny  > edges.item(i).bottom - bd) {
-									ny  = edges.item(i).bottom;
+									ny <= edges[i].bottom &&
+									ny  > edges[i].bottom - bd) {
+									ny  = edges[i].bottom;
 									bumpedv = 1;
 								}
 								if (ny > y &&
-									ny >= edges.item(i).top - m_h - yi &&
-									ny  < edges.item(i).top - m_h - yi + bd) {
-									ny  = edges.item(i).top - m_h - yi;
+									ny >= edges[i].top - m_h - yi &&
+									ny  < edges[i].top - m_h - yi + bd) {
+									ny  = edges[i].top - m_h - yi;
 									bumpedv = 1;
 								}
 							}

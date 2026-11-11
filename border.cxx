@@ -36,8 +36,7 @@ public:
 	unsigned short width, height;
 };
 
-declareList(RectangleList, BorderRectangle);
-implementList(RectangleList, BorderRectangle);
+using RectangleList = std::vector<BorderRectangle>;
 
 class BorderRectangleList : public RectangleList
 {
@@ -45,9 +44,9 @@ public:
 	BorderRectangleList() { }
 	virtual ~BorderRectangleList() { }
 
-	void append(BorderRectangle const &r) { RectangleList::append(r); }
+	void append(BorderRectangle const &r) { push_back(r); }
 	void append(int x, int y, int w, int h);
-	XRectangle *xrectangles() { return (XRectangle *)array(0, count()); }
+	XRectangle *xrectangles() { return reinterpret_cast<XRectangle *>(data()); }
 };
 
 void BorderRectangleList::append(int x, int y, int w, int h)
@@ -525,34 +524,34 @@ void Border::setTransientFrameVisibility(bool visible, int w, int h)
 	int i;
 	BorderRectangleList rl;
 
-	rl.append(0, 0, w + 1, yIndent() - 1);
+	rl.push_back(0, 0, w + 1, yIndent() - 1);
 	for (i = 1; i < yIndent(); ++i) {
-		rl.append(w + 1, i - 1, i + 1, 1);
+		rl.push_back(w + 1, i - 1, i + 1, 1);
 	}
-	rl.append(0, yIndent() - 1, xIndent() - 1, h - yIndent() + 2);
+	rl.push_back(0, yIndent() - 1, xIndent() - 1, h - yIndent() + 2);
 	for (i = 1; i < yIndent(); ++i) {
-		rl.append(i - 1, h, 1, i + 2);
+		rl.push_back(i - 1, h, 1, i + 2);
 	}
 
 	XShapeCombineRectangles
 		(display(), m_parent, ShapeBounding,
-		 0, 0, rl.xrectangles(), rl.count(),
+		 0, 0, rl.xrectangles(), rl.size(),
 		 visible ? ShapeUnion : ShapeSubtract, YXSorted);
 
-	rl.remove_all();
+	rl.clear();
 
-	rl.append(1, 1, w, yIndent() - 2);
+	rl.push_back(1, 1, w, yIndent() - 2);
 	for (i = 2; i < yIndent(); ++i) {
-		rl.append(w + 1, i - 1, i, 1);
+		rl.push_back(w + 1, i - 1, i, 1);
 	}
-	rl.append(1, yIndent() - 1, xIndent() - 2, h - yIndent() + 1);
+	rl.push_back(1, yIndent() - 1, xIndent() - 2, h - yIndent() + 1);
 	for (i = 2; i < yIndent(); ++i) {
-		rl.append(i - 1, h, 1, i + 1);
+		rl.push_back(i - 1, h, 1, i + 1);
 	}
 
 	XShapeCombineRectangles
 		(display(), m_parent, ShapeClip,
-		 0, 0, rl.xrectangles(), rl.count(),
+		 0, 0, rl.xrectangles(), rl.size(),
 		 visible ? ShapeUnion : ShapeSubtract, YXSorted);
 	// If the client is shaped, we have to show the inside of the window
 	if(m_client->isShaped()) {
@@ -590,42 +589,42 @@ void Border::shapeParent(int w, int h)
 	// child window border
 
 	// top of tab
-	rl.append(0, 0, w + m_tabWidth[screen()] + 1, TAB_TOP_HEIGHT + 2);
+	rl.push_back(0, 0, w + m_tabWidth[screen()] + 1, TAB_TOP_HEIGHT + 2);
 
 	// struts in tab, left...
-	rl.append(0, TAB_TOP_HEIGHT + 1,
+	rl.push_back(0, TAB_TOP_HEIGHT + 1,
 		  TAB_TOP_HEIGHT + 2, m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 1);
 
 	// ...and right
-	rl.append(m_tabWidth[screen()] - TAB_TOP_HEIGHT, TAB_TOP_HEIGHT + 1,
+	rl.push_back(m_tabWidth[screen()] - TAB_TOP_HEIGHT, TAB_TOP_HEIGHT + 1,
 		  TAB_TOP_HEIGHT + 2, m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 1);
 
-	mainRect = rl.count();
-	rl.append(xIndent() - 1, yIndent() - 1, w + 2, h + 2);
+	mainRect = rl.size();
+	rl.push_back(xIndent() - 1, yIndent() - 1, w + 2, h + 2);
 
 	// main tab
-	rl.append(0, m_tabWidth[screen()] - TAB_TOP_HEIGHT, m_tabWidth[screen()] + 2,
+	rl.push_back(0, m_tabWidth[screen()] - TAB_TOP_HEIGHT, m_tabWidth[screen()] + 2,
 		  m_tabHeight - m_tabWidth[screen()] + TAB_TOP_HEIGHT);
 
 	// diagonal
 	for (i = 1; i < m_tabWidth[screen()] - 1; ++i) {
 	int y = m_tabHeight + i - 1;
 	/* JG: Check position */
-	if (y < h) rl.append(i, y, m_tabWidth[screen()] - i + 2, 1);
+	if (y < h) rl.push_back(i, y, m_tabWidth[screen()] - i + 2, 1);
 	}
 
 	XShapeCombineRectangles
 	(display(), m_parent, ShapeBounding,
-	 0, 0, rl.xrectangles(), rl.count(), ShapeSet, YXSorted);
+	 0, 0, rl.xrectangles(), rl.size(), ShapeSet, YXSorted);
 
-	rl.item(mainRect).x ++;
-	rl.item(mainRect).y ++;
-	rl.item(mainRect).width -= 2;
-	rl.item(mainRect).height -= 2;
+	rl[mainRect].x ++;
+	rl[mainRect].y ++;
+	rl[mainRect].width -= 2;
+	rl[mainRect].height -= 2;
 
 	XShapeCombineRectangles
 	(display(), m_parent, ShapeClip,
-	 0, 0, rl.xrectangles(), rl.count(), ShapeSet, YXSorted);
+	 0, 0, rl.xrectangles(), rl.size(), ShapeSet, YXSorted);
 }
 
 
@@ -640,50 +639,50 @@ void Border::shapeTab(int w, int h)
 
 	// Bounding rectangles
 
-	rl.append(0, 0, w + m_tabWidth[screen()] + 1, TAB_TOP_HEIGHT + 2);
-	rl.append(0, TAB_TOP_HEIGHT + 1, TAB_TOP_HEIGHT + 2,
+	rl.push_back(0, 0, w + m_tabWidth[screen()] + 1, TAB_TOP_HEIGHT + 2);
+	rl.push_back(0, TAB_TOP_HEIGHT + 1, TAB_TOP_HEIGHT + 2,
 		  m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 1);
 
-	rl.append(m_tabWidth[screen()] - TAB_TOP_HEIGHT, TAB_TOP_HEIGHT + 1,
+	rl.push_back(m_tabWidth[screen()] - TAB_TOP_HEIGHT, TAB_TOP_HEIGHT + 1,
 		  TAB_TOP_HEIGHT + 2, m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 1);
 
-	rl.append(0, m_tabWidth[screen()] - TAB_TOP_HEIGHT, m_tabWidth[screen()] + 2,
+	rl.push_back(0, m_tabWidth[screen()] - TAB_TOP_HEIGHT, m_tabWidth[screen()] + 2,
 		  m_tabHeight - m_tabWidth[screen()] + TAB_TOP_HEIGHT);
 
 	for (i = 1; i < m_tabWidth[screen()] - 1; ++i) {
 	int y = m_tabHeight + i - 1;
 	/* JG: Check position */
-	if (y <= h) rl.append(i, y, m_tabWidth[screen()] - i + 2, 1);
+	if (y <= h) rl.push_back(i, y, m_tabWidth[screen()] - i + 2, 1);
 	}
 
 	XShapeCombineRectangles
 	(display(), m_tab, ShapeBounding,
-	 0, 0, rl.xrectangles(), rl.count(), ShapeSet, YXSorted);
+	 0, 0, rl.xrectangles(), rl.size(), ShapeSet, YXSorted);
 
-	rl.remove_all();
+	rl.clear();
 
 	// Clipping rectangles
 
-	rl.append(1, 1, w + m_tabWidth[screen()] - 1, TAB_TOP_HEIGHT);
+	rl.push_back(1, 1, w + m_tabWidth[screen()] - 1, TAB_TOP_HEIGHT);
 
-	rl.append(1, TAB_TOP_HEIGHT + 1, TAB_TOP_HEIGHT,
+	rl.push_back(1, TAB_TOP_HEIGHT + 1, TAB_TOP_HEIGHT,
 		  m_tabWidth[screen()] + TAB_TOP_HEIGHT*2 - 1);
 
-	rl.append(m_tabWidth[screen()] - TAB_TOP_HEIGHT + 1, TAB_TOP_HEIGHT + 1,
+	rl.push_back(m_tabWidth[screen()] - TAB_TOP_HEIGHT + 1, TAB_TOP_HEIGHT + 1,
 		  TAB_TOP_HEIGHT, m_tabWidth[screen()] + TAB_TOP_HEIGHT*2 - 1);
 
-	rl.append(1, m_tabWidth[screen()] - TAB_TOP_HEIGHT + 1, m_tabWidth[screen()],
+	rl.push_back(1, m_tabWidth[screen()] - TAB_TOP_HEIGHT + 1, m_tabWidth[screen()],
 		  m_tabHeight - m_tabWidth[screen()] + TAB_TOP_HEIGHT - 1);
 
 	for (i = 1; i < m_tabWidth[screen()] - 2; ++i) {
 	int y = m_tabHeight + i - 1;
 	/* JG: Check position */
-	if (y < h) rl.append(i + 1, y, m_tabWidth[screen()] - i, 1);
+	if (y < h) rl.push_back(i + 1, y, m_tabWidth[screen()] - i, 1);
 	}
 
 	XShapeCombineRectangles
 	(display(), m_tab, ShapeClip,
-	 0, 0, rl.xrectangles(), rl.count(), ShapeSet, YXSorted);
+	 0, 0, rl.xrectangles(), rl.size(), ShapeSet, YXSorted);
 }
 
 
@@ -750,30 +749,30 @@ void Border::resizeTab(int h)
 
 	BorderRectangleList rl;
 	for (i = 1; i < m_tabWidth[screen()] - 1; ++i) {
-	rl.append(i, m_tabHeight + i - 1, m_tabWidth[screen()] - i + 2, 1);
+	rl.push_back(i, m_tabHeight + i - 1, m_tabWidth[screen()] - i + 2, 1);
 	}
 
 	XShapeCombineRectangles
 	(display(), m_parent, ShapeBounding,
-	 0, 0, rl.xrectangles(), rl.count(), ShapeUnion, YXBanded);
+	 0, 0, rl.xrectangles(), rl.size(), ShapeUnion, YXBanded);
 
 	XShapeCombineRectangles
 	(display(), m_parent, ShapeClip,
-	 0, 0, rl.xrectangles(), rl.count(), ShapeUnion, YXBanded);
+	 0, 0, rl.xrectangles(), rl.size(), ShapeUnion, YXBanded);
 
 	XShapeCombineRectangles
 	(display(), m_tab, ShapeBounding,
-	 0, 0, rl.xrectangles(), rl.count(), ShapeUnion, YXBanded);
+	 0, 0, rl.xrectangles(), rl.size(), ShapeUnion, YXBanded);
 
-	if (rl.count() < 2) return;
+	if (rl.size() < 2) return;
 
-	for (i = 0; i < rl.count() - 1; ++i) {
-	rl.item(i).x ++; rl.item(i).width -= 2;
+	for (i = 0; i < rl.size() - 1; ++i) {
+	rl[i].x ++; rl[i].width -= 2;
 	}
 
 	XShapeCombineRectangles
 	(display(), m_tab, ShapeClip,
-	 0, 0, rl.xrectangles(), rl.count() - 1, ShapeUnion, YXBanded);
+	 0, 0, rl.xrectangles(), rl.size() - 1, ShapeUnion, YXBanded);
 }
 
 
@@ -783,32 +782,32 @@ void Border::shapeResize()
 	BorderRectangleList rl;
 
 	for (i = 0; i < FRAME_WIDTH*2; ++i) {
-	rl.append(FRAME_WIDTH*2 - i - 1, i, i + 1, 1);
+	rl.push_back(FRAME_WIDTH*2 - i - 1, i, i + 1, 1);
 	}
 
 	XShapeCombineRectangles
 	(display(), m_resize, ShapeBounding, 0, 0,
-	 rl.xrectangles(), rl.count(), ShapeSet, YXBanded);
+	 rl.xrectangles(), rl.size(), ShapeSet, YXBanded);
 
-	rl.remove_all();
+	rl.clear();
 
 	for (i = 1; i < FRAME_WIDTH*2; ++i) {
-	rl.append(FRAME_WIDTH*2 - i, i, i, 1);
+	rl.push_back(FRAME_WIDTH*2 - i, i, i, 1);
 	}
 
 	XShapeCombineRectangles
 	(display(), m_resize, ShapeClip, 0, 0,
-	 rl.xrectangles(), rl.count(), ShapeSet, YXBanded);
+	 rl.xrectangles(), rl.size(), ShapeSet, YXBanded);
 
-	rl.remove_all();
+	rl.clear();
 
 	for (i = 0; i < FRAME_WIDTH*2 - 3; ++i) {
-	rl.append(FRAME_WIDTH*2 - i - 1, i + 3, 1, 1);
+	rl.push_back(FRAME_WIDTH*2 - i - 1, i + 3, 1, 1);
 	}
 
 	XShapeCombineRectangles
 	(display(), m_resize, ShapeClip, 0, 0,
-	 rl.xrectangles(), rl.count(), ShapeSubtract, YXBanded);
+	 rl.xrectangles(), rl.size(), ShapeSubtract, YXBanded);
 
 	windowManager()->installCursorOnWindow
 	(WindowManager::DownrightCursor, m_resize);
@@ -829,59 +828,59 @@ void Border::setFrameVisibility(bool visible, int w, int h)
 	BorderRectangleList rl;
 	// Bounding rectangles
 
-	rl.append(m_tabWidth[screen()] + w + 1, 0, FRAME_WIDTH + 1, FRAME_WIDTH);
+	rl.push_back(m_tabWidth[screen()] + w + 1, 0, FRAME_WIDTH + 1, FRAME_WIDTH);
 
-	rl.append(m_tabWidth[screen()] + 2, TAB_TOP_HEIGHT + 2, w,
+	rl.push_back(m_tabWidth[screen()] + 2, TAB_TOP_HEIGHT + 2, w,
 			  FRAME_WIDTH - TAB_TOP_HEIGHT - 2);
 
 	int ww = m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 4;
-	rl.append((m_tabWidth[screen()] + 2 - ww) / 2, (m_tabWidth[screen()]+2 - ww) / 2, ww, ww);
+	rl.push_back((m_tabWidth[screen()] + 2 - ww) / 2, (m_tabWidth[screen()]+2 - ww) / 2, ww, ww);
 
-	rl.append(m_tabWidth[screen()] + 2, FRAME_WIDTH,
+	rl.push_back(m_tabWidth[screen()] + 2, FRAME_WIDTH,
 			  FRAME_WIDTH - 2, 
 			  m_tabHeight + m_tabWidth[screen()] - FRAME_WIDTH - 2);
 
 	// swap last two if sorted wrong
-	if (rl.item(rl.count()-2).y > rl.item(rl.count()-1).y) {
-		rl.append(rl.item(rl.count()-2));
-		rl.remove(rl.count()-3);
+	if (rl[rl.size(]-2).y > rl[rl.size(]-1).y) {
+		rl.push_back(rl[rl.size(]-2));
+		rl.erase(rl.begin() + rl.size()-3);
 	}
 
-	int final = rl.count();
-	rl.append(rl.item(final-1).x - 1,
-			  rl.item(final-1).y + rl.item(final-1).height,
-			  rl.item(final-1).width + 1,
-			  h - rl.item(final-1).height + 2);
+	int final = rl.size();
+	rl.push_back(rl[final-1].x - 1,
+			  rl[final-1].y + rl[final-1].height,
+			  rl[final-1].width + 1,
+			  h - rl[final-1].height + 2);
 
 	XShapeCombineRectangles(display(), m_parent, ShapeBounding,
-							0, 0, rl.xrectangles(), rl.count(),
+							0, 0, rl.xrectangles(), rl.size(),
 							visible ? ShapeUnion : ShapeSubtract, YXSorted);
-	rl.remove_all();
+	rl.clear();
 
 	// Clip rectangles
 
-	rl.append(m_tabWidth[screen()] + w + 1, 1, FRAME_WIDTH, FRAME_WIDTH - 1);
+	rl.push_back(m_tabWidth[screen()] + w + 1, 1, FRAME_WIDTH, FRAME_WIDTH - 1);
 
-	rl.append(m_tabWidth[screen()] + 2, TAB_TOP_HEIGHT + 2, w,
+	rl.push_back(m_tabWidth[screen()] + 2, TAB_TOP_HEIGHT + 2, w,
 			  FRAME_WIDTH - TAB_TOP_HEIGHT - 2);
 
 	ww = m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 6;
-	rl.append((m_tabWidth[screen()] + 2 - ww) / 2, (m_tabWidth[screen()]+2 - ww) / 2, ww, ww);
-	rl.append(m_tabWidth[screen()] + 2, FRAME_WIDTH,
+	rl.push_back((m_tabWidth[screen()] + 2 - ww) / 2, (m_tabWidth[screen()]+2 - ww) / 2, ww, ww);
+	rl.push_back(m_tabWidth[screen()] + 2, FRAME_WIDTH,
 			  FRAME_WIDTH - 2, h - FRAME_WIDTH);
 
 	// swap last two if sorted wrong
-	if (rl.item(rl.count()-2).y > rl.item(rl.count()-1).y) {
-		rl.append(rl.item(rl.count()-2));
-		rl.remove(rl.count()-3);
+	if (rl[rl.size(]-2).y > rl[rl.size(]-1).y) {
+		rl.push_back(rl[rl.size(]-2));
+		rl.erase(rl.begin() + rl.size()-3);
 	}
 
-	rl.append(m_tabWidth[screen()] + 2, h, FRAME_WIDTH - 2, FRAME_WIDTH + 1);
+	rl.push_back(m_tabWidth[screen()] + 2, h, FRAME_WIDTH - 2, FRAME_WIDTH + 1);
 
 	XShapeCombineRectangles(display(), m_parent, ShapeClip,
-							0, 0, rl.xrectangles(), rl.count(),
+							0, 0, rl.xrectangles(), rl.size(),
 				visible ? ShapeUnion : ShapeSubtract, YXSorted);
-	rl.remove_all();
+	rl.clear();
 
 	if (visible && !isFixedSize()) {
 		XMapRaised(display(), m_resize);

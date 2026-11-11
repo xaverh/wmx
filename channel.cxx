@@ -116,21 +116,21 @@ void WindowManager::flipChannel(bool statusOnly, bool flipDown,
 	ClientList considering;
 
 		for (int layer = 0; layer < MAX_LAYER; ++layer) {
-		for (i = (int)m_orderedClients[layer].count()-1; i >= 0; --i) {
-		considering.append(m_orderedClients[layer].item(i));
+		for (i = (int)m_orderedClients[layer].size()-1; i >= 0; --i) {
+		considering.push_back(m_orderedClients[layer][i]);
 		}
 	}
 
-	for (i = 0; i < (int)considering.count(); ++i) {
-		if (considering.item(i) == push || considering.item(i)->isSticky()
+	for (i = 0; i < (int)considering.size(); ++i) {
+		if (considering[i] == push || considering[i]->isSticky()
 		) {
-		considering.item(i)->setChannel(nextChannel);
+		considering[i]->setChannel(nextChannel);
 		} else {
-		considering.item(i)->flipChannel(true, nextChannel);
+		considering[i]->flipChannel(true, nextChannel);
 		}
 	}
 
-	considering.remove_all();
+	considering.clear();
 	}
 
 	m_currentChannel = nextChannel;
@@ -153,15 +153,15 @@ void WindowManager::instateChannel()
 	ClientList considering;
 
 	for (int layer = 0; layer < MAX_LAYER; ++layer) {
-		for (i = m_orderedClients[layer].count()-1; i >= 0; --i) {
-		considering.append(m_orderedClients[layer].item(i));
+		for (i = m_orderedClients[layer].size()-1; i >= 0; --i) {
+		considering.push_back(m_orderedClients[layer][i]);
 		}
 	}
 
-	for (i = 0; i < considering.count(); ++i) {
-	considering.item(i)->flipChannel(false, m_currentChannel);
-	if ((considering.item(i)->channel() == m_channels) &&
-		!considering.item(i)->isSticky()) createNewChannel();
+	for (i = 0; i < considering.size(); ++i) {
+	considering[i]->flipChannel(false, m_currentChannel);
+	if ((considering[i]->channel() == m_channels) &&
+		!considering[i]->isSticky()) createNewChannel();
 	}
 
 	if (m_activeClient && (m_activeClient->channel() != channel())) {
@@ -179,8 +179,8 @@ void WindowManager::checkChannel(int ch)
 	if (m_channels <= 2 || ch < m_channels - 1) return;
 
 	for(int layer = 0; layer < MAX_LAYER; ++layer) {
-		for (int i = m_orderedClients[layer].count()-1; i >= 0; --i) {
-		if (m_orderedClients[layer].item(i)->channel() == ch) return;
+		for (int i = m_orderedClients[layer].size()-1; i >= 0; --i) {
+		if (m_orderedClients[layer][i]->channel() == ch) return;
 		}
 	}
 

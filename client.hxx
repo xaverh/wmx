@@ -11,7 +11,7 @@ public:
 	int left, right, top, bottom;
 };
 
-declareList(EdgeRectList, EdgeRect);
+using EdgeRectList = std::vector<EdgeRect>;
 
 class Client {
 public:

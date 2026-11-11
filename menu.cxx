@@ -511,7 +511,7 @@ ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
 
 	if (selecting > 0) {
 
-	Client *cl = m_clients.item(selecting - 1);
+	Client *cl = m_clients[selecting - 1];
 
 	if (selecting < m_nHidden) cl->unhide(true);
 	else if (selecting < m_nItems) {
@@ -527,7 +527,7 @@ ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
 
 ClientMenu::~ClientMenu()
 {
-	m_clients.remove_all();
+	m_clients.clear();
 	free(m_items);
 }
 
@@ -536,31 +536,31 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 	int i;
 	XButtonEvent *xbev = (XButtonEvent *)m_event; // KeyEvent is similar enough
 
-	for (i = 0; i < m_windowManager->hiddenClients().count(); ++i) {
-		Client *client = m_windowManager->hiddenClients().item(i);
+	for (i = 0; i < m_windowManager->hiddenClients().size(); ++i) {
+		Client *client = m_windowManager->hiddenClients()[i];
 	if (client->root() == m_windowManager->root() &&
 		client->channel() == m_windowManager->channel() &&
 			client->type() != DockClient) {
-		m_clients.append(client);
+		m_clients.push_back(client);
 	}
 	}
 
-	int nh = m_clients.count();
+	int nh = m_clients.size();
 	if (!CONFIG_DISABLE_NEW_WINDOW_COMMAND) ++nh;
 
 	if (CONFIG_EVERYTHING_ON_ROOT_MENU) {
-	for (i = 0; i < m_windowManager->clients().count(); ++i) {
-			Client *client = m_windowManager->clients().item(i);
+	for (i = 0; i < m_windowManager->clients().size(); ++i) {
+			Client *client = m_windowManager->clients()[i];
 		if (client->isNormal() &&
 		client->root() == m_windowManager->root() &&
 		client->channel() == m_windowManager->channel() &&
 				client->type() != DockClient) {
-		m_clients.append(client);
+		m_clients.push_back(client);
 		}
 	}
 	}
 
-	int n = m_clients.count();
+	int n = m_clients.size();
 	if (!CONFIG_DISABLE_NEW_WINDOW_COMMAND) ++n;
 
 	int mx = DisplayWidth (display(), screen()) - 1;
@@ -588,13 +588,13 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == false) {
 
 		if (i == 0) items[i] = CONFIG_NEW_WINDOW_LABEL;
-		else if (m_allowExit && i > m_clients.count()) items[i] = "[Exit wmx]";
-		else items[i] = m_clients.item(i-1)->label();
+		else if (m_allowExit && i > m_clients.size()) items[i] = "[Exit wmx]";
+		else items[i] = m_clients[i-1]->label();
 
 	} else {
 
-		if (m_allowExit && i >= m_clients.count()) items[i] = "[Exit wmx]";
-		else items[i] = m_clients.item(i)->label();
+		if (m_allowExit && i >= m_clients.size()) items[i] = "[Exit wmx]";
+		else items[i] = m_clients[i]->label();
 	}
 	}
 
@@ -611,15 +611,15 @@ Client *ClientMenu::checkFeedback(int item)
 
 	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == false) {
 
-	if (item <= 0 || item > m_clients.count()+1) return nullptr;
-	if (m_allowExit && item == m_clients.count() + 1) return nullptr;
-	return m_clients.item(item - 1);
+	if (item <= 0 || item > m_clients.size()+1) return nullptr;
+	if (m_allowExit && item == m_clients.size() + 1) return nullptr;
+	return m_clients[item - 1];
 
 	} else {
 
-	if (item < 0 || item > m_clients.count()) return nullptr;
-	if (m_allowExit && item == m_clients.count()) return nullptr;
-	return m_clients.item(item);
+	if (item < 0 || item > m_clients.size()) return nullptr;
+	if (m_allowExit && item == m_clients.size()) return nullptr;
+	return m_clients[item];
 	}
 }
 

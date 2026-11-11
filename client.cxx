@@ -13,7 +13,6 @@
 
 char const *Client const::m_defaultLabel = "incognito";
 
-implementList(EdgeRectList, EdgeRect);
 
 
 Client::Client(WindowManager *const wm, Window w, bool shaped) :
@@ -1447,7 +1446,7 @@ void Client::appendEdges(EdgeRectList &list)
 	}
 	r.right  = m_x + m_w;
 	r.bottom = m_y + m_h;
-	list.append(r);
+	list.push_back(r);
 }
 
 

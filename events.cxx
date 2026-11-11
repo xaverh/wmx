@@ -561,9 +561,9 @@ void WindowManager::eventDestroy(XDestroyWindowEvent *e)
 		m_focusChanging = false;
 	}
 
-	for (int i = m_clients.count()-1; i >= 0; --i) {
-		if (m_clients.item(i) == c) {
-		m_clients.remove(i);
+	for (int i = m_clients.size()-1; i >= 0; --i) {
+		if (m_clients[i] == c) {
+		m_clients.erase(m_clients.begin() + i);
 		break;
 		}
 	}
@@ -656,8 +656,8 @@ void WindowManager::eventColormap(XColormapEvent *e)
 
 	if (c) c->eventColormap(e);
 	else {
-		for (i = 0; i < m_clients.count(); ++i) {
-		m_clients.item(i)->eventColormap(e);
+		for (i = 0; i < m_clients.size(); ++i) {
+		m_clients[i]->eventColormap(e);
 		}
 	}
 	}
