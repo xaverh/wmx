@@ -1,4 +1,3 @@
-
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
@@ -36,33 +35,33 @@ struct DynamicConfigImpl;
 class DynamicConfig
 {
 public:
-    DynamicConfig();
-    ~DynamicConfig();
-    void scan(char startup = 0);
+	DynamicConfig();
+	~DynamicConfig();
+	void scan(char startup = 0);
 
-    char clickFocus();
-    char raiseFocus();
-    char autoRaiseFocus();
-    int  raiseDelay();
-    char useKeyboard();
-    char fullMenu();
-    char useFeedback();
-    int  feedbackDelay();
-    char disableNew();
-    char rightCirculate();
-    char rightLower();
-    char rightToggleHeight();
-    char passFocusClick();
-    int  tabMargin();
-    char *tabForeground();
-    char *tabBackground();
-    char *frameBackground();
+	char clickFocus();
+	char raiseFocus();
+	char autoRaiseFocus();
+	int  raiseDelay();
+	char useKeyboard();
+	char fullMenu();
+	char useFeedback();
+	int  feedbackDelay();
+	char disableNew();
+	char rightCirculate();
+	char rightLower();
+	char rightToggleHeight();
+	char passFocusClick();
+	int  tabMargin();
+	char *tabForeground();
+	char *tabBackground();
+	char *frameBackground();
 
-    static DynamicConfig config;
+	static DynamicConfig config;
 
 private:
-    DynamicConfigImpl *m_impl;
-    void update(char *);
+	DynamicConfigImpl *m_impl;
+	void update(char *);
 };
 
 
@@ -89,7 +88,7 @@ private:
 // Area where [exit wmx] is added (0 -> everywhere -# -> px from other side)
 #define CONFIG_EXIT_CLICK_SIZE_X 0
 #define CONFIG_EXIT_CLICK_SIZE_Y -3
- 
+
 // Directory under $HOME in which to look for commands for the
 // middle-button menu
 #define CONFIG_COMMAND_MENU       ".wmx"
@@ -98,7 +97,7 @@ private:
 // append screennumber to COMMAND_MENU directory;
 // use non screen style as fallback
 #define CONFIG_ADD_SCREEN_TO_COMMAND_MENU False
- 
+
 // Focus possibilities.
 // 
 // You can't have CLICK_TO_FOCUS without RAISE_ON_FOCUS, but the other

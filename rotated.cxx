@@ -1,4 +1,3 @@
-
 /* ********************************************************************** */
 
 /* xvertext, Copyright (c) 1992 Alan Richardson (mppa3@uk.ac.sussex.syma)
@@ -52,8 +51,8 @@ static char *my_strdup(const char *str)
   s = (char *)malloc((unsigned)(strlen(str)+1));
   /* this error is highly unlikely ... */
   if (s == NULL) {
-    fprintf(stderr, "Fatal error: my_strdup(): Couldn't do malloc (gulp!)\n");
-    exit(1); 
+	fprintf(stderr, "Fatal error: my_strdup(): Couldn't do malloc (gulp!)\n");
+	exit(1); 
   }
 
   strcpy(s, str);
@@ -65,7 +64,7 @@ static char *my_strdup(const char *str)
 
 
 /* *** Routine to replace `strtok' : this one returns a zero
-       length string if it encounters two consecutive delimiters *** */
+	   length string if it encounters two consecutive delimiters *** */
 
 static char *my_strtok(char *str1, const char *str2)
 {
@@ -76,16 +75,16 @@ static char *my_strtok(char *str1, const char *str2)
 
   /* this error should never occur ... */
   if (str2 == NULL) {
-    fprintf(stderr,
-	    "Fatal error: my_strtok(): recieved null delimiter string\n");
-    exit(1);
+	fprintf(stderr,
+		"Fatal error: my_strtok(): recieved null delimiter string\n");
+	exit(1);
   }
 
   /* initialise if str1 not NULL ... */
   if (str1 != NULL) {
-    start = 0;
-    stext = str1;
-    len = strlen(str1);
+	start = 0;
+	stext = str1;
+	len = strlen(str1);
   }
 
   /* run out of tokens ? ... */
@@ -94,12 +93,12 @@ static char *my_strtok(char *str1, const char *str2)
   /* loop through characters ... */
   for (i = start; i < len; i++) {
 
-    /* loop through delimiters ... */
-    stop = 0;
-    for (j = 0; j < strlen(str2); j++)
-      if (stext[i] == str2[j]) stop = 1;
- 
-    if (stop) break;
+	/* loop through delimiters ... */
+	stop = 0;
+	for (j = 0; j < strlen(str2); j++)
+	  if (stext[i] == str2[j]) stop = 1;
+
+	if (stop) break;
   }
 
   stext[i] = '\0';
@@ -111,7 +110,7 @@ static char *my_strtok(char *str1, const char *str2)
 
 
 /* ---------------------------------------------------------------------- */
-  
+
 
 /* *** Routine to return version/copyright information *** */
 
@@ -126,9 +125,9 @@ float XRotVersion(char *str, int n)
 
 
 /* *** Load the rotated version of a given font *** */
- 
+
 XRotFontStruct *XRotLoadFont(Display *dpy, int screen, 
-			     char *fontname, float angle)
+				 char *fontname, float angle)
 {
   char val;
   XImage *I1, *I2;
@@ -153,10 +152,10 @@ XRotFontStruct *XRotLoadFont(Display *dpy, int screen,
 
   /* useful macros ... */
   root = RootWindow(dpy,screen);
-    
+
   /* create the depth 1 canvas bitmap ... */
   canvas = XCreatePixmap(dpy, root, boxlen, boxlen, 1);
- 
+
   /* create a GC ... */
   font_gc = XCreateGC(dpy, canvas, 0, 0);
   XSetBackground(dpy, font_gc, off);
@@ -169,38 +168,38 @@ XRotFontStruct *XRotLoadFont(Display *dpy, int screen,
   XFontSet fontset;
   fontset = XCreateFontSet(dpy, fontname, &ml, &mc, &ds);
   if (fontset) {
-    XFontStruct **fs_list;
-    XFontsOfFontSet(fontset, &fs_list, &ml);
-    fontstruct = fs_list[0];
+	XFontStruct **fs_list;
+	XFontsOfFontSet(fontset, &fs_list, &ml);
+	fontstruct = fs_list[0];
   } else {
-    fontstruct = NULL;
+	fontstruct = NULL;
   }
 #define XTextWidth(x,y,z)     XmbTextEscapement(rotfont->xfontset,y,z)
 #define XDrawString(t,u,v,w,x,y,z) XmbDrawString(t,u,rotfont->xfontset,v,w,x,y,z)
 #define XDrawImageString(t,u,v,w,x,y,z) XmbDrawString(t,u,rotfont->xfontset,v,w,x,y,z)
   if (fontstruct == NULL) {
-    xv_errno = XV_NOFONT;
-    return NULL;
+	xv_errno = XV_NOFONT;
+	return NULL;
   }
- 
+
   XSetFont(dpy, font_gc, fontstruct->fid);
 
   /* allocate space for rotated font ... */
   rotfont = (XRotFontStruct *)malloc((unsigned)sizeof(XRotFontStruct));
   if (rotfont == NULL) {
-    xv_errno = XV_NOMEM;
-    return NULL;
+	xv_errno = XV_NOMEM;
+	return NULL;
   }
-   
+
   /* determine which characters are defined in font ... */
   min_char = fontstruct->min_char_or_byte2; 
   max_char = fontstruct->max_char_or_byte2;
- 
+
   /* we only want printing characters ... */
   if (min_char<32)  min_char = 32;
   //  if (max_char>126) max_char = 126; // bad for non-ascii iso
   if (max_char>255) max_char = 255;
-     
+
   /* some overall font data ... */
   rotfont->name = my_strdup(fontname);
   rotfont->dir = dir;
@@ -240,7 +239,7 @@ void XRotUnloadFont(Display *dpy, int screen, XRotFontStruct *rotfont)
 
 
 /* ---------------------------------------------------------------------- */
-   
+
 
 /* *** Return the width of a string *** */
 
@@ -262,12 +261,12 @@ int XRotTextWidth(XRotFontStruct *rotfont, char *str, int len)
 /* *** A front end to XRotPaintString : mimics XDrawString *** */
 
 void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont, 
-		    Drawable drawable,
-		    GC gc, int x, int y, char *str, int len)
+			Drawable drawable,
+			GC gc, int x, int y, char *str, int len)
 {            
   static GC my_gc = 0;
   static int lastscreen = -1;
-    
+
   int i, xp, yp, dir, ichar;
 
   if (str == NULL || len<1) return;
@@ -276,21 +275,21 @@ void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont,
 
   if((lastscreen != screen) && (my_gc != 0))
   {
-    XFreeGC(dpy,my_gc);
-    my_gc = 0;
+	XFreeGC(dpy,my_gc);
+	my_gc = 0;
   }
-    
+
   if(my_gc == 0) my_gc = XCreateGC(dpy, drawable, 0, 0);
 
   XCopyGC(dpy, gc, GCForeground|GCBackground, my_gc);
 
   /* a horizontal string is easy ... */
   if (dir == 0) {
-    XSetFillStyle(dpy, my_gc, FillSolid);
-    XSetFont(dpy, my_gc, rotfont->xfontstruct->fid);
-    XDrawString(dpy, drawable, my_gc, x, y, str, len);
+	XSetFillStyle(dpy, my_gc, FillSolid);
+	XSetFont(dpy, my_gc, rotfont->xfontstruct->fid);
+	XDrawString(dpy, drawable, my_gc, x, y, str, len);
 
-    return;
+	return;
   }
 
   /* vertical or upside down ... */
@@ -316,7 +315,7 @@ void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont,
 
   /* width in bytes ... */
   vert_len = (vert_w-1)/8+1;   
- 
+
   /* create the depth 1 canvas bitmap ... */
   Pixmap canvas = XCreatePixmap(dpy, root, width, height, 1);
 
@@ -336,33 +335,33 @@ void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont,
   /* reserve memory for first XImage ... */
   vertdata = (unsigned char *) malloc((unsigned)(vert_len*vert_h));
   if (vertdata == NULL) {
-    xv_errno = XV_NOMEM;
-    return;
+	xv_errno = XV_NOMEM;
+	return;
   }
 
   /* create the XImage ... */
   I1 = XCreateImage(dpy, DefaultVisual(dpy, screen), 1, XYBitmap,
-		    0, (char *)vertdata, vert_w, vert_h, 8, 0);
+			0, (char *)vertdata, vert_w, vert_h, 8, 0);
 
   if (I1 == NULL) {
-    xv_errno = XV_NOXIMAGE;
-    return;
+	xv_errno = XV_NOXIMAGE;
+	return;
   }
 
   I1->byte_order = I1->bitmap_bit_order = MSBFirst;
 
   /* extract character from canvas ... */
   XGetSubImage(dpy, canvas, 0, 0,
-	       vert_w, vert_h, 1, XYPixmap, I1, 0, 0);
+		   vert_w, vert_h, 1, XYPixmap, I1, 0, 0);
   I1->format = XYBitmap; 
 
   /* width, height of rotated character ... */
   if (dir == 2) { 
-    bit_w = vert_w;
-    bit_h = vert_h; 
+	bit_w = vert_w;
+	bit_h = vert_h; 
   } else {
-    bit_w = vert_h;
-    bit_h = vert_w; 
+	bit_w = vert_h;
+	bit_h = vert_w; 
   }
 
   /* width in bytes ... */
@@ -371,17 +370,17 @@ void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont,
   /* reserve memory for the rotated image ... */
   bitdata = (unsigned char *)calloc((unsigned)(bit_h*bit_len), 1);
   if (bitdata == NULL) {
-    xv_errno = XV_NOMEM;
-    return;
+	xv_errno = XV_NOMEM;
+	return;
   }
 
   /* create the image ... */
   I2 = XCreateImage(dpy, DefaultVisual(dpy, screen), 1, XYBitmap, 0,
-		    (char *)bitdata, bit_w, bit_h, 8, 0); 
+			(char *)bitdata, bit_w, bit_h, 8, 0); 
 
   if (I2 == NULL) {
-    xv_errno = XV_NOXIMAGE;
-    return;
+	xv_errno = XV_NOXIMAGE;
+	return;
   }
 
   I2->byte_order = I2->bitmap_bit_order = MSBFirst;
@@ -389,32 +388,32 @@ void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont,
   /* map vertical data to rotated character ... */
   int j;
   for (j = 0; j < bit_h; j++) {
-    for (i = 0; i < bit_w; i++) {
-      /* map bits ... */
-      if (dir == 1)
+	for (i = 0; i < bit_w; i++) {
+	  /* map bits ... */
+	  if (dir == 1)
 	val = vertdata[i*vert_len + (vert_w-j-1)/8] &
 	  (128>>((vert_w-j-1)%8));
 
-      else if (dir == 2)
+	  else if (dir == 2)
 	val = vertdata[(vert_h-j-1)*vert_len + (vert_w-i-1)/8] &
 	  (128>>((vert_w-i-1)%8));
-		
-      else 
+
+	  else 
 	val = vertdata[(vert_h-i-1)*vert_len + j/8] & 
 	  (128>>(j%8));
-    
-      if (val) 
+
+	  if (val) 
 	bitdata[j*bit_len + i/8] = bitdata[j*bit_len + i/8] |
 	  (128>>(i%8));
-    }
+	}
   }
 
   /* create this character's bitmap ... */
   Pixmap image = XCreatePixmap(dpy, root, bit_w, bit_h, 1);
-     
+
   /* put the image into the bitmap ... */
   XPutImage(dpy, image, font_gc, I2, 0, 0, 0, 0, bit_w, bit_h);
-  
+
   /* free the image and data ... */
   XDestroyImage(I1);
   XDestroyImage(I2);
@@ -427,16 +426,16 @@ void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont,
 
   /* suitable offset ... */
   if (dir == 1) {
-    xp = x-rotfont->max_ascent;
-    yp = y-width; //rotfont->rbearing; 
+	xp = x-rotfont->max_ascent;
+	yp = y-width; //rotfont->rbearing; 
   }
   else if (dir == 2) {
-    xp = x-width; //rotfont->rbearing;
-    yp = y-rotfont->max_descent+1;
+	xp = x-width; //rotfont->rbearing;
+	yp = y-rotfont->max_descent+1;
   }
   else {
-    xp = x-rotfont->max_descent+1;
-    yp = y+0; //rotfont->lbearing; 
+	xp = x-rotfont->max_descent+1;
+	yp = y+0; //rotfont->lbearing; 
   }
 
   XSetFillStyle(dpy, my_gc, FillStippled);
@@ -448,8 +447,8 @@ void XRotDrawString(Display *dpy, int screen, XRotFontStruct *rotfont,
   XFreePixmap(dpy, image);
 }
 
-  
-    
+
+
 /* ---------------------------------------------------------------------- */
 
 
@@ -464,14 +463,14 @@ void XRotDrawAlignedString(Display *dpy, int screen, XRotFontStruct *rotfont,
   char *str1, *str2 = "\n\0", *str3;
 
   if (text == NULL) 
-    return;
-  
+	return;
+
   dir = rotfont->dir;
 
   /* count number of sections in string ... */
   for (i = 0; i<strlen(text); i++) 
-    if (text[i] == '\n') 
-      nl++;
+	if (text[i] == '\n') 
+	  nl++;
 
   /* find width of longest section ... */
   str1 = my_strdup(text);
@@ -479,132 +478,132 @@ void XRotDrawAlignedString(Display *dpy, int screen, XRotFontStruct *rotfont,
   max_width = XRotTextWidth(rotfont, str3, strlen(str3));
 
   do {
-    str3 = my_strtok((char *)NULL, str2);
-    if (str3 != NULL)
-      if (XRotTextWidth(rotfont, str3, strlen(str3))>max_width)
+	str3 = my_strtok((char *)NULL, str2);
+	if (str3 != NULL)
+	  if (XRotTextWidth(rotfont, str3, strlen(str3))>max_width)
 	max_width = XRotTextWidth(rotfont, str3, strlen(str3));
   }
   while (str3 != NULL);
- 
+
   /* calculate vertical starting point according to alignment policy and
-     rotation angle ... */
+	 rotation angle ... */
   if (dir == 0) {
-    if (align == TLEFT || align == TCENTRE || align == TRIGHT)
-      yp = y+rotfont->max_ascent;
+	if (align == TLEFT || align == TCENTRE || align == TRIGHT)
+	  yp = y+rotfont->max_ascent;
 
-    else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
-      yp = y-(nl-1)*rotfont->height - rotfont->max_descent;
+	else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
+	  yp = y-(nl-1)*rotfont->height - rotfont->max_descent;
 
-    else 
-      yp = y-(nl-1)/2*rotfont->height + rotfont->max_ascent -
+	else 
+	  yp = y-(nl-1)/2*rotfont->height + rotfont->max_ascent -
 	rotfont->height/2 - ((nl%2 == 0)?rotfont->height/2:0); 
   }
 
   else if (dir == 1) {
-    if (align == TLEFT || align == TCENTRE || align == TRIGHT)
-      xp = x+rotfont->max_ascent;
+	if (align == TLEFT || align == TCENTRE || align == TRIGHT)
+	  xp = x+rotfont->max_ascent;
 
-    else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
-      xp = x-(nl-1)*rotfont->height - rotfont->max_descent;
+	else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
+	  xp = x-(nl-1)*rotfont->height - rotfont->max_descent;
 
-    else 
-      xp = x-(nl-1)/2*rotfont->height + rotfont->max_ascent -
+	else 
+	  xp = x-(nl-1)/2*rotfont->height + rotfont->max_ascent -
 	rotfont->height/2 - ((nl%2 == 0)?rotfont->height/2:0); 
   }
 
   else if (dir == 2) {
-    if (align == TLEFT || align == TCENTRE || align == TRIGHT)
-      yp = y-rotfont->max_ascent;
-     
-    else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
-      yp = y+(nl-1)*rotfont->height + rotfont->max_descent;
-     
-    else 
-      yp = y+(nl-1)/2*rotfont->height - rotfont->max_ascent +
+	if (align == TLEFT || align == TCENTRE || align == TRIGHT)
+	  yp = y-rotfont->max_ascent;
+
+	else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
+	  yp = y+(nl-1)*rotfont->height + rotfont->max_descent;
+
+	else 
+	  yp = y+(nl-1)/2*rotfont->height - rotfont->max_ascent +
 	rotfont->height/2 + ((nl%2 == 0)?rotfont->height/2:0); 
   }
 
   else {
-    if (align == TLEFT || align == TCENTRE || align == TRIGHT)
-      xp = x-rotfont->max_ascent;
-    
-    else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
-      xp = x+(nl-1)*rotfont->height + rotfont->max_descent;
-  
-    else 
-      xp = x+(nl-1)/2*rotfont->height - rotfont->max_ascent +
+	if (align == TLEFT || align == TCENTRE || align == TRIGHT)
+	  xp = x-rotfont->max_ascent;
+
+	else if (align == BLEFT || align == BCENTRE || align == BRIGHT)
+	  xp = x+(nl-1)*rotfont->height + rotfont->max_descent;
+
+	else 
+	  xp = x+(nl-1)/2*rotfont->height - rotfont->max_ascent +
 	rotfont->height/2 + ((nl%2 == 0)?rotfont->height/2:0); 
   }
 
   free(str1);
   str1 = my_strdup(text);
   str3 = my_strtok(str1, str2);
-  
+
   /* loop through each section in the string ... */
   do {
-    /* width of this section ... */
-    this_width = XRotTextWidth(rotfont, str3, strlen(str3));
+	/* width of this section ... */
+	this_width = XRotTextWidth(rotfont, str3, strlen(str3));
 
-    /* horizontal alignment ... */
-    if (dir == 0) {
-      if (align == TLEFT || align == MLEFT || align == BLEFT)
+	/* horizontal alignment ... */
+	if (dir == 0) {
+	  if (align == TLEFT || align == MLEFT || align == BLEFT)
 	xp = x;
-  
-      else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
-	xp = x-this_width/2;
- 
-      else 
-	xp = x-max_width; 
-    }   
 
-    else if (dir == 1) {
-      if (align == TLEFT || align == MLEFT || align == BLEFT)
+	  else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
+	xp = x-this_width/2;
+
+	  else 
+	xp = x-max_width; 
+	}   
+
+	else if (dir == 1) {
+	  if (align == TLEFT || align == MLEFT || align == BLEFT)
 	yp = y;
 
-      else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
+	  else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
 	yp = y+this_width/2;
 
-      else 
+	  else 
 	yp = y+max_width; 
-    }
+	}
 
-    else if (dir == 2) {
-      if (align == TLEFT || align == MLEFT || align == BLEFT)
+	else if (dir == 2) {
+	  if (align == TLEFT || align == MLEFT || align == BLEFT)
 	xp = x;
-  
-      else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
+
+	  else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
 	xp = x+this_width/2;
- 
-      else 
+
+	  else 
 	xp = x+max_width; 
-    }
+	}
 
-    else {
-      if (align == TLEFT || align == MLEFT || align == BLEFT)  
+	else {
+	  if (align == TLEFT || align == MLEFT || align == BLEFT)  
 	yp = y;
-     
-      else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
-	yp = y-this_width/2;
-     
-      else 
-	yp = y-max_width; 
-    }
 
-    /* draw the section ... */
-    XRotDrawString(dpy, screen, rotfont, drawable, gc, xp, yp,
+	  else if (align == TCENTRE || align == MCENTRE || align == BCENTRE)
+	yp = y-this_width/2;
+
+	  else 
+	yp = y-max_width; 
+	}
+
+	/* draw the section ... */
+	XRotDrawString(dpy, screen, rotfont, drawable, gc, xp, yp,
 		   str3, strlen(str3));
 
-    str3 = my_strtok((char *)NULL, str2);
+	str3 = my_strtok((char *)NULL, str2);
 
-    /* advance position ... */
-    if (dir == 0)
-      yp += rotfont->height;
-    else if (dir == 1)
-      xp += rotfont->height;
-    else if (dir == 2)
-      yp -= rotfont->height;
-    else 
-      xp -= rotfont->height;
+	/* advance position ... */
+	if (dir == 0)
+	  yp += rotfont->height;
+	else if (dir == 1)
+	  xp += rotfont->height;
+	else if (dir == 2)
+	  yp -= rotfont->height;
+	else 
+	  xp -= rotfont->height;
   }
   while (str3 != NULL);
 

@@ -1,4 +1,3 @@
-
 #ifndef _WM2_CURSORS_H_
 #define _WM2_CURSORS_H_
 

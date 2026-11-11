@@ -1,5 +1,3 @@
-/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*-  vi:set ts=8 sts=4 sw=4: */
-
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
 #define CHECKPOINT fprintf(stderr,"%s:%d\n",__FILE__,__LINE__);
@@ -46,11 +44,11 @@ typedef char Boolean;
 
 #define signal(x,y)     \
   do { \
-    struct sigaction sAct; \
-    (void)sigemptyset(&sAct.sa_mask); \
-    sAct.sa_flags = 0; \
-    sAct.sa_handler = (SIGNAL_CALLBACK_TYPE(y)); \
-    (void)sigaction((x), &sAct, NULL); \
+	struct sigaction sAct; \
+	(void)sigemptyset(&sAct.sa_mask); \
+	sAct.sa_flags = 0; \
+	sAct.sa_handler = (SIGNAL_CALLBACK_TYPE(y)); \
+	(void)sigaction((x), &sAct, NULL); \
   } while (0)
 
 #include "config.hxx"
@@ -84,72 +82,72 @@ typedef char Boolean;
 #define WIN_HINTS_SKIP_TASKBAR    (1<<2) /*do not show on taskbar*/
 #define WIN_HINTS_GROUP_TRANSIENT (1<<3) /*Reserved - definition is unclear*/
 #define WIN_HINTS_FOCUS_ON_CLICK  (1<<4) /*app only accepts focus if clicked*/
-  
+
 class Atoms {
 public:
-    static Atom wm_state;
-    static Atom wm_changeState;
-    static Atom wm_protocols;
-    static Atom wm_delete;
-    static Atom wm_takeFocus;
-    static Atom wm_colormaps;
-    static Atom wmx_running;
+	static Atom wm_state;
+	static Atom wm_changeState;
+	static Atom wm_protocols;
+	static Atom wm_delete;
+	static Atom wm_takeFocus;
+	static Atom wm_colormaps;
+	static Atom wmx_running;
 
-    static Atom netwm_supportingWmCheck;
-    static Atom netwm_wmName;
-    static Atom netwm_supported;
-    static Atom netwm_clientList;
-    static Atom netwm_clientListStacking;
-    static Atom netwm_desktop;
-    static Atom netwm_desktopCount;
-    static Atom netwm_desktopNames;
-    static Atom netwm_activeWindow;
+	static Atom netwm_supportingWmCheck;
+	static Atom netwm_wmName;
+	static Atom netwm_supported;
+	static Atom netwm_clientList;
+	static Atom netwm_clientListStacking;
+	static Atom netwm_desktop;
+	static Atom netwm_desktopCount;
+	static Atom netwm_desktopNames;
+	static Atom netwm_activeWindow;
 
-    static Atom netwm_winLayer; //!!! obsolete
-    static Atom netwm_winDesktopButtonProxy; //!!! what the hell?
+	static Atom netwm_winLayer; //!!! obsolete
+	static Atom netwm_winDesktopButtonProxy; //!!! what the hell?
 
-    static Atom netwm_winHints; //!!! obsolete
-    static Atom netwm_winState; //!!! meaning has changed (was int, now atoms)
+	static Atom netwm_winHints; //!!! obsolete
+	static Atom netwm_winState; //!!! meaning has changed (was int, now atoms)
 
-    static Atom netwm_winDesktop;
+	static Atom netwm_winDesktop;
 
-    static Atom netwm_winType;
+	static Atom netwm_winType;
 
-    static Atom netwm_winType_desktop; // desktop active background window
-    static Atom netwm_winType_dock;    // dock or panel to remain on top
-    static Atom netwm_winType_toolbar; // managed torn-off toolbar window
-    static Atom netwm_winType_menu;    // managed torn-off menu window
-    static Atom netwm_winType_utility; // small persistent palette or similar
-    static Atom netwm_winType_splash;  // splash screen
-    static Atom netwm_winType_dialog;  // dialog; default for managed transient
-    static Atom netwm_winType_dropdown;// menu window (override-redirect)
-    static Atom netwm_winType_popup;   // menu window (override-redirect)
-    static Atom netwm_winType_tooltip; // tooltip (override-redirect)
-    static Atom netwm_winType_notify;  // e.g. battery low (override-redirect)
-    static Atom netwm_winType_combo;   // combobox menu (override-redirect)
-    static Atom netwm_winType_dnd;     // dragged object (override-redirect)
-    static Atom netwm_winType_normal;  // normal top-level window
+	static Atom netwm_winType_desktop; // desktop active background window
+	static Atom netwm_winType_dock;    // dock or panel to remain on top
+	static Atom netwm_winType_toolbar; // managed torn-off toolbar window
+	static Atom netwm_winType_menu;    // managed torn-off menu window
+	static Atom netwm_winType_utility; // small persistent palette or similar
+	static Atom netwm_winType_splash;  // splash screen
+	static Atom netwm_winType_dialog;  // dialog; default for managed transient
+	static Atom netwm_winType_dropdown;// menu window (override-redirect)
+	static Atom netwm_winType_popup;   // menu window (override-redirect)
+	static Atom netwm_winType_tooltip; // tooltip (override-redirect)
+	static Atom netwm_winType_notify;  // e.g. battery low (override-redirect)
+	static Atom netwm_winType_combo;   // combobox menu (override-redirect)
+	static Atom netwm_winType_dnd;     // dragged object (override-redirect)
+	static Atom netwm_winType_normal;  // normal top-level window
 };
 
 /* These are the netwm window types that we actually care about. */
 
 enum ClientType 
 {
-    /* netwm_winType_normal,
-       or no hint and either override-redirect or no transient: */
-    NormalClient,
+	/* netwm_winType_normal,
+	   or no hint and either override-redirect or no transient: */
+	NormalClient,
 
-    /* netwm_winType_dialog,
-       or no hint and transient: */
-    DialogClient,
+	/* netwm_winType_dialog,
+	   or no hint and transient: */
+	DialogClient,
 
-    DesktopClient,  // netwm_winType_desktop
-    DockClient,     // netwm_winType_dock
-    ToolbarClient,  // netwm_winType_toolbar
-    MenuClient,     // netwm_winType_menu
-    UtilityClient,  // netwm_winType_utility
-    SplashClient,   // netwm_winType_splash
-    NotifyClient    // netwm_winType_notify
+	DesktopClient,  // netwm_winType_desktop
+	DockClient,     // netwm_winType_dock
+	ToolbarClient,  // netwm_winType_toolbar
+	MenuClient,     // netwm_winType_menu
+	UtilityClient,  // netwm_winType_utility
+	SplashClient,   // netwm_winType_splash
+	NotifyClient    // netwm_winType_notify
 };
 
 declareList(AtomList, Atom);
@@ -171,7 +169,7 @@ declareList(AtomList, Atom);
 
 #define DOCK_LAYER    9
 #define FULLSCREEN_LAYER 12
- 
+
 #define MAX_LAYER    13
 
 extern Boolean ignoreBadWindowErrors; // tidiness hack

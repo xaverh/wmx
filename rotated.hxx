@@ -24,33 +24,33 @@
 /* *** The font structures *** */
 
 struct BitmapStruct {
-    int			 bit_w;
-    int			 bit_h;
+	int			 bit_w;
+	int			 bit_h;
 
-    Pixmap bm;
+	Pixmap bm;
 };
 
 struct XRotCharStruct {
-    int			 ascent;
-    int			 descent;
-    int			 lbearing;
-    int			 rbearing;
-    int			 width;
+	int			 ascent;
+	int			 descent;
+	int			 lbearing;
+	int			 rbearing;
+	int			 width;
 
-    BitmapStruct	 glyph;
+	BitmapStruct	 glyph;
 };
 
 struct XRotFontStruct {
-    int			 dir;
-    int			 height;
-    int			 max_ascent;
-    int			 max_descent;
-    int			 max_char;
-    int			 min_char;
-    char 		*name;
+	int			 dir;
+	int			 height;
+	int			 max_ascent;
+	int			 max_descent;
+	int			 max_char;
+	int			 min_char;
+	char 		*name;
 
-    XFontSet		 xfontset;
-    XFontStruct		*xfontstruct;
+	XFontSet		 xfontset;
+	XFontStruct		*xfontstruct;
 
   XRotCharStruct	 per_char[224]; // all chars from 32 to 255
 };
@@ -94,7 +94,7 @@ extern int		 xv_errno;
 
 
 /* ---------------------------------------------------------------------- */
- 
+
 
 #else
 
