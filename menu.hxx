@@ -71,7 +71,6 @@ private:
 	virtual void raiseFeedbackLevel(int);
 };
 
-#if CONFIG_USE_CHANNEL_MENU
 class ChannelMenu : public Menu
 {
  public:
@@ -84,7 +83,6 @@ class ChannelMenu : public Menu
 	int m_channels;
 	char **m_items;
 };
-#endif
 
 class CommandMenu : public Menu
 {

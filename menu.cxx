@@ -855,7 +855,6 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 	return items;
 }
 
-#if CONFIG_USE_CHANNEL_MENU
 
 ChannelMenu::ChannelMenu(WindowManager *manager, XEvent *e)
 	: Menu(manager, e), m_channels(manager->channels()),
