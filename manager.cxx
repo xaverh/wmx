@@ -143,7 +143,7 @@ implementList(AtomList, Atom);
 	XModifierKeymap *modmap = XGetModifierMapping(m_display);
 	KeyCode alt = 0;
 	for (i = 0; i < (kmax - kmin) * kpk; ++i) {
-	if (CONFIG_ALT_KEY && keymap[i] == *CONFIG_ALT_KEY) {
+	if constexpr (CONFIG_ALT_KEY) if (keymap[i] == *CONFIG_ALT_KEY) {
 		alt = kmin + (i / kpk);
 		for (j = 0; j < (8 * modmap->max_keypermod); ++j) {
 		if (modmap->modifiermap[j] == alt) {

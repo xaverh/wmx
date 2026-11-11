@@ -180,12 +180,12 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 
 	Client *c = windowToClient(ev->window);
 
-		if (CONFIG_ALT_KEY && key == *CONFIG_ALT_KEY) {
+		if constexpr (CONFIG_ALT_KEY) if (key == *CONFIG_ALT_KEY) {
 			m_altPressed = true;
 			m_altStateRetained = false;
 		}
 
-if (CONFIG_QUICKRAISE_KEY && key == *CONFIG_QUICKRAISE_KEY && c) {
+if constexpr (CONFIG_QUICKRAISE_KEY) if (key == *CONFIG_QUICKRAISE_KEY && c) {
 
 		if (isTop(c) && (CONFIG_QUICKRAISE_ALSO_LOWERS == true)) {
 		c->lower();
@@ -194,15 +194,15 @@ if (CONFIG_QUICKRAISE_KEY && key == *CONFIG_QUICKRAISE_KEY && c) {
 		}
 
 	} else
-if (CONFIG_QUICKHIDE_KEY && key == *CONFIG_QUICKHIDE_KEY && c) {
+if constexpr (CONFIG_QUICKHIDE_KEY) if (key == *CONFIG_QUICKHIDE_KEY && c) {
 		c->hide();
 
 	} else 
-if (CONFIG_QUICKCLOSE_KEY && key == *CONFIG_QUICKCLOSE_KEY && c) {
+if constexpr (CONFIG_QUICKCLOSE_KEY) if (key == *CONFIG_QUICKCLOSE_KEY && c) {
 		c->kill();
 
 	} else
-if (CONFIG_QUICKHEIGHT_KEY && key == *CONFIG_QUICKHEIGHT_KEY && c) {
+if constexpr (CONFIG_QUICKHEIGHT_KEY) if (key == *CONFIG_QUICKHEIGHT_KEY && c) {
 
 		if (c->isFullHeight()) {
 		c->unmaximise(Vertical);
@@ -232,57 +232,57 @@ if (CONFIG_QUICKHEIGHT_KEY && key == *CONFIG_QUICKHEIGHT_KEY && c) {
 		// These key names also appear in Client::manage(), so
 		// when adding a key it must be added in both places
 
-				if (CONFIG_FLIP_DOWN_KEY && key == *CONFIG_FLIP_DOWN_KEY)
+				if constexpr (CONFIG_FLIP_DOWN_KEY) if (key == *CONFIG_FLIP_DOWN_KEY)
 			flipChannel(false, true, true, 0);
 
-		else if (CONFIG_FLIP_UP_KEY && key == *CONFIG_FLIP_UP_KEY)
+		else if constexpr (CONFIG_FLIP_UP_KEY) if (key == *CONFIG_FLIP_UP_KEY)
 			flipChannel(false, false, true, 0);
 
-		else if (CONFIG_CIRCULATE_KEY && key == *CONFIG_CIRCULATE_KEY)
+		else if constexpr (CONFIG_CIRCULATE_KEY) if (key == *CONFIG_CIRCULATE_KEY)
 			circulate(false);
 
-		else if (CONFIG_HIDE_KEY && key == *CONFIG_HIDE_KEY)
+		else if constexpr (CONFIG_HIDE_KEY) if (key == *CONFIG_HIDE_KEY)
 			if (c) c->hide();
 
-		else if (CONFIG_DESTROY_KEY && key == *CONFIG_DESTROY_KEY)
+		else if constexpr (CONFIG_DESTROY_KEY) if (key == *CONFIG_DESTROY_KEY)
 			if (c) c->kill();
 
-		else if (CONFIG_RAISE_KEY && key == *CONFIG_RAISE_KEY)
+		else if constexpr (CONFIG_RAISE_KEY) if (key == *CONFIG_RAISE_KEY)
 			if (c) c->mapRaised();
 
-		else if (CONFIG_LOWER_KEY && key == *CONFIG_LOWER_KEY)
+		else if constexpr (CONFIG_LOWER_KEY) if (key == *CONFIG_LOWER_KEY)
 			if (c) c->lower();
 
-		else if (CONFIG_FULLHEIGHT_KEY && key == *CONFIG_FULLHEIGHT_KEY)
+		else if constexpr (CONFIG_FULLHEIGHT_KEY) if (key == *CONFIG_FULLHEIGHT_KEY)
 			if (c) c->maximise(Vertical);
 
-		else if (CONFIG_NORMALHEIGHT_KEY && key == *CONFIG_NORMALHEIGHT_KEY)
+		else if constexpr (CONFIG_NORMALHEIGHT_KEY) if (key == *CONFIG_NORMALHEIGHT_KEY)
 			if (c && !CONFIG_SAME_KEY_MAX_UNMAX)
 						c->unmaximise(Vertical);
 
-		else if (CONFIG_FULLWIDTH_KEY && key == *CONFIG_FULLWIDTH_KEY)
+		else if constexpr (CONFIG_FULLWIDTH_KEY) if (key == *CONFIG_FULLWIDTH_KEY)
 			if (c) c->maximise(Horizontal);
 
-		else if (CONFIG_NORMALWIDTH_KEY && key == *CONFIG_NORMALWIDTH_KEY)
+		else if constexpr (CONFIG_NORMALWIDTH_KEY) if (key == *CONFIG_NORMALWIDTH_KEY)
 			if (c && !CONFIG_SAME_KEY_MAX_UNMAX)
 						c->unmaximise(Horizontal);
 
-		else if (CONFIG_MAXIMISE_KEY && key == *CONFIG_MAXIMISE_KEY)
+		else if constexpr (CONFIG_MAXIMISE_KEY) if (key == *CONFIG_MAXIMISE_KEY)
 			if (c) c->maximise(Maximum);
 
-		else if (CONFIG_UNMAXIMISE_KEY && key == *CONFIG_UNMAXIMISE_KEY)
+		else if constexpr (CONFIG_UNMAXIMISE_KEY) if (key == *CONFIG_UNMAXIMISE_KEY)
 			if (c && !CONFIG_SAME_KEY_MAX_UNMAX)
 						c->unmaximise(Maximum);
 
-		else if (CONFIG_STICKY_KEY && key == *CONFIG_STICKY_KEY)
+		else if constexpr (CONFIG_STICKY_KEY) if (key == *CONFIG_STICKY_KEY)
 			if (c) c->setSticky(!(c->isSticky()));
 
-		else if (CONFIG_CLIENT_MENU_KEY && key == *CONFIG_CLIENT_MENU_KEY)
+		else if constexpr (CONFIG_CLIENT_MENU_KEY) if (key == *CONFIG_CLIENT_MENU_KEY)
 			if constexpr (CONFIG_WANT_KEYBOARD_MENU) {
 			ClientMenu menu(this, (XEvent *)ev);
 
 			}
-		else if (CONFIG_COMMAND_MENU_KEY && key == *CONFIG_COMMAND_MENU_KEY)
+		else if constexpr (CONFIG_COMMAND_MENU_KEY) if (key == *CONFIG_COMMAND_MENU_KEY)
 			if constexpr (CONFIG_WANT_KEYBOARD_MENU) {
 			CommandMenu menu(this, (XEvent *)ev);
 
@@ -302,7 +302,7 @@ void WindowManager::eventKeyRelease(XKeyEvent *ev)
 {
 	KeySym key = XKeycodeToKeysym(display(), ev->keycode, 0);
 
-	if (CONFIG_ALT_KEY && key == *CONFIG_ALT_KEY) {
+	if constexpr (CONFIG_ALT_KEY) if (key == *CONFIG_ALT_KEY) {
 		m_altPressed = false;
 		m_altStateRetained = false;
 
