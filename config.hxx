@@ -25,44 +25,7 @@
 // -- Chris Cannam, January 1998
 
 
-// This isn't one of the sections.  This is the structure for Stefan
-// `Sec' Zehl's runtime configuration hack -- see Config.C.  It's a
-// bit incomplete, but works, mostly.  Anything in this file that's
-// #defined to DynamicConfig::config.something() will take its default
-// from Config.C
-
-struct DynamicConfigImpl;
-class DynamicConfig
-{
-public:
-	DynamicConfig();
-	~DynamicConfig();
-	void scan(char startup = 0);
-
-	char clickFocus();
-	char raiseFocus();
-	char autoRaiseFocus();
-	int  raiseDelay();
-	char useKeyboard();
-	char fullMenu();
-	char useFeedback();
-	int  feedbackDelay();
-	char disableNew();
-	char rightCirculate();
-	char rightLower();
-	char rightToggleHeight();
-	char passFocusClick();
-	int  tabMargin();
-	char *tabForeground();
-	char *tabBackground();
-	char *frameBackground();
-
-	static DynamicConfig config;
-
-private:
-	DynamicConfigImpl *m_impl;
-	void update(char *);
-};
+#include "dynamicconfig.hxx"
 
 
 // =================================================
