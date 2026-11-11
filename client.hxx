@@ -50,42 +50,42 @@ public:
 	void manage(bool mapped);
 	bool hasWindow(Window);
 
-	Client *revertTo() { return m_revert; }
+	Client *revertTo() const { return m_revert; }
 	void setRevertTo(Client *c) { m_revert = c; }
 
-	bool isHidden()      { return (m_state == IconicState);    }
-	bool isWithdrawn()   { return (m_state == WithdrawnState); }
-	bool isNormal()      { return (m_state == NormalState);    }
-	bool isKilled()      { return (m_window == None);          }
-	bool isTransient()   { return ((m_transient != None) || (m_shaped)); }
-	bool isSticky()      { return m_sticky; }
-	bool skipsFocus()    { return m_skipFocus || isNonFocusable(); } //!!!merge
-	bool isFocusOnClick(){ return (m_focusOnClick ||
+	bool isHidden()      const { return (m_state == IconicState);    }
+	bool isWithdrawn()   const { return (m_state == WithdrawnState); }
+	bool isNormal()      const { return (m_state == NormalState);    }
+	bool isKilled()      const { return (m_window == None);          }
+	bool isTransient()   const { return ((m_transient != None) || (m_shaped)); }
+	bool isSticky()      const { return m_sticky; }
+	bool skipsFocus()    const { return m_skipFocus || isNonFocusable(); } //!!!merge
+	bool isFocusOnClick() const { return (m_focusOnClick ||
 									  (layer() < FIRST_FOCUS_FOLLOWS_LAYER)); }
-	bool isMovable()     { return m_movable; }
-	Window  transientFor()  { return m_transient; }
-	bool isFixedSize()   { return m_fixedSize; }
-	bool isShaped()      { return m_shaped; }
+	bool isMovable()     const { return m_movable; }
+	Window  transientFor()  const { return m_transient; }
+	bool isFixedSize()   const { return m_fixedSize; }
+	bool isShaped()      const { return m_shaped; }
 
 	// Client is borderless (like things on desktop or at 'dock' layer
 	// or above.
-	bool isBorderless()  { return ((layer() < FIRST_DECORATED_LAYER) ||
+	bool isBorderless()  const { return ((layer() < FIRST_DECORATED_LAYER) ||
 									  (layer() > LAST_DECORATED_LAYER)); }
 
 	// Client should not receive focus (panel, desktop etc.)
 	bool isNonFocusable(){ return ((layer() > LAST_FOCUSABLE_LAYER)); }
 
-	char const *label()     { return m_label;    }
-	char const *name()      { return m_name;     }
-	char const *iconName()  { return m_iconName; }
+	char const *label()     const { return m_label;    }
+	char const *name()      const { return m_name;     }
+	char const *iconName()  const { return m_iconName; }
 
-	int layer()             { return m_layer; }
+	int layer()             const { return m_layer; }
 
-	ClientType type()       { return m_type; }
+	ClientType type()       const { return m_type; }
 
-	int channel() { return m_channel;  }
+	int channel() const { return m_channel;  }
 	void flipChannel(bool leaving, int newChannel);
-	bool isNormalButElsewhere() { return isNormal()||m_unmappedForChannel; }
+	bool isNormalButElsewhere() const { return isNormal()||m_unmappedForChannel; }
 	void setChannel(int channel) { m_channel = channel; netwmUpdateChannel(); }
 	void setSticky(bool sticky);
 	void setSkipFocus(bool);
@@ -105,21 +105,21 @@ public:
 
 	void maximise(int);
 	void unmaximise(int);
-	bool isFullHeight() { return m_isFullHeight; }
+	bool isFullHeight() const { return m_isFullHeight; }
 	void makeThisNormalHeight() { m_isFullHeight = false; }
 	void makeThisNormalWidth() { m_isFullWidth = false; }
 
 	/* for call from within: */
 
 	void fatal(char const *m)    { m_windowManager->fatal(m);              }
-	Display *display()     { return m_windowManager->display();      }
+	Display *display()     const { return m_windowManager->display();      }
 	int screen();
-	Window parent()        { return m_border->parent();              }
+	Window parent()        const { return m_border->parent();              }
 	Window root();
-	Client *activeClient() { return m_windowManager->activeClient(); }
-	bool isActive()     { return (activeClient() == this);        }
+	Client *activeClient() const { return m_windowManager->activeClient(); }
+	bool isActive()     const { return (activeClient() == this);        }
 
-	WindowManager *windowManager() { return m_windowManager; }
+	WindowManager *windowManager() const { return m_windowManager; }
 
 	// for call from equivalent wm functions in Events.C:
 
@@ -137,7 +137,7 @@ public:
 
 
 	void netwmUpdateChannel();
-	Window window()        { return m_window; }
+	Window window()        const { return m_window; }
 
 	void appendEdges(EdgeRectList &);
 

@@ -20,7 +20,7 @@ public:
 	// for call from Client and within:
 
 	Client *windowToClient(Window, bool create = false);
-	Client *activeClient() { return m_activeClient; }
+	Client *activeClient() const { return m_activeClient; }
 	bool raiseTransients(Client *); // true if raised any
 	Time timestamp(bool reset);
 	void clearFocus();
@@ -31,16 +31,16 @@ public:
 	void removeFromHiddenList(Client *);
 	void skipInRevert(Client *, Client *);
 
-	Display *display() { return m_display; }
-	Window root() { return m_root[screen()]; }
-	Window mroot(int i) { return m_root[i]; }
-	int screen() { return m_screenNumber; }
-	int screensTotal() { return m_screensTotal; }
+	Display *display() const { return m_display; }
+	Window root() const { return m_root[screen()]; }
+	Window mroot(int i) const { return m_root[i]; }
+	int screen() const { return m_screenNumber; }
+	int screensTotal() const { return m_screensTotal; }
 	void setScreen(int i) { m_screenNumber = i; }
 	void setScreenFromRoot(Window);
 	void setScreenFromPointer();
 
-	int altModMask() { return m_altModMask; }
+	int altModMask() const { return m_altModMask; }
 
 	enum RootCursor {
 	NormalCursor, DeleteCursor, DownCursor, RightCursor, DownrightCursor
@@ -63,8 +63,8 @@ public:
 	void releaseGrabKeyMode(XKeyEvent *);
 	void spawn(char *, char *, char * = nullptr);
 
-	int channel() { return m_currentChannel; }
-	int channels() { return m_channels; }
+	int channel() const { return m_currentChannel; }
+	int channels() const { return m_channels; }
 	void setSignalled() { m_looping = false; } // ...
 	void gotoChannel(int channel, Client *push);
 	void ensureChannelExists(int channel);

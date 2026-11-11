@@ -41,7 +41,7 @@ public:
 	WindowManager *windowManager(); // calls into Client
 	bool isTransient();	// calls into Client
 	bool isFixedSize();	// calls into Client
-	Window parent() { return m_parent; }
+	Window parent() const { return m_parent; }
 	bool hasWindow(Window);
 
 	Display *display();
