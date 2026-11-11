@@ -684,11 +684,6 @@ tryagain:
 			XFreeStringList(list);
 			n = num;
 		} else if (cnt > Success) {
-					"text property\n"
-					"  original type %ld, string %s\n"
-					"  converted string %s\n"
-					"  decide to use original value as STRING\n",
-					textprop.encoding, textprop.value, *list);
 			string = (unsigned char*)NewString(*(char**)p);
 			XFreeStringList(list);
 			n = n;
@@ -843,7 +838,6 @@ void Client::gravitate(bool invert)
 	break;
 
 	default:
-		gravity, m_window);
 	return;
 	}
 
@@ -939,8 +933,6 @@ void Client::getClientType()
 			Atom typeAtom = ((Atom *)property)[i];
 
 			char *name = XGetAtomName(display(), typeAtom);
-
-					i, name);
 
 			if (name) XFree(name);
 
