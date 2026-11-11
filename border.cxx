@@ -839,8 +839,8 @@ void Border::setFrameVisibility(bool visible, int w, int h)
 			  m_tabHeight + m_tabWidth[screen()] - FRAME_WIDTH - 2);
 
 	// swap last two if sorted wrong
-	if (rl[rl.size()-2).y > rl[rl.size()-1).y) {
-		rl.push_back(rl[rl.size()-2));
+	if (rl[rl.size()-2].y > rl[rl.size()-1].y) {
+		rl.push_back(rl[rl.size()-2]);
 		rl.erase(rl.begin() + rl.size()-3);
 	}
 
@@ -868,8 +868,8 @@ void Border::setFrameVisibility(bool visible, int w, int h)
 			  FRAME_WIDTH - 2, h - FRAME_WIDTH);
 
 	// swap last two if sorted wrong
-	if (rl[rl.size()-2).y > rl[rl.size()-1).y) {
-		rl.push_back(rl[rl.size()-2));
+	if (rl[rl.size()-2].y > rl[rl.size()-1].y) {
+		rl.push_back(rl[rl.size()-2]);
 		rl.erase(rl.begin() + rl.size()-3);
 	}
 
