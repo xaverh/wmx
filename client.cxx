@@ -224,7 +224,7 @@ void Client::manage(bool mapped)
 	int i;
 	int keycode;
 
-	static KeySym keys[] = {
+	static std::optional<KeySym> keys[] = {
 		CONFIG_FLIP_UP_KEY, CONFIG_FLIP_DOWN_KEY, CONFIG_CIRCULATE_KEY,
 		CONFIG_HIDE_KEY, CONFIG_DESTROY_KEY, CONFIG_RAISE_KEY,
 		CONFIG_LOWER_KEY, CONFIG_FULLHEIGHT_KEY, CONFIG_NORMALHEIGHT_KEY,
@@ -237,7 +237,7 @@ void Client::manage(bool mapped)
 #endif
 	};
 
-		XGrabKey(display(), XKeysymToKeycode(display(), CONFIG_ALT_KEY),
+		if (CONFIG_ALT_KEY) XGrabKey(display(), XKeysymToKeycode(display(), *CONFIG_ALT_KEY),
 				 0, m_window, true, GrabModeAsync, GrabModeAsync);
 
 	XGrabButton(display(), Button1,
@@ -245,7 +245,8 @@ void Client::manage(bool mapped)
 			GrabModeAsync, GrabModeSync, None, None);
 
 	for (i = 0; i < (int)(sizeof(keys)/sizeof(keys[0])); ++i) {
-		keycode = XKeysymToKeycode(display(), keys[i]);
+		if (!keys[i]) continue;
+		keycode = XKeysymToKeycode(display(), *keys[i]);
 		if (keycode) {
 		XGrabKey(display(), keycode,
 			 m_windowManager->altModMask()|LockMask|Mod2Mask,
@@ -266,19 +267,19 @@ void Client::manage(bool mapped)
 		}
 	}
 
-	keycode = XKeysymToKeycode(display(), CONFIG_QUICKRAISE_KEY);
+	keycode = CONFIG_QUICKRAISE_KEY ? XKeysymToKeycode(display(), *CONFIG_QUICKRAISE_KEY) : 0;
 	if (keycode) {
 		XGrabKey(display(), keycode, AnyModifier, m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 	}
 
-	keycode = XKeysymToKeycode(display(), CONFIG_QUICKHIDE_KEY);
+	keycode = CONFIG_QUICKHIDE_KEY ? XKeysymToKeycode(display(), *CONFIG_QUICKHIDE_KEY) : 0;
 	if (keycode) {
 		XGrabKey(display(), keycode, AnyModifier, m_window, true,
 			 GrabModeAsync, GrabModeAsync);
 	}
 
-	keycode = XKeysymToKeycode(display(), CONFIG_QUICKHEIGHT_KEY);
+	keycode = CONFIG_QUICKHEIGHT_KEY ? XKeysymToKeycode(display(), *CONFIG_QUICKHEIGHT_KEY) : 0;
 	if (keycode) {
 		XGrabKey(display(), keycode, AnyModifier, m_window, true,
 			 GrabModeAsync, GrabModeAsync);

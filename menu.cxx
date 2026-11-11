@@ -411,7 +411,7 @@ int Menu::getSelection()
 
 		KeySym key = XKeycodeToKeysym(display(), event.xkey.keycode, 0);
 
-		if (key == CONFIG_MENU_SELECT_KEY) {
+		if (CONFIG_MENU_SELECT_KEY && key == *CONFIG_MENU_SELECT_KEY) {
 
 		if (!drawn) selecting = -1;
 
@@ -425,7 +425,7 @@ int Menu::getSelection()
 		done = true;
 		break;
 
-		} else if (key == CONFIG_MENU_CANCEL_KEY) {
+		} else if (CONFIG_MENU_CANCEL_KEY && key == *CONFIG_MENU_CANCEL_KEY) {
 
 		m_windowManager->releaseGrabKeyMode(&event.xkey);
 		XUnmapWindow(display(), m_window[screen()]);
@@ -434,15 +434,15 @@ int Menu::getSelection()
 		done = true;
 		break;
 
-		} else if (key != CONFIG_MENU_UP_KEY &&
-			   key != CONFIG_MENU_DOWN_KEY) {
+		} else if (!(CONFIG_MENU_UP_KEY && key == *CONFIG_MENU_UP_KEY) &&
+			   !(CONFIG_MENU_DOWN_KEY && key == *CONFIG_MENU_DOWN_KEY)) {
 		break;
 		}
 
 		if (!drawn) break;
 		prev = selecting;
 
-		if (key == CONFIG_MENU_UP_KEY) {
+		if (CONFIG_MENU_UP_KEY && key == *CONFIG_MENU_UP_KEY) {
 
 		if (prev <= 0) selecting = m_nItems - 1;
 		else selecting = prev - 1;

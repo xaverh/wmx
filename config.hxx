@@ -26,6 +26,7 @@
 
 
 #include "dynamicconfig.hxx"
+#include <optional>
 
 
 // =================================================
@@ -120,54 +121,54 @@ constexpr int MENU_ENTRY_MAXLENGTH = 80;
 // flip channels, and Alt/Tab to switch windows.  (On my 105-key
 // PC keyboard, Meta_L corresponds to the left Windows key.)
 
-constexpr KeySym CONFIG_ALT_KEY = XK_Super_L;
+constexpr std::optional<KeySym> CONFIG_ALT_KEY = XK_Super_L;
 
 // And these define the rest of the keyboard controls, when the above
 // modifier is pressed; they're keysyms as defined in <X11/keysym.h>
 // and <X11/keysymdef.h>
 
-constexpr KeySym CONFIG_FLIP_UP_KEY = XK_Right;
-constexpr KeySym CONFIG_FLIP_DOWN_KEY = XK_Left;
-constexpr KeySym CONFIG_HIDE_KEY = XK_Return;
-constexpr KeySym CONFIG_STICKY_KEY = XK_Pause;
-constexpr KeySym CONFIG_RAISE_KEY = XK_Up;
-constexpr KeySym CONFIG_LOWER_KEY = XK_Down;
+constexpr std::optional<KeySym> CONFIG_FLIP_UP_KEY = XK_Right;
+constexpr std::optional<KeySym> CONFIG_FLIP_DOWN_KEY = XK_Left;
+constexpr std::optional<KeySym> CONFIG_HIDE_KEY = XK_Return;
+constexpr std::optional<KeySym> CONFIG_STICKY_KEY = XK_Pause;
+constexpr std::optional<KeySym> CONFIG_RAISE_KEY = XK_Up;
+constexpr std::optional<KeySym> CONFIG_LOWER_KEY = XK_Down;
 // Prior and Next should be the same as Page_Up and Page_Down in R6
-constexpr KeySym CONFIG_FULLHEIGHT_KEY = XK_Prior;
-constexpr KeySym CONFIG_NORMALHEIGHT_KEY = XK_Next;
-constexpr KeySym CONFIG_FULLWIDTH_KEY = XK_KP_Add;
-constexpr KeySym CONFIG_NORMALWIDTH_KEY = XK_KP_Subtract;
-constexpr KeySym CONFIG_MAXIMISE_KEY = XK_Home;
-constexpr KeySym CONFIG_UNMAXIMISE_KEY = XK_End;
+constexpr std::optional<KeySym> CONFIG_FULLHEIGHT_KEY = XK_Prior;
+constexpr std::optional<KeySym> CONFIG_NORMALHEIGHT_KEY = XK_Next;
+constexpr std::optional<KeySym> CONFIG_FULLWIDTH_KEY = XK_KP_Add;
+constexpr std::optional<KeySym> CONFIG_NORMALWIDTH_KEY = XK_KP_Subtract;
+constexpr std::optional<KeySym> CONFIG_MAXIMISE_KEY = XK_Home;
+constexpr std::optional<KeySym> CONFIG_UNMAXIMISE_KEY = XK_End;
 constexpr bool CONFIG_SAME_KEY_MAX_UNMAX = false;
 
 // The next two may clash badly with Emacs, if you use Alt as the
 // modifier.  The commented variants might work better for some.
-constexpr KeySym CONFIG_CIRCULATE_KEY = XK_Tab;
-//constexpr KeySym CONFIG_CIRCULATE_KEY = XK_grave;
-//constexpr KeySym CONFIG_CIRCULATE_KEY = XK_section;
-constexpr KeySym CONFIG_DESTROY_KEY = XK_BackSpace;
-//constexpr KeySym CONFIG_DESTROY_KEY = XK_Delete;
-//constexpr KeySym CONFIG_DESTROY_KEY = XK_Insert;
+constexpr std::optional<KeySym> CONFIG_CIRCULATE_KEY = XK_Tab;
+//constexpr std::optional<KeySym> CONFIG_CIRCULATE_KEY = XK_grave;
+//constexpr std::optional<KeySym> CONFIG_CIRCULATE_KEY = XK_section;
+constexpr std::optional<KeySym> CONFIG_DESTROY_KEY = XK_BackSpace;
+//constexpr std::optional<KeySym> CONFIG_DESTROY_KEY = XK_Delete;
+//constexpr std::optional<KeySym> CONFIG_DESTROY_KEY = XK_Insert;
 
 // If WANT_KEYBOARD_MENU is true, then the MENU_KEY, when pressed with
 // the modifier, will call up a client menu with keyboard navigation
 constexpr bool CONFIG_WANT_KEYBOARD_MENU = true;
-constexpr KeySym CONFIG_CLIENT_MENU_KEY = XK_Menu;
-constexpr KeySym CONFIG_COMMAND_MENU_KEY = XK_Multi_key;
+constexpr std::optional<KeySym> CONFIG_CLIENT_MENU_KEY = XK_Menu;
+constexpr std::optional<KeySym> CONFIG_COMMAND_MENU_KEY = XK_Multi_key;
 constexpr bool CONFIG_EXIT_ON_KBD_MENU = true;
 // these are for navigating on the menu; they don't require a modifier
-constexpr KeySym CONFIG_MENU_UP_KEY = XK_Up;
-constexpr KeySym CONFIG_MENU_DOWN_KEY = XK_Down;
-constexpr KeySym CONFIG_MENU_SELECT_KEY = XK_Return;
-constexpr KeySym CONFIG_MENU_CANCEL_KEY = XK_Escape;
+constexpr std::optional<KeySym> CONFIG_MENU_UP_KEY = XK_Up;
+constexpr std::optional<KeySym> CONFIG_MENU_DOWN_KEY = XK_Down;
+constexpr std::optional<KeySym> CONFIG_MENU_SELECT_KEY = XK_Return;
+constexpr std::optional<KeySym> CONFIG_MENU_CANCEL_KEY = XK_Escape;
 
 // Useful for fortunate people with Sun Type-5 keyboards.  These don't
 // require the modifier to be pressed.
-constexpr KeySym CONFIG_QUICKRAISE_KEY = XK_F15;
-constexpr KeySym CONFIG_QUICKHIDE_KEY = XK_F17;
-constexpr KeySym CONFIG_QUICKHEIGHT_KEY = XK_F13;
-constexpr KeySym CONFIG_QUICKCLOSE_KEY = XK_F11;
+constexpr std::optional<KeySym> CONFIG_QUICKRAISE_KEY = XK_F15;
+constexpr std::optional<KeySym> CONFIG_QUICKHIDE_KEY = XK_F17;
+constexpr std::optional<KeySym> CONFIG_QUICKHEIGHT_KEY = XK_F13;
+constexpr std::optional<KeySym> CONFIG_QUICKCLOSE_KEY = XK_F11;
 constexpr bool CONFIG_QUICKRAISE_ALSO_LOWERS = true;
 
 // Mouse Configuration
