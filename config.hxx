@@ -169,11 +169,6 @@ constexpr bool CONFIG_EXIT_ON_KBD_MENU = true;
 #define CONFIG_QUICKHEIGHT_KEY	XK_F13
 #define CONFIG_QUICKCLOSE_KEY	XK_F11
 constexpr bool CONFIG_QUICKRAISE_ALSO_LOWERS = true;
-constexpr char const *CONFIG_SUNPOWER_EXEC = "/usr/openwin/bin/sys-suspend";
-#define CONFIG_SUNPOWER_KEY		SunXK_PowerSwitch
-#define CONFIG_SUNPOWER_SHIFT_KEY	SunXK_PowerSwitchShift
-#define CONFIG_SUNPOWER_OPTIONS	"-x","-h",0
-#define CONFIG_SUNPOWER_SHIFTOPTIONS	"-x","-n",0
 
 // Mouse Configuration
 // Use this section to remap your mouse button actions.

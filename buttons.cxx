@@ -4,7 +4,6 @@
 #include <X11/keysym.h>
 #include <sys/time.h>
 
-#include <X11/Sunkeysym.h>
 
 void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 {
@@ -220,23 +219,6 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 
 	} else
 #endif // CONFIG_QUICKHEIGHT_KEY
-	  if (key == CONFIG_SUNPOWER_KEY) {
-		   pid_t pid = fork();
-		   if(pid == 0)
-		   {
-			   execl(CONFIG_SUNPOWER_EXEC,CONFIG_SUNPOWER_EXEC,
-					 CONFIG_SUNPOWER_OPTIONS, nullptr);
-		   }
-
-	   } else if (key == CONFIG_SUNPOWER_SHIFT_KEY) {
-		   pid_t pid = fork();
-		   if(pid == 0)
-		   {
-			   execl(CONFIG_SUNPOWER_EXEC,CONFIG_SUNPOWER_EXEC,
-					 CONFIG_SUNPOWER_SHIFTOPTIONS, nullptr);
-		   }
-	   } else
-
 	   if (ev->state & m_altModMask) {
 
 		   if (!m_altPressed) {
