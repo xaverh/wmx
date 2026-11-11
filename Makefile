@@ -44,6 +44,7 @@ OBJ = border.o \
 
 all: wmx
 
+.SUFFIXES: .cxx .o
 .cxx.o:
 	$(CXX) -c $(CXXFLAGS) $<
 
