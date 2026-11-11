@@ -1148,6 +1148,14 @@ void WindowManager::netwmUpdateCurrentChannel()
 		 PropModeReplace, (unsigned char *)&val, 1);
 
 	netwmUpdateWindowList();
-}  
+}
+
+void WindowManager::netwmUpdateActiveClient()
+{
+	Window w = m_activeClient ? m_activeClient->window() : None;
+	XChangeProperty
+		(m_display, m_root[0], Atoms::netwm_activeWindow, XA_WINDOW, 32,
+		 PropModeReplace, (unsigned char *)&w, 1);
+}
 
 
