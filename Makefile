@@ -76,15 +76,21 @@ menu.o: menu.cxx border.hxx client.hxx config.hxx general.hxx \
 remote.o: remote.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx listmacro.hxx manager.hxx remote.hxx
 
-clean:
-	rm -f wmx $(OBJ)
+wmx.desktop: wmx.desktop.in
+	sed 's|@PREFIX@|$(PREFIX)|g' wmx.desktop.in > wmx.desktop
 
-install: wmx
+install: wmx wmx.desktop
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp -f wmx $(DESTDIR)$(PREFIX)/bin
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/wmx
+	mkdir -p $(DESTDIR)$(PREFIX)/share/xsessions
+	cp -f wmx.desktop $(DESTDIR)$(PREFIX)/share/xsessions/wmx.desktop
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/wmx
+	rm -f $(DESTDIR)$(PREFIX)/share/xsessions/wmx.desktop
+
+clean:
+	rm -f wmx $(OBJ) wmx.desktop
 
 .PHONY: all clean install uninstall

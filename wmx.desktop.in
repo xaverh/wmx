@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=wmx
+Comment=A tabbed, shaped window manager
+Exec=@PREFIX@/bin/wmx
+TryExec=@PREFIX@/bin/wmx
+NoDisplay=true
+DesktopNames=wmx
