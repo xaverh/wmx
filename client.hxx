@@ -231,8 +231,8 @@ private:
 	void decorate(bool active);
 };
 
-#define Pdelete    1
-#define PtakeFocus 2
+constexpr int Pdelete = 1;
+constexpr int PtakeFocus = 2;
 
 #endif
 

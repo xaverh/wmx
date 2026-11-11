@@ -10,9 +10,9 @@ class WindowManager;
 // change these a certain amount before breaking the shoddy code in
 // the rest of this file.
 
-#define TAB_TOP_HEIGHT 2
-#define FRAME_WIDTH CONFIG_FRAME_THICKNESS
-#define TRANSIENT_FRAME_WIDTH 4
+constexpr int TAB_TOP_HEIGHT = 2;
+constexpr int FRAME_WIDTH = CONFIG_FRAME_THICKNESS;
+constexpr int TRANSIENT_FRAME_WIDTH = 4;
 // NB frameTopHeight = frameHeight-tabTopHeight
 
 class Border {			// friend of client

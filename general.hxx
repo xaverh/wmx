@@ -102,25 +102,25 @@ enum ClientType
 
 declareList(AtomList, Atom);
 
-#define DESKTOP_LAYER 0
+constexpr int DESKTOP_LAYER = 0;
 
-#define FIRST_FOCUS_FOLLOWS_LAYER 3 // -- above this it's focus-on-click only
-#define FIRST_DECORATED_LAYER 3     // -- above this, windows are borderless
+constexpr int FIRST_FOCUS_FOLLOWS_LAYER = 3; // above this it's focus-on-click only
+constexpr int FIRST_DECORATED_LAYER = 3;     // above this, windows are borderless
 
-#define NORMAL_LAYER  4
-#define UTILITY_LAYER 6
-#define DIALOG_LAYER  7
+constexpr int NORMAL_LAYER = 4;
+constexpr int UTILITY_LAYER = 6;
+constexpr int DIALOG_LAYER = 7;
 
-#define LAST_FOCUSABLE_LAYER  7 // -- below this, windows do not receive focus
+constexpr int LAST_FOCUSABLE_LAYER = 7; // below this, windows do not receive focus
 
-#define TOOLBAR_LAYER 8
+constexpr int TOOLBAR_LAYER = 8;
 
-#define LAST_DECORATED_LAYER  8 // -- below this, windows are borderless
+constexpr int LAST_DECORATED_LAYER = 8; // below this, windows are borderless
 
-#define DOCK_LAYER    9
-#define FULLSCREEN_LAYER 12
+constexpr int DOCK_LAYER = 9;
+constexpr int FULLSCREEN_LAYER = 12;
 
-#define MAX_LAYER    13
+constexpr int MAX_LAYER = 13;
 
 extern bool ignoreBadWindowErrors; // tidiness hack
 
