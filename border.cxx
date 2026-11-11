@@ -73,14 +73,13 @@ Border::Border(Client *const c, Window child) :
 Border::~Border()
 {
 	if (m_parent != root()) {
-	else {
-			if (!m_client->isBorderless()) {
+		if (!m_client->isBorderless()) {
 			XDestroyWindow(display(), m_tab);
-             XDestroyWindow(display(), m_button);
-			}
+			XDestroyWindow(display(), m_button);
+		}
 		XDestroyWindow(display(), m_parent);
-			if (!m_client->isBorderless()) {
-		XDestroyWindow(display(), m_resize);
+		if (!m_client->isBorderless()) {
+			XDestroyWindow(display(), m_resize);
 		}
 
 		if (m_feedback) {
@@ -88,7 +87,6 @@ Border::~Border()
 		}
 
 		if (m_xftDraw) XftDrawDestroy(m_xftDraw);
-	}
 	}
 
 	//!!! remind me why we don't delete these windows if m_parent == root() ?

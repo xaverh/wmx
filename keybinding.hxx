@@ -11,17 +11,17 @@ struct key_entry {
 class WindowManager;
 class Keybinding {
  public:
-	Keybinding::Keybinding(WindowManager *const, char *, bool);
+	Keybinding(WindowManager *const, char *, bool);
 	~Keybinding();
-	void Keybinding::setup(void);
-	char * Keybinding::command_for_keysym(KeySym sym);
-	void Keybinding::spawn(char *command, int);
-	void Keybinding::grab_each_key(Display *display, Window window, int mask);
+	void setup(void);
+	char *command_for_keysym(KeySym sym);
+	void spawn(char *command, int);
+	void grab_each_key(Display *display, Window window, int mask);
 
 
  private:
 	WindowManager *wm;
-	int Keybinding::scan_directory(char *dir_name, bool with_modifier);
+	int scan_directory(char *dir_name, bool with_modifier);
 	int table_count;
 	struct key_entry *table;
 

@@ -73,7 +73,7 @@ public:
 									  (layer() > LAST_DECORATED_LAYER)); }
 
 	// Client should not receive focus (panel, desktop etc.)
-	bool isNonFocusable(){ return ((layer() > LAST_FOCUSABLE_LAYER)); }
+	bool isNonFocusable() const { return ((layer() > LAST_FOCUSABLE_LAYER)); }
 
 	char const *label()     const { return m_label;    }
 	char const *name()      const { return m_name;     }
