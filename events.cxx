@@ -398,8 +398,6 @@ void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 			m_stubborn = true;
 			m_lastPopTime = 0L;
 
-				label());
-
 		} else {
 			m_lastPopTime = popTime;
 		}
@@ -588,8 +586,6 @@ void WindowManager::eventClient(XClientMessageEvent *e)
 
 	int channel = (int)e->data.l[0] + 1;
 
-				channel);
-
 	// netwm is not up-to-date and asked us to flip to a 
 	// non-existing channel
 	if (channel > m_channels) {
@@ -611,7 +607,6 @@ void WindowManager::eventClient(XClientMessageEvent *e)
 	Client *c = windowToClient(e->window);
 	if (c)
 		c->eventClient(e);
-	else
 }
 
 void Client::eventClient(XClientMessageEvent *e)
