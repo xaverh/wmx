@@ -5,14 +5,6 @@
 #include <sys/types.h>
 #include <sys/time.h>
 
-#ifdef _POSIX_SOURCE
-#undef _POSIX_SOURCE
-#endif
-
-#ifndef __FreeBSD__
-#define _POSIX_SOURCE 1
-#endif
-
 #include <stdio.h>
 #include <signal.h>
 #include <errno.h>
