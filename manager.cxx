@@ -33,11 +33,8 @@ Atom    Atoms::netwm_desktop;
 Atom    Atoms::netwm_desktopCount;
 Atom    Atoms::netwm_desktopNames;
 Atom    Atoms::netwm_activeWindow;
-Atom    Atoms::netwm_winLayer;
-Atom    Atoms::netwm_winDesktopButtonProxy;
 Atom    Atoms::netwm_winState;
 Atom    Atoms::netwm_winDesktop;
-Atom    Atoms::netwm_winHints;
 Atom    Atoms::netwm_winType;
 
 Atom    Atoms::netwm_winType_desktop;
@@ -245,13 +242,6 @@ implementList(AtomList, Atom);
 	Atoms::netwm_desktopCount      = XInternAtom(m_display, "_NET_NUMBER_OF_DESKTOPS",  False);
 	Atoms::netwm_desktopNames      = XInternAtom(m_display, "_NET_DESKTOP_NAMES",       False);
 	Atoms::netwm_activeWindow      = XInternAtom(m_display, "_NET_ACTIVE_WINDOW",       False);
-	//!!! "replaced with _NET_WM_WINDOW_TYPE functional hint":
-	Atoms::netwm_winLayer          = XInternAtom(m_display, "_WIN_LAYER",               False);
-	//!!! what is this??
-	Atoms::netwm_winDesktopButtonProxy 
-							   = XInternAtom(m_display, "_WIN_DESKTOP_BUTTON_PROXY",False);
-	//!!! "replaced with _NET_WM_WINDOW_TYPE functional hint":
-	Atoms::netwm_winHints          = XInternAtom(m_display, "_WIN_HINTS",               False);
 	Atoms::netwm_winState          = XInternAtom(m_display, "_NET_WM_STATE",            False);    
 	Atoms::netwm_winDesktop        = XInternAtom(m_display, "_NET_WM_DESKTOP",          False);    
 
@@ -1020,21 +1010,6 @@ void WindowManager::gnomeInitialiseCompliance()
 		(m_display, m_netwmCheckWin, Atoms::netwm_wmName,
 		 XA_STRING, 8, PropModeReplace, (unsigned char *)"wmx", 1);
 
-	// Also going to add the desktop button proxy stuff to the same
-	// window.  This is an old property, but it's not clear how it has
-	// been superseded -- see e.g.
-	// http://developer.gnome.org/doc/standards/wm/c71.html
-
-	XChangeProperty
-		(m_display, m_root[0], Atoms::netwm_winDesktopButtonProxy,
-		 XA_CARDINAL, 32, PropModeReplace,
-		 (unsigned char*)&m_netwmCheckWin, 1);
-
-	XChangeProperty
-		(m_display, m_netwmCheckWin, Atoms::netwm_winDesktopButtonProxy,
-		 XA_CARDINAL, 32, PropModeReplace,
-		 (unsigned char*)&m_netwmCheckWin, 1);
-
 	// Now we need to tell NETWM how compliant we are
 
 	// some day we will be more compliant
@@ -1046,12 +1021,9 @@ void WindowManager::gnomeInitialiseCompliance()
 	supported.append(Atoms::netwm_desktopCount);
 	supported.append(Atoms::netwm_desktopNames);
 	supported.append(Atoms::netwm_activeWindow);
-	supported.append(Atoms::netwm_winLayer);
-	supported.append(Atoms::netwm_winHints);
 	supported.append(Atoms::netwm_winState);
 	supported.append(Atoms::netwm_winDesktop);
 	supported.append(Atoms::netwm_winType);
-	supported.append(Atoms::netwm_winDesktopButtonProxy);
 	supported.append(Atoms::netwm_supportingWmCheck);
 
 	XChangeProperty
@@ -1082,26 +1054,6 @@ void WindowManager::updateStackingOrder()
 		}
 	}
 
-#if 0   
-	/******************************/
-	/*****  TAKE THIS OUT!!!  *****/
-
-	{
-		int count = 0;
-		for(Window* i=windows; i<windowIter; ++i) {
-			for(Window* j=windows; j<windowIter; ++j) {
-				if(i!=j && *i==*j) {
-					count++;
-				}
-			}
-		}
-		if(count!=0)
-			fprintf(stderr, "wmx: %d duplicate windows in stacking list\n", count);
-	}
-
-	/*****  TAKE THIS OUT!!!  *****/    
-	/******************************/
-#endif
 implementList(AtomList, Atom);
 
 	XRestackWindows(display(), windows, windowIter-windows);

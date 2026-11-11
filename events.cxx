@@ -669,18 +669,6 @@ void Client::eventClient(XClientMessageEvent *e)
 			gotoClient();
 			return;
 		}
-	} else if (e->message_type == Atoms::netwm_winLayer) {
-		setLayer(e->data.l[0]);
-		return;
-	} else if (e->message_type == Atoms::netwm_winState) {
-		// Although e->data.l[0] contains a mask of which values to change,
-		// We ignore it, prefering to simply compare data.l[1] with our
-		// internal state.  This helps to ensure consistency.
-		updateFromNetwmProperty(Atoms::netwm_winState, e->data.l[1]);
-		return;  
-	} else if (e->message_type == Atoms::netwm_winHints) {  
-		updateFromNetwmProperty(Atoms::netwm_winHints, e->data.l[1]);
-		return;  
 	} else if (e->message_type == 0xed) {  // What is this for?
 	XUnmapWindow(display(), window());
 	return;

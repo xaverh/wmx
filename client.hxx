@@ -219,7 +219,6 @@ private:
 	void setState(int);
 	void setNetwmProperty(Atom, unsigned char, Boolean);
 
-	void updateFromNetwmProperty(Atom, unsigned char);
 
 	// internal instantiation requests
 	Boolean setLabel(void);	// returns True if changed

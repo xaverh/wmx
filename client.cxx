@@ -509,16 +509,6 @@ void Client::manage(Boolean mapped)
 	char *property = 0;
 	int length = 0;
 
-	if ((property = getProperty(Atoms::netwm_winState, XA_CARDINAL, length))) {
-		updateFromNetwmProperty(Atoms::netwm_winState, property[0]);
-		XFree(property);
-	}
-
-	if ((property = getProperty(Atoms::netwm_winHints, XA_CARDINAL, length))) {
-		updateFromNetwmProperty(Atoms::netwm_winHints, property[0]);
-		XFree(property);
-	}
-
 	m_windowManager->hoistToTop(this);
 
 	sendConfigureNotify(); // due to Martin Andrews
@@ -637,24 +627,20 @@ void Client::deactivate()	// called from wm?
 void Client::setSticky(Boolean sticky) 
 {    
 	m_sticky = sticky;
-//    setNetwmProperty(Atoms::netwm_winState, WIN_STATE_STICKY, sticky);
 }
 
 void Client::setMovable(Boolean movable) 
 { 
-//    setNetwmProperty(Atoms::netwm_winState, WIN_STATE_FIXED_POSITION, !movable);
 	m_movable = movable;
 }
 
 void Client::setSkipFocus(Boolean skipFocus) 
 { 
-//    setNetwmProperty(Atoms::netwm_winHints, WIN_HINTS_SKIP_FOCUS, skipFocus);      
 	m_skipFocus = skipFocus;
 }
 
 void Client::setFocusOnClick(Boolean focusOnClick) 
 { 
-//    setNetwmProperty(Atoms::netwm_winHints, WIN_HINTS_FOCUS_ON_CLICK, focusOnClick);      
 	m_focusOnClick = focusOnClick;
 }
 
@@ -1352,12 +1338,6 @@ void Client::maximise(int max)
 
 	XResizeWindow(display(), m_window, m_w, m_h);
 	sendConfigureNotify();
-	if(max==Vertical || max==Maximum)
-		setNetwmProperty(Atoms::netwm_winState, WIN_STATE_MAXIMIZED_VERT,
-						 m_isFullHeight);
-	if(max==Horizontal || max==Maximum)
-		setNetwmProperty(Atoms::netwm_winState,WIN_STATE_MAXIMIZED_HORIZ, 
-						 m_isFullWidth);
 }
 
 
@@ -1400,12 +1380,6 @@ void Client::unmaximise(int max)
 
 	XResizeWindow(display(), m_window, m_w, m_h);
 	sendConfigureNotify();
-	if(max==Vertical || max==Maximum)
-		setNetwmProperty(Atoms::netwm_winState, WIN_STATE_MAXIMIZED_VERT, 
-						 m_isFullHeight);
-	if(max==Horizontal || max==Maximum)
-		setNetwmProperty(Atoms::netwm_winState, WIN_STATE_MAXIMIZED_HORIZ,
-						 m_isFullWidth);
 }
 
 
@@ -1514,89 +1488,6 @@ void Client::removeFeedback(Boolean mapped)
 	}
 }
 
-void Client::updateFromNetwmProperty(Atom property, unsigned char state) {
-
-	//!!! out of date
-
-	return;//!!!
-
-	enum {Vertical, Maximum, Horizontal};
-
-	if(property == Atoms::netwm_winState) {
-
-		if(state & WIN_STATE_STICKY) {
-			if (!isSticky()) 
-				setSticky(True);
-		} else {
-			if (isSticky()) 
-				setSticky(False);
-		}
-
-		if(state & WIN_STATE_MAXIMIZED_VERT) {
-			// Does this mean 'This is my maximum size' or 'maximise me'?
-			// I'm presuming the latter - from the spec:
-			// "the bits set mean that state/property is *desired* by the client"
-			if(!m_isFullHeight)
-				maximise(Vertical);
-		} else {
-			if(m_isFullHeight)
-				unmaximise(Vertical);
-		}
-
-		if(state & WIN_STATE_MAXIMIZED_HORIZ) {
-			// Does this mean 'This is my maximum size' or 'maximise me'?
-			// I'm presuming the latter - see above.
-			if(!m_isFullWidth)
-				maximise(Horizontal);
-		} else {
-			if(m_isFullWidth)
-				unmaximise(Horizontal);
-		}
-
-		if(state & WIN_STATE_FIXED_POSITION) {
-			if(isMovable())
-				setMovable(False);
-		} else {
-				if(!isMovable())
-			setMovable(True);
-		}
-
-		/* We ignore:
-			WIN_STATE_MINIMIZED       // Reserved - definition is unclear
-			WIN_STATE_HIDDEN          // not on taskbar but window visible
-			WIN_STATE_SHADED          // shaded (MacOS / Afterstep style)
-			WIN_STATE_HID_WORKSPACE   // not on current desktop
-			WIN_STATE_HID_TRANSIENT   // owner of transient is hidden
-			WIN_STATE_ARRANGE_IGNORE  // ignore for auto arranging
-		*/
-
-	} else if(property == Atoms::netwm_winHints) {
-
-		if(state & WIN_HINTS_SKIP_FOCUS) {
-			if(!skipsFocus())
-				setSkipFocus(True);
-		} else {
-			if(skipsFocus())
-				setSkipFocus(False);
-		}
-
-		if(state & WIN_HINTS_FOCUS_ON_CLICK) {
-			if(!isFocusOnClick())
-				setFocusOnClick(True);
-		} else {
-			if(isFocusOnClick())
-				setFocusOnClick(False);
-		}
-
-		/* We ignore:
-			WIN_HINTS_SKIP_WINLIST    // do not show in window list
-			WIN_HINTS_SKIP_TASKBAR    // do not show on taskbar
-			WIN_HINTS_GROUP_TRANSIENT // Reserved - definition is unclear
-			WIN_HINTS_FOCUS_ON_CLICK  // app only accepts focus if clicked
-		*/
-	} else {
-	}
-}
 
 void Client::netwmUpdateChannel()
 {
