@@ -5,8 +5,12 @@
 
 #include "General.h"
 #include "listmacro.h"
+#include "Keybinding.h"
+#include "Remote.h"
 
 class Client;
+class Remote;
+
 declarePList(ClientList, Client);
 
 #if CONFIG_GROUPS != False
@@ -71,7 +75,7 @@ public:
     void releaseGrab(XButtonEvent *);
     void releaseGrabKeyMode(XButtonEvent *);
     void releaseGrabKeyMode(XKeyEvent *);
-    void spawn(char *, char *);
+    void spawn(char *, char *, char * = NULL);
 
     int channel() { return m_currentChannel; }
     int channels() { return m_channels; }
@@ -110,6 +114,15 @@ public:
 
     // Stupid little helper function
     static int numdigits(int);
+
+    void sort_clients(void);
+
+    class Keybinding *key_binding_with_mod;
+    class Keybinding *key_binding_without_mod;
+
+    void print_clients(int);
+    void add_fd_to_watch(int);
+    void remove_fd_from_watch(int fd);
 
 private:
     int loop();
@@ -230,6 +243,10 @@ private:
     Window m_netwmCheckWin;
 
     int m_altModMask;
+    class Remote * remote_control;
+    fd_set active_fds;
+    int max_fd;
+
 };
 
 #endif
