@@ -7,7 +7,7 @@ PKG_CONFIG  = pkg-config
 PREFIX      = /usr/local
 MANPREFIX   = $(PREFIX)/share/man
 CXXFLAGS    = -Wall -O2
-LDFLAGS     = -lX11 -lXext -lXmu -lSM -lICE -lm
+LDFLAGS     = -lX11 -lXext -lXmu -lm
 # Xft is required for fonts.
 XFT_CFLAGS != $(PKG_CONFIG) --cflags xft fontconfig freetype2
 XFT_LIBS   != $(PKG_CONFIG) --libs   xft fontconfig freetype2
@@ -24,7 +24,6 @@ SRC = border.cxx
       manager.cxx
       menu.cxx
       remote.cxx
-      session.cxx
 OBJ = border.o
       buttons.o
       channel.o
@@ -36,7 +35,6 @@ OBJ = border.o
       manager.o
       menu.o
       remote.o
-      session.o
 all: wmx
 .cxx.o:
 	$(CXX) -c $(CXXFLAGS) $<
@@ -65,7 +63,6 @@ menu.o: menu.cxx border.hxx client.hxx config.hxx general.hxx
 	keybinding.hxx listmacro.hxx manager.hxx menu.hxx remote.hxx
 remote.o: remote.cxx border.hxx client.hxx config.hxx general.hxx
 	keybinding.hxx listmacro.hxx manager.hxx remote.hxx
-session.o: session.cxx config.hxx general.hxx keybinding.hxx
 	listmacro.hxx manager.hxx remote.hxx
 clean:
 	rm -f wmx $(OBJ)

@@ -72,9 +72,6 @@ implementList(AtomList, Atom);
 #define DEFAULT_PORT 6999
 WindowManager::WindowManager(int argc, char **argv) :
 	m_focusChanging(False),
-#ifdef CONFIG_USE_SESSION_MANAGER
-	m_smFD(-1),
-#endif
 implementList(AtomList, Atom);
 	m_altPressed(False),
 	m_altStateRetained(False),
@@ -103,9 +100,6 @@ implementList(AtomList, Atom);
 		);
 
 	int i, j;
-#if CONFIG_USE_SESSION_MANAGER != False
-	char *oldSessionId = 0;
-#endif
 implementList(AtomList, Atom);
 
 
@@ -114,12 +108,6 @@ implementList(AtomList, Atom);
 
 	if (argc > 1) {
 
-#if CONFIG_USE_SESSION_MANAGER != False
-	// Damn!  This means we have to support a command-line argument
-	if (argc == 3 && !strcmp(argv[1], "--sm-client-id")) {
-		oldSessionId = argv[2];
-	} else {
-#endif
 implementList(AtomList, Atom);
 		{
 		int	c ;
@@ -162,9 +150,6 @@ implementList(AtomList, Atom);
 		exit(2);
 		}
 
-#if CONFIG_USE_SESSION_MANAGER != False
-	}
-#endif
 implementList(AtomList, Atom);
 	}
 
@@ -217,8 +202,6 @@ implementList(AtomList, Atom);
 	fprintf(stderr, "\n     Hidden clients only on menu.");
 	}
 
-	if (CONFIG_USE_SESSION_MANAGER) {
-	fprintf(stderr, "  Using session manager.");
 	} else {
 	fprintf(stderr, "  No session manager.");
 	}
@@ -416,9 +399,6 @@ implementList(AtomList, Atom);
 	m_initialising = False;
 	m_returnCode = 0;
 
-#if CONFIG_USE_SESSION_MANAGER != False
-	initialiseSession(argv[0], oldSessionId);
-#endif
 implementList(AtomList, Atom);
 
 	netwmInitialiseCompliance();

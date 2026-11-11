@@ -167,14 +167,8 @@ void WindowManager::nextEvent(XEvent *e)
 	FD_SET(fd, &rfds);
 	t.tv_sec = t.tv_usec = 0;
 
-#if CONFIG_USE_SESSION_MANAGER != False
-	if (m_smFD >= 0) {
-			FD_SET(m_smFD, &rfds);
-		}
-#endif
 
 		int nfds = fd + 1;
-		if (m_smFD > fd) nfds = m_smFD + 1;
 
 #ifdef hpux
 #define select(a,b,c,d,e) select((a),(int *)(b),(c),(d),(e))
@@ -187,19 +181,6 @@ void WindowManager::nextEvent(XEvent *e)
 		// another function, but it'd be better to go back and
 		// think hard about why the code is like this at all
 
-#if CONFIG_USE_SESSION_MANAGER != False
-		if (m_smFD >= 0 && FD_ISSET(m_smFD, &rfds)) {
-		Bool rep;
-				if (IceProcessMessages(m_smIceConnection, NULL, &rep)
-					== IceProcessMessagesIOError) {
-					fprintf(stderr, "wmx: Error processing ICE message: closing session manager connection\n");
-					SmcCloseConnection(m_smConnection, 0, NULL);
-			m_smIceConnection = NULL;
-			m_smConnection = NULL;
-				}
-		goto waiting;
-		}
-#endif
 		if (FD_ISSET(fd, &rfds)) {
 		XNextEvent(m_display, e);
 		return;
@@ -214,11 +195,6 @@ void WindowManager::nextEvent(XEvent *e)
 	memcpy((void *)&rfds, (void *)&active_fds, sizeof(rfds));
 	t.tv_sec = 0; t.tv_usec = 20000;
 
-#if CONFIG_USE_SESSION_MANAGER != False
-	if (m_smFD >= 0) {
-			FD_SET(m_smFD, &rfds);
-		}
-#endif
 
 	if ((r = select(max_fd, &rfds, NULL, NULL,
 			(m_channelChangeTime > 0 || m_focusChanging) ? &t :
@@ -229,19 +205,6 @@ void WindowManager::nextEvent(XEvent *e)
 		for (f=0; f < max_fd; f++) {
 		  if (FD_ISSET(f, &rfds)) {
 			// fprintf(stderr, "%d is set\n", f);
-#if CONFIG_USE_SESSION_MANAGER != False
-			if (f == m_smFD) {
-				  Bool rep;
-				  if (IceProcessMessages(m_smIceConnection, NULL, &rep)
-				  == IceProcessMessagesIOError) {
-					fprintf(stderr, "wmx: Error processing ICE message: closing session manager connection [2]\n");
-					SmcCloseConnection(m_smConnection, 0, NULL);
-					m_smIceConnection = NULL;
-					m_smConnection = NULL;
-				  }
-				  did_something++;
-			}
-#endif
 
 			if (remote_control->isRemoteControlFd(f)) {
 				  did_something++;

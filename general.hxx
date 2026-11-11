@@ -59,9 +59,6 @@ typedef char Boolean;
 #include FT_GLYPH_H
 #include <X11/Xft/Xft.h>
 
-#if CONFIG_USE_SESSION_MANAGER != False
-#include <X11/SM/SMlib.h>
-#endif
 
 //!!! these replaced by atoms
 #define WIN_STATE_STICKY          (1<<0) /*everyone knows sticky*/

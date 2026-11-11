@@ -170,12 +170,6 @@ private:
 
 #define CONFIG_USE_WINDOW_GROUPS	True
 
-// If USE_SESSION_MANAGER is True, and you have an Xsmc session
-// manager running, wmx will respond to session manager callbacks and
-// notify the session manager of its restart command.
-
-#define CONFIG_USE_SESSION_MANAGER	True
-
 // Specify the maximum length of an entry in the client menu or the command
 // menu. Set this to zero if you want no limitation
 
