@@ -66,17 +66,14 @@ Border::Border(Client *const c, Window child) :
 	if (!m_drawGC) initialiseStatics(c->windowManager());
 
 
-//#if CONFIG_MAD_FEEDBACK != 0
 	m_feedback = 0;
 	m_fedback = False;
-//#endif
 }
 
 
 Border::~Border()
 {
 	if (m_parent != root()) {
-	if (!m_parent) fprintf(stderr,"wmx: zero parent in Border::~Border\n");
 	else {
 			if (!m_client->isBorderless()) {
 			XDestroyWindow(display(), m_tab);
@@ -105,7 +102,6 @@ void Border::initialiseStatics(WindowManager *wm)
 {
 	if (m_drawGC) return;
 
-	fprintf(stderr, "Border::initialiseStatics: initialising\n");
 
 	XGCValues *values;
 
@@ -135,7 +131,6 @@ void Border::initialiseStatics(WindowManager *wm)
 	char *ffi = fi, *tokstr = fi;
 	while ((fi = strtok(tokstr, ","))) {
 
-	fprintf(stderr, "fi = \"%s\"\n", fi);
 	tokstr = 0;
 
 	int ascent = 0, height = 0;
@@ -168,10 +163,8 @@ void Border::initialiseStatics(WindowManager *wm)
 
 	ascent = refFont->ascent;
 	height = refFont->height;
-	fprintf(stderr, "tab font ascent=%d, height=%d\n", ascent, height);
 
 	XftFontClose(wm->display(), refFont);
-//	FcPatternDestroy(match);
 
 	FcMatrix matrix;
 	FcMatrixInit(&matrix);
@@ -189,7 +182,6 @@ void Border::initialiseStatics(WindowManager *wm)
 	}
 
 	m_tabFont = XftFontOpenPattern(wm->display(), match);
-	fprintf(stderr, "tab font ascent = %d\n", m_tabFont->ascent);
 	if (!m_tabFont) {
 		FcPatternDestroy(match);
 	} else {
@@ -226,7 +218,6 @@ void Border::initialiseStatics(WindowManager *wm)
 		 CONFIG_TAB_FOREGROUND,
 		 &m_xftColour[i]);
 
-	fprintf(stderr, "tab font height = %d\n", (int)m_tabFont->height);
 	m_tabWidth[i] = m_tabFont->height + (CONFIG_TAB_MARGIN * 2);
 
 	if (m_tabWidth[i] < TAB_TOP_HEIGHT * 2 + 8) {
@@ -253,7 +244,6 @@ void Border::initialiseStatics(WindowManager *wm)
 		int use_dynamic = True;
 		XpmAttributes attrs;
 
-		//	attrs.valuemask = 0L;
 
 		attrs.valuemask =
 		  XpmCloseness | XpmVisual | XpmColormap | XpmDepth;
@@ -294,27 +284,21 @@ void Border::initialiseStatics(WindowManager *wm)
 			case XpmSuccess:
 				break;
 			case XpmColorError:
-				fprintf(stderr, "wmx: Pixmap colour error\n");
 				m_backgroundPixmap = None;
 				break;
 			case XpmOpenFailed:
-				fprintf(stderr, "wmx: Pixmap open failed\n");
 				m_backgroundPixmap = None;
 				break;
 			case XpmFileInvalid:
-				fprintf(stderr, "wmx: Pixmap file invalid\n");
 				m_backgroundPixmap = None;
 				break;
 			case XpmNoMemory:
-				fprintf(stderr, "wmx: Ran out of memory when loading pixamp\n");
 				m_backgroundPixmap = None;
 				break;
 			case XpmColorFailed:
-				fprintf(stderr, "wmx: Pixmap colour failed\n");
 				m_backgroundPixmap = None;
 				break;
 			default:
-				fprintf(stderr, "wmx: Unknown error loading pixmap\n");
 				m_backgroundPixmap = None;
 				break;
 			}
@@ -405,7 +389,6 @@ void Border::drawLabel()
 {
 	if (m_label) {
 	XClearWindow(display(), m_tab);
-//	fprintf(stderr, "coords: %d,%d / label: \"%s\"\n", (int)(2 + m_tabFont->ascent),
 //		(int)(m_tabHeight - 1), m_label);
 	XftDrawStringUtf8(m_xftDraw,
 			  &m_xftColour[screen()],
@@ -434,7 +417,6 @@ int Border::getRotatedTextWidth(char *text)
 	XGlyphInfo extents;
 	XftTextExtentsUtf8(display(), m_tabFont, (FcChar8 *)text, strlen(text),
 			   &extents);
-//    fprintf(stderr, "extents width=%d height=%d\n", (int)extents.width,
 //	    (int)extents.height);
 	return extents.height;
 }
@@ -448,7 +430,6 @@ void Border::fixTabHeight(int maxHeight)
 	if (maxHeight < m_tabWidth[screen()] + 2) maxHeight = 
 	m_tabWidth[screen()] + 2;
 
-//    fprintf(stderr, "client label: \"%s\"\n", m_client->label());
 
 	if (m_label) free(m_label);
 	m_label = NewString(m_client->label());
@@ -457,7 +438,6 @@ void Border::fixTabHeight(int maxHeight)
 	m_tabHeight = getRotatedTextWidth(m_label) + 6 + m_tabWidth[screen()];
 	}
 
-//    fprintf(stderr, "my label: \"%s\"\n", m_label);
 
 	if (m_tabHeight <= maxHeight) return;
 
@@ -490,7 +470,6 @@ void Border::fixTabHeight(int maxHeight)
 	m_label = NewString("");
 	}
 
-//    fprintf(stderr, "my shorter label: \"%s\"\n", m_label);
 }
 
 
@@ -512,9 +491,7 @@ void Border::shapeTransientParent(int w, int h)
 	XFree(recs);
 
 //      count me among the clueless... i have no idea why
-//      this code is not needed.... (henri, 1.9.99)
 //	This code is needed to mak the black border on the frame of a shaped
-//	window appear (Jamie, 19.6.00)
 /**/
 	recs =  XShapeGetRectangles(display(), m_child, ShapeClip, &count, &ordering);
 	XShapeCombineRectangles
@@ -578,7 +555,6 @@ void Border::setTransientFrameVisibility(Boolean visible, int w, int h)
 		 0, 0, rl.xrectangles(), rl.count(),
 		 visible ? ShapeUnion : ShapeSubtract, YXSorted);
 	// If the client is shaped, we have to show the inside of the window
-	// frame.
 	if(m_client->isShaped()) {
 
 		XShapeCombineRectangles
@@ -636,7 +612,6 @@ void Border::shapeParent(int w, int h)
 	int y = m_tabHeight + i - 1;
 	/* JG: Check position */
 	if (y < h) rl.append(i, y, m_tabWidth[screen()] - i + 2, 1);
-//	rl.append(i, m_tabHeight + i - 1, m_tabWidth - i + 2, 1);
 	}
 
 	XShapeCombineRectangles
@@ -679,7 +654,6 @@ void Border::shapeTab(int w, int h)
 	int y = m_tabHeight + i - 1;
 	/* JG: Check position */
 	if (y <= h) rl.append(i, y, m_tabWidth[screen()] - i + 2, 1);
-//	rl.append(i, m_tabHeight + i - 1, m_tabWidth[screen()] - i + 2, 1);
 	}
 
 	XShapeCombineRectangles
@@ -705,7 +679,6 @@ void Border::shapeTab(int w, int h)
 	int y = m_tabHeight + i - 1;
 	/* JG: Check position */
 	if (y < h) rl.append(i + 1, y, m_tabWidth[screen()] - i, 1);
-//	rl.append(i + 1, m_tabHeight + i - 1, m_tabWidth[screen()] - i, 1);
 	}
 
 	XShapeCombineRectangles
@@ -861,7 +834,6 @@ void Border::setFrameVisibility(Boolean visible, int w, int h)
 	rl.append(m_tabWidth[screen()] + 2, TAB_TOP_HEIGHT + 2, w,
 			  FRAME_WIDTH - TAB_TOP_HEIGHT - 2);
 
-	// for button
 	int ww = m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 4;
 	rl.append((m_tabWidth[screen()] + 2 - ww) / 2, (m_tabWidth[screen()]+2 - ww) / 2, ww, ww);
 
@@ -893,7 +865,6 @@ void Border::setFrameVisibility(Boolean visible, int w, int h)
 	rl.append(m_tabWidth[screen()] + 2, TAB_TOP_HEIGHT + 2, w,
 			  FRAME_WIDTH - TAB_TOP_HEIGHT - 2);
 
-	// for button
 	ww = m_tabWidth[screen()] - TAB_TOP_HEIGHT*2 - 6;
 	rl.append((m_tabWidth[screen()] + 2 - ww) / 2, (m_tabWidth[screen()]+2 - ww) / 2, ww, ww);
 	rl.append(m_tabWidth[screen()] + 2, FRAME_WIDTH,
@@ -1071,7 +1042,6 @@ void Border::moveTo(int x, int y)
 void Border::map()
 {
 	if (m_parent == root()) {
-	fprintf(stderr, "wmx: bad parent in Border::map()\n");
 	} else {
 	XMapWindow(display(), m_parent);
 
@@ -1092,7 +1062,6 @@ No longer needed now we're using the layer system.
 void Border::mapRaised()
 {
 	if (m_parent == root()) {
-	fprintf(stderr, "wmx: bad parent in Border::mapRaised()\n");
 	} else {
 	XMapRaised(display(), m_parent);
 
@@ -1116,14 +1085,12 @@ void Border::lower()
 void Border::unmap()
 {
 	if (m_parent == root()) {
-	fprintf(stderr, "wmx: bad parent in Border::unmap()\n");
 	} else {
 	XUnmapWindow(display(), m_parent);
 
 	if (!isTransient() && !m_client->isBorderless()) {
 		XUnmapWindow(display(), m_tab);
 		XUnmapWindow(display(), m_button);
-//	    XUnmapWindow(display(), m_resize); // no, will unmap with parent
 	}
 	}
 }

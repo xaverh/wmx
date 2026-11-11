@@ -39,27 +39,21 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 	for (pass=0; pass<2; pass++) {
 	count = 0;
 	while (ent = readdir(dir)) {
-		// printf("%s type: %d\n", ent->d_name, ent->d_type);
 		sprintf(filename, "%s/%s", dir_name, ent->d_name);
 		n = stat(filename, &buf);
-		// printf("type 0%o\n", buf.st_mode);
 		if (n != 0) {
 		printf("stat failed for %s, n = %d\n", filename, n);
 		continue;
 		}
 		if (!S_ISREG(buf.st_mode)) {
-		// printf("not a regular file\n");
 		continue;
 		}
 		if (S_ISDIR(buf.st_mode)) {
-		// printf("is a directory\n");
 		continue;
 		}
-		// S_ISLNK(buf.st_mode) doesn't work
 		// but we probably don't need to exclude them anyway
 
 		if (! (buf.st_mode & S_IXUSR) ) {
-		// printf("is NOT executable\n");
 		continue;
 		}
 		sym = XStringToKeysym(ent->d_name);
@@ -69,7 +63,6 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 		}
 
 		// it is valid
-		// printf("valid filename %s  sym is 0x%x\n", filename, sym);
 
 		count++;
 		if (pass == 0) {
@@ -88,7 +81,6 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 	} // while readdir
 	if (pass == 0) {
 		// end of first pass
-		// printf("There were %d entries found\n", count);
 		table_count = count;
 		p = table = (struct key_entry *)
 		malloc( count * sizeof(struct key_entry) );
@@ -160,7 +152,6 @@ void Keybinding::spawn(char *command, int windowid)
 	char client_id[1024];
 	sprintf(client_id, "0x%x", windowid);
 
-	// printf("arg1 is %s\n", client_id);
 	wm->spawn(command, command, client_id);
 
 }

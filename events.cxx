@@ -21,7 +21,6 @@ void WindowManager::dispatchEvent(XEvent *ev)
 {
 	m_currentTime = CurrentTime;
 
-//    fprintf(stderr, "WindowManager::dispatchEvent: event type %d for window %p\n",
 //            (int)ev->type, (void *)((XUnmapEvent *)ev)->window);
 
 	switch (ev->type) {
@@ -54,7 +53,6 @@ void WindowManager::dispatchEvent(XEvent *ev)
 	break;
 
 	case CreateNotify:
-//	eventCreate(&ev->xcreatewindow);
 	break;
 
 	case DestroyNotify:
@@ -74,15 +72,12 @@ void WindowManager::dispatchEvent(XEvent *ev)
 	break;
 
 	case SelectionClear:
-	fprintf(stderr, "wmx: SelectionClear (this should not happen)\n");
 	break;
 
 	case SelectionNotify:
-	fprintf(stderr, "wmx: SelectionNotify (this should not happen)\n");
 	break;
 
 	case SelectionRequest:
-	fprintf(stderr, "wmx: SelectionRequest (this should not happen)\n");
 	break;
 
 	case EnterNotify:
@@ -91,7 +86,6 @@ void WindowManager::dispatchEvent(XEvent *ev)
 	break;
 
 	case ReparentNotify:
-//	eventReparent(&ev->xreparent);
 	break;
 
 	case FocusIn:
@@ -120,7 +114,6 @@ void WindowManager::dispatchEvent(XEvent *ev)
 	break;
 
 	default:
-//	    if (ev->type == m_shapeEvent) eventShapeNotify((XShapeEvent *)ev);
 	if (ev->type == m_shapeEvent) {
 		fprintf(stderr, "wmx: shaped windows are not supported\n");
 	} else {
@@ -186,8 +179,6 @@ void WindowManager::nextEvent(XEvent *e)
 		return;
 		}
 
-//	    XNextEvent(m_display, e);
-//	    return;
 	}
 
 	XFlush(m_display);
@@ -204,19 +195,16 @@ void WindowManager::nextEvent(XEvent *e)
 		int did_something = 0;
 		for (f=0; f < max_fd; f++) {
 		  if (FD_ISSET(f, &rfds)) {
-			// fprintf(stderr, "%d is set\n", f);
 
 			if (remote_control->isRemoteControlFd(f)) {
 				  did_something++;
 				  if (! remote_control->doRemoteControl(f) ) {
-					// fprintf(stderr, "doRemoteControl(%d) ??\n", f);
 					// If a connection has closed,  the
 					// active_fd set has changed
 					goto waiting;
 				  }
 			}
 
-			// if (FD_ISSET(fd, &rfds)) {
 			if (f == fd) {
 				  XNextEvent(m_display, e);
 				  return;
@@ -228,7 +216,6 @@ void WindowManager::nextEvent(XEvent *e)
 		  goto waiting;
 		}
 
-//	    return;
 	} // if select found something
 
 	if (CONFIG_AUTO_RAISE && m_focusChanging) { // timeout on select
@@ -262,10 +249,7 @@ void WindowManager::checkDelaysForFocus()
 		t - m_focusTimestamp > CONFIG_POINTER_STOPPED_DELAY) {
 
 		if (m_focusPointerNowStill) {
-//		m_focusCandidate->focusIfAppropriate(True);
 		m_focusPointerMoved = False;
-//		if (m_focusCandidate->isNormal()) m_focusCandidate->mapRaised();
-//		stopConsideringFocus();
 
 		} else m_focusPointerNowStill = True; // until proven false
 	}
@@ -276,8 +260,6 @@ void WindowManager::checkDelaysForFocus()
 
 		m_focusCandidate->focusIfAppropriate(True);
 
-//	    if (m_focusCandidate->isNormal()) m_focusCandidate->mapRaised();
-//	    stopConsideringFocus();
 	}
 	}
 }
@@ -417,7 +399,6 @@ void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 
 	XConfigureWindow(display(), e->window, e->value_mask, &wc);
 
-	// if parent==root, it's not managed yet -- & it'll be raised when it is
 	if (raise && parent() != root()) {
 
 	if (CONFIG_AUTO_RAISE) {
@@ -433,7 +414,6 @@ void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 			m_stubborn = True;
 			m_lastPopTime = 0L;
 
-			fprintf(stderr, "wmx: client \"%s\" declared stubborn\n",
 				label());
 
 		} else {
@@ -457,7 +437,6 @@ void WindowManager::eventMapRequest(XMapRequestEvent *e)
 
 	// JG
 	if (!c) {
-		fprintf(stderr, "wmx: start managing window %lx\n", e->window);
 	c = windowToClient(e->window, True);
 	if (c) {
 		c->eventMapRequest(e);
@@ -471,9 +450,7 @@ void WindowManager::eventMapRequest(XMapRequestEvent *e)
 
 	// some stuff for multi-screen fuckups here, omitted
 
-//    if (c) c->eventMapRequest(e);
 //    else {
-//	fprintf(stderr, "wmx: bad map request for window %lx\n", e->window);
 //    }
 }
 
@@ -484,7 +461,6 @@ void Client::eventMapRequest(XMapRequestEvent *)
 
 	case WithdrawnState:
 	if (parent() == root()) {
-		fprintf(stderr, "about to manage client from Client::eventMapRequest\n");
 		manage(False);
 		return;
 	}
@@ -528,7 +504,6 @@ void Client::eventUnmap(XUnmapEvent *e)
 {
 	if (e->window != m_window) return;
 
-	fprintf(stderr, "Client[%p]::eventUnmap: m_unmappedForChannel = %d, m_state = %d, transient for = %p, m_reparenting = %d\n", this, (int)m_unmappedForChannel, (int)m_state, (void *)transientFor(), (int)m_reparenting);
 
 	if (m_unmappedForChannel) {
 	setState(NormalState);
@@ -571,7 +546,6 @@ void Client::eventUnmap(XUnmapEvent *e)
 	}
 	}
 
-//    m_reparenting = False;
 	m_stubborn = False;
 }
 
@@ -580,12 +554,9 @@ void Client::eventMap(XMapEvent *e)
 {
 	if (e->window != m_window) return;
 
-//    fprintf(stderr, "state %d, m_reparenting %d\n", (int)m_state, (int)m_reparenting);
 
 	if (m_reparenting) {
-//        fprintf(stderr, "m_reparenting true, ignoring\n");
 	} else if (isWithdrawn()) {
-//        fprintf(stderr, "unwithdrawing\n");
 		unwithdraw();
 	}
 }
@@ -593,8 +564,6 @@ void Client::eventMap(XMapEvent *e)
 void WindowManager::eventCreate(XCreateWindowEvent *e)
 {
 	// not currently used! windows created on first MapRequest instead
-//    if (e->override_redirect) return;
-//    Client *c = windowToClient(e->window, True);
 }
 
 
@@ -620,21 +589,17 @@ void WindowManager::eventDestroy(XDestroyWindowEvent *e)
 #if CONFIG_GROUPS != False
 	for (int y = 0; y < 10; y++) {
 		there = -1;
-//	    fprintf(stderr, "y = %d : ", y);
 
 		for (int i = 0; i < grouping.item(y)->count(); i++) {
-//  		fprintf(stderr, "'%d %d %d'", i, 
 //  			grouping.item(y)->item(i),
 //  			c );
          if (grouping.item(y)->item(i) == c) {
-//		    fprintf(stderr, "removing client from %d at %d\n", y, i);
 			there = i;
 		}
 		}
 		if (there != -1) {
 		grouping.item(y)->remove(there);
 		}
-//	    fprintf(stderr,"\n");
 	}
 #endif
 
@@ -655,7 +620,6 @@ void WindowManager::eventClient(XClientMessageEvent *e)
 
 	int channel = (int)e->data.l[0] + 1;
 
-		fprintf(stderr, "NETWM desktop request for channel %d received\n",
 				channel);
 
 	// netwm is not up-to-date and asked us to flip to a 
@@ -668,7 +632,6 @@ void WindowManager::eventClient(XClientMessageEvent *e)
 		// gotoChannel always does something -- even if we're already
 		// on that channel, it will flash up the channel indicator.
 		// We don't want that if we're just responding to a NETWM
-		// request.
 
 		if (channel != m_currentChannel) {
 			gotoChannel(channel, 0);
@@ -681,7 +644,6 @@ void WindowManager::eventClient(XClientMessageEvent *e)
 	if (c)
 		c->eventClient(e);
 	else
-		fprintf(stderr, "wmx: Received client message for unknown client with window %lx!\n", e->window);
 }
 
 void Client::eventClient(XClientMessageEvent *e)
@@ -689,13 +651,8 @@ void Client::eventClient(XClientMessageEvent *e)
 	//!!! review this
 
 	char *atomName0 = XGetAtomName(display(), e->message_type);
-
-	fprintf(stderr, "wmx: received XClientMessageEvent with name \"%s\" for client \"%s\"", 
-			atomName0, name());
-
 	XFree(atomName0);
 
-	fprintf(stderr, ", type 0x%lx, " "window 0x%lx\n", e->message_type, e->window);
 
 
 	if (e->message_type == Atoms::netwm_activeWindow) {
@@ -705,14 +662,10 @@ void Client::eventClient(XClientMessageEvent *e)
 
 	if (e->message_type == Atoms::wm_changeState) {
 	if (e->format == 32 && e->data.l[0] == IconicState) {
-			fprintf(stderr, "format = %d, first long value = %ld - request to hide\n",
-					(int)e->format, e->data.l[0]);
 		if (isNormal()) hide();
 			else if (isHidden()) gotoClient(); // seems to be necessary for some taskbars
 		return;
 	} else if (e->format == 32 && e->data.l[0] == NormalState) {
-			fprintf(stderr, "format = %d, first long value = %ld - request to show\n",
-					(int)e->format, e->data.l[0]);
 			gotoClient();
 			return;
 		}
@@ -734,14 +687,7 @@ void Client::eventClient(XClientMessageEvent *e)
 	}
 
 	char *atomName = XGetAtomName(display(), e->message_type);
-
-	fprintf(stderr, "wmx: unexpected XClientMessageEvent with name \"%s\" received", 
-			atomName);
-
 	XFree(atomName);
-
-	fprintf(stderr, ", type 0x%lx, "
-		"window 0x%lx\n", e->message_type, e->window);
 }
 
 
@@ -823,7 +769,6 @@ void Client::eventProperty(XPropertyEvent *e)
 void WindowManager::eventReparent(XReparentEvent *e)
 {
 	// not currently used! map events used instead, only
-//    if (e->override_redirect) return;
 //    (void)windowToClient(e->window, True); // create if absent
 
 	// odd screen complications, omitted
@@ -832,9 +777,7 @@ void WindowManager::eventReparent(XReparentEvent *e)
 
 void WindowManager::eventMap(XMapEvent *e)
 {
-//    fprintf(stderr, "WindowManager::eventMap: window %p\n", (void *)e->window);
 	Client *c = windowToClient(e->window);
-//    fprintf(stderr, "client is %p\n", c);
 	if (c) {
 		c->eventMap(e);
 	}

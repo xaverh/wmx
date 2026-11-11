@@ -107,7 +107,6 @@ void DynamicConfig::scan(char startup)
 		update(temp);
 	}
 	} else if (startup) {
-	fprintf(stderr, "\nwmx: No dynamic configuration found\n");
 	}
 }
 
@@ -118,11 +117,9 @@ void DynamicConfig::update(char *string)
 
 #define OPTION(x) ( (!strncasecmp(s, x, strlen(x))) && (s += strlen(x)) )
 
-	fprintf(stderr, "\nwmx: Reading dynamic configuration... ");
 
 	s = strtok(string, "/");
 	do {
-	fprintf(stderr, ">%s< ",s);
 
 	if (OPTION("menu:")) {
 		if (OPTION("full")) m_impl->menu = 1;

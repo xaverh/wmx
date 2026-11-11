@@ -103,7 +103,6 @@ implementList(AtomList, Atom);
 implementList(AtomList, Atom);
 
 
-	// remote_control = NULL;
 	remote_control = new Remote(this);
 
 	if (argc > 1) {
@@ -134,8 +133,6 @@ implementList(AtomList, Atom);
 		}
 
 		if (port > 0) {
-			//remote_control_socket = setup_socket("localhost", port);
-			// remote_control = Remote::Remote(this, port);
 			remote_control->setup_port(port, verbose);
 		}
 
@@ -164,102 +161,20 @@ implementList(AtomList, Atom);
 	if (!XSetLocaleModifiers(""))
      fprintf(stderr,
 		"Warning: X locale modifiers not supported, using default\n");
-	char* ret_setlocale = setlocale(LC_ALL, NULL);
-                     // re-query in case overwritten
 
 	if (CONFIG_AUTO_RAISE) {
 	if (CONFIG_CLICK_TO_FOCUS) {
 		fatal("can't have auto-raise-with-delay with click-to-focus");
 	} else if (CONFIG_RAISE_ON_FOCUS) {
 		fatal("can't have raise-on-focus AND auto-raise-with-delay");
-	} else {
-		fprintf(stderr, "     Focus follows, auto-raise with delay.");
 	}
-
 	} else {
 	if (CONFIG_CLICK_TO_FOCUS) {
-		if (CONFIG_RAISE_ON_FOCUS) {
-				if (CONFIG_PASS_FOCUS_CLICK) {
-			fprintf(stderr, "     Click to focus, focus clicks passed on to client.");
-				} else {
-					fprintf(stderr, "     Click to focus, focus clicks not passed on to clients.");
-				}
-		} else {
+		if (!CONFIG_RAISE_ON_FOCUS) {
 		fatal("can't have click-to-focus without raise-on-focus");
 		}
-	} else {
-		if (CONFIG_RAISE_ON_FOCUS) {
-		fprintf(stderr, "     Focus follows, auto-raise.");
-		} else {
-		fprintf(stderr, "     Focus follows pointer.");
-		}
 	}
 	}
-
-	if (CONFIG_EVERYTHING_ON_ROOT_MENU) {
-	fprintf(stderr, "\n     All clients on menu.");
-	} else {
-	fprintf(stderr, "\n     Hidden clients only on menu.");
-	}
-
-	if (CONFIG_USE_PIXMAPS) {
-	fprintf(stderr, "  Fancy borders.");
-	} else {
-	fprintf(stderr, "  Plain borders.");
-	}
-
-	if (CONFIG_MAD_FEEDBACK) {
-	fprintf(stderr, "  Skeletal feedback on.");
-	} else {
-	fprintf(stderr, "  Skeletal feedback off.");
-	}
-
-	if (CONFIG_USE_KEYBOARD) {
-	fprintf(stderr, "\n     Keyboard controls available.");
-	} else {
-	fprintf(stderr, "\n     No keyboard controls.");
-	}
-
-	if (CONFIG_WANT_KEYBOARD_MENU) {
-	fprintf(stderr, "  Keyboard menu available.");
-	} else {
-	fprintf(stderr, "  No keyboard menu available.");
-	}
-
-	if (CONFIG_CHANNEL_SURF) {
-	fprintf(stderr, "\n     Channels on.");
-	} else {
-	fprintf(stderr, "\n     Channels off.");
-	}	
-
-	if (CONFIG_USE_CHANNEL_KEYS) {
-	fprintf(stderr, "  Quick keyboard channel-surf available.");
-	} else {
-	fprintf(stderr, "  No quick keyboard channel-surf.");
-	}
-
-	fprintf(stderr, "\n     Operating system locale is \"%s\".",
-		ret_setlocale ? ret_setlocale : "(NULL)");
-
-	fprintf(stderr, "\n     NETWM compliant.");
-
-	if (remote_control->RemoteControlIsOn()) {
-	  fprintf(stderr, "\n     Remote control on port %d.",
-		  remote_control->RemoteControlIsOn());
-	}
-
-	fprintf(stderr, "\n     Command menu taken from ");
-	if (wmxdir == NULL) {
-	fprintf(stderr, "%s/%s.\n", home, CONFIG_COMMAND_MENU);
-	} else {
-	if (*wmxdir == '/') {
-		fprintf(stderr, "%s.\n", wmxdir);
-	} else {
-		fprintf(stderr, "%s/%s.\n", home, wmxdir);
-	}
-	}
-
-//    fprintf(stderr, "     (To reconfigure, simply edit and recompile.)\n\n");
 
 	m_display = XOpenDisplay(NULL);
 	if (!m_display) fatal("can't open display");
@@ -288,7 +203,6 @@ implementList(AtomList, Atom);
 	}
 
 	if (!m_altModMask) {
-	fprintf(stderr, "configured Alt keysym: 0x%x (keycode %d, 0x%x)\n",
 				CONFIG_ALT_KEY, alt, alt);
 		fatal("no modifier corresponds to the configured Alt keysym");
 	}
@@ -366,13 +280,11 @@ implementList(AtomList, Atom);
 
 	initialiseScreen();
 	if (m_screensTotal > 1) {
-		fprintf(stderr, "\n     Detected %d screens.", m_screensTotal);
 	}
 
 #ifdef CONFIG_USE_COMPOSITE
 	int ev, er;
 	if (XCompositeQueryExtension(m_display, &ev, &er)) {
-		fprintf(stderr, "\n     Enabling composite extension.\n");
 		for (int i = 0; i < m_screensTotal; ++i) {
 			XCompositeRedirectSubwindows(m_display, RootWindow(m_display, i),
 										 CompositeRedirectAutomatic);
@@ -403,7 +315,6 @@ implementList(AtomList, Atom);
 	updateStackingOrder();
 	loop();
 	if (m_restart == True){
-	fprintf(stderr,"restarting wmx from SIGHUP\n");
 	execv(argv[0],argv);
 	}
 }
@@ -435,7 +346,6 @@ void WindowManager::release()
 
 	for (i = 0; i < m_clients.count(); ++i) {
 	c = m_clients.item(i);
-		fprintf(stderr, "release: client %d is %p\n", i, c);
 
 	if (c->isNormal() || c->isNormalButElsewhere()) normalList.append(c);
 	else unparentList.append(c);
@@ -449,9 +359,7 @@ void WindowManager::release()
 	m_hiddenClients.remove_all();
 
 	for (i = 0; i < unparentList.count(); ++i) {
-	fprintf(stderr, "release: unparenting client %p\n",unparentList.item(i));
 	unparentList.item(i)->unreparent();
-		fprintf(stderr, "release: releasing client %p\n", unparentList.item(i));
 	unparentList.item(i)->release();
 	}
 
@@ -556,7 +464,6 @@ void WindowManager::initialiseScreen()
 
 	m_root = (Window *) malloc(m_screensTotal * sizeof(Window));
 	m_defaultColormap = (Colormap *) malloc(m_screensTotal * sizeof(Colormap));
-//    m_minimumColormaps = (int *) malloc(m_screensTotal * sizeof(int));
 	m_channelWindow = (Window *) malloc(m_screensTotal * sizeof(Window));
 	m_clockWindow = (Window *) malloc(2 * sizeof(Window));
 
@@ -567,7 +474,6 @@ void WindowManager::initialiseScreen()
 
 		m_root[i] = RootWindow(m_display, i);
 		m_defaultColormap[i] = DefaultColormap(m_display, i);
-//        m_minimumColormaps[i] = MinCmapsOfScreen(ScreenOfDisplay(m_display, i));
 
 		XColor black, white, temp;
 
@@ -680,7 +586,6 @@ Time WindowManager::timestamp(Boolean reset)
 
 void WindowManager::sigHandler(int signal)
 {
-	fprintf(stderr, "WindowManager::sigHandler: signal %d\n", signal);
 	m_signalled = True;
 	if (signal == SIGHUP)
 	m_restart = True;
@@ -700,7 +605,6 @@ void WindowManager::scanInitialWindows()
 		for (i = 0; i < n; ++i) {
 
 		XGetWindowAttributes(m_display, wins[i], &attr);
-//	    if (attr.override_redirect || wins[i] == m_menuWindow) continue;
 		if (attr.override_redirect) continue;
 		(void)windowToClient(wins[i], True);
 	}
@@ -757,7 +661,6 @@ void WindowManager::installColormap(Colormap cmap)
 {
 	if (cmap == None) {
 	XInstallColormap(m_display, m_defaultColormap[screen()]);
-//	XInstallColormap(m_display, m_defaultColormap);
 	} else {
 	XInstallColormap(m_display, cmap);
 	}
@@ -841,7 +744,6 @@ void WindowManager::addToHiddenList(Client *c)
 
 void WindowManager::removeFromHiddenList(Client *c)
 {
-	fprintf(stderr, "WindowManager::removeFromHiddenList(%p)\n", c);
 
 	for (int i = 0; i < m_hiddenClients.count(); ++i) {
 	if (m_hiddenClients.item(i) == c) {
@@ -868,7 +770,6 @@ void WindowManager::removeFromHiddenList(Client *c)
 
 void WindowManager::hoistToTop(Client *c)
 {
-	fprintf(stderr, "WindowManager::hoistToTop(%p)\n", c);
 
 	int i;
 	int layer = c->layer();
@@ -909,7 +810,6 @@ void WindowManager::removeFromOrderedList(Client *c)
 {
 	int layer = c->layer();
 
-	fprintf(stderr, "WindowManager::removeFromOrderedList(%p) [layer %d]\n",
 			c, layer);
 
 	for (int i = 0; i < m_orderedClients[layer].count(); ++i) {
@@ -1031,7 +931,6 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = NULL*/)
 		  remote_control->close_all_sockets();
 		}
 
-		// if you don't have putenv, miss out this next
 		// conditional and its contents
 
 		if (displayName && (displayName[0] != '\0')) {
@@ -1089,19 +988,13 @@ void WindowManager::print_clients(int fd) {
 	  XTextProperty text_prop;
 	  char *res_name = "?";
 
-	  //      if (SORT_CLIENTS) {
-	  //	  this->sort_clients();
 	  //}
 
-	  // printf("Number of clients: %d\n", m_clients.count());
-	  // sprintf(buff, "Number of clients: %d\n", clients().count());
-	  // write(fd, buff, strlen(buff));
 	  if (m_clients.count() == 0) {
 	  sprintf(buff, "No clients!\n");
 	  write(fd, buff, strlen(buff));
 	  }
 	  for (i = 0; i < m_clients.count(); ++i) {
-	  // printf("%s\n", m_clients.item(i)->label());
 	  c = clients().item(i);
 	  if (XGetTextProperty(c->display(), c->window(), 
 				   &text_prop, XA_WM_CLASS)) {
@@ -1122,7 +1015,6 @@ void WindowManager::print_clients(int fd) {
 
 void WindowManager::add_fd_to_watch(int fd)
 {
-	// fprintf(stderr, "adding fd %d to read_set\n", fd);
 	if (fd >= max_fd) {
 	max_fd = fd+1;
 	}
@@ -1131,7 +1023,6 @@ void WindowManager::add_fd_to_watch(int fd)
 
 void WindowManager::remove_fd_from_watch(int fd)
 {
-	// fprintf(stderr, "removing fd %d from read_set\n", fd);
 	FD_CLR(fd, &active_fds);
 }
 
@@ -1280,17 +1171,14 @@ void WindowManager::netwmUpdateWindowList()
 		Client *c = m_hiddenClients.item(i);
 		if (c->isKilled()) continue;
 		byAge[count++] = c->window();
-//        fprintf(stderr, "[netwm] client %d [%p] [H] window %lx, \"%s\"\n", count, c, c->window(), c->name());
 	}
 
 	for (int i = 0; i < m_clients.count(); ++i) {
 		Client *c = m_clients.item(i);
 		if (!c->isNormal() || c->isKilled()) continue;
 		byAge[count++] = c->window();
-//        fprintf(stderr, "[netwm] client %d [%p] window %lx, \"%s\"\n", count, c, c->window(), c->name());
 	}
 
-//    fprintf(stderr, "[netwm] %d client(s) total, setting to root window %lx\n", count, m_root[0]);
 
 	XChangeProperty
 		(m_display, m_root[0], Atoms::netwm_clientList, XA_WINDOW, 32, 
@@ -1324,7 +1212,6 @@ void WindowManager::netwmUpdateStackingOrder()
 		Client *c = m_hiddenClients.item(i);
 		if (c->isKilled()) continue;
 		byStacking[count++] = c->window();
-//        fprintf(stderr, "[netwm] stacking order: hidden client %d\n", c);
 	}
 
 	for (int layer = 0; layer < MAX_LAYER; ++layer) {
@@ -1333,11 +1220,9 @@ void WindowManager::netwmUpdateStackingOrder()
 			Client *c = m_orderedClients[layer].item(i);
 		if (c->isWithdrawn() || c->isKilled() || c->isHidden()) continue;
 			byStacking[count++] = c->window();
-//            fprintf(stderr, "[netwm] stacking order: item %d is window %lx, client \"%s\"\n", count, c->window(), c->name());
 		}
 	}
 
-//    fprintf(stderr, "[netwm] stacking order: %d client(s) total\n", count);
 
 	XChangeProperty
 		(m_display, m_root[0], Atoms::netwm_clientListStacking, XA_WINDOW, 32, 

@@ -116,9 +116,7 @@ void WindowManager::flipChannel(Boolean statusOnly, Boolean flipDown,
 	ClientList considering;
 
 		for (int layer = 0; layer < MAX_LAYER; ++layer) {
-			fprintf(stderr, "WindowManager::flipChannel: considering layer %d\n", layer);
 		for (i = (int)m_orderedClients[layer].count()-1; i >= 0; --i) {
-				fprintf(stderr, "WindowManager::flipChannel: considering client %p\n", m_orderedClients[layer].item(i));
 		considering.append(m_orderedClients[layer].item(i));
 		}
 	}
@@ -241,7 +239,6 @@ WindowManager::updateClock()
 	time_t t;
 	struct tm *lt;
 
-	fprintf(stderr, "updateClock\n");
 
 	time(&t);
 	lt = localtime(&t);

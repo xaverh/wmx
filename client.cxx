@@ -77,20 +77,15 @@ Client::Client(WindowManager *const wm, Window w, Boolean shaped) :
 	m_channel = wm->channel();
 	m_unmappedForChannel = False;
 
-	fprintf(stderr, "new client at %d,%d %dx%d, window = %lx, name = \"%s\"\n",
 			m_x, m_y, m_w, m_h, m_window, m_label);
 
-//#if CONFIG_MAD_FEEDBACK != 0
 	m_speculating = m_levelRaised = False;
-//#endif
 
 	if (attr.map_state == IsViewable) manage(True);
-	else fprintf(stderr, "not managing this client; it is not viewable\n");
 
 	netwmUpdateChannel();
 
 	if (m_channel != wm->channel()) {
-	fprintf(stderr, "my channel for \"%s\" %d differs from wm channel %d, withdrawing\n", name(), (int)m_channel, (int)wm->channel());
 	if (isNormal()) {
 			if (activeClient() == this) {
 				wm->setActiveClient(0);
@@ -246,7 +241,6 @@ void Client::manage(Boolean mapped)
 		XGrabKey(display(), XKeysymToKeycode(display(), CONFIG_ALT_KEY),
 				 0, m_window, True, GrabModeAsync, GrabModeAsync);
 
-	// for dragging windows from anywhere with Alt pressed
 	XGrabButton(display(), Button1,
 			m_windowManager->altModMask(), m_window, False, 0,
 			GrabModeAsync, GrabModeSync, None, None);
@@ -385,14 +379,12 @@ void Client::manage(Boolean mapped)
 	getClientType();
 	getChannel();
 
-	fprintf(stderr, "managing client, name = \"%s\"\n", m_name);
 
 	hints = XGetWMHints(d, m_window);
 
 #if CONFIG_USE_WINDOW_GROUPS != False
 	m_groupParent = hints ? hints->window_group : None;
 	if (m_groupParent == None) m_groupParent = m_window;
-	fprintf(stderr, "Client %p (%s) has window %lx and groupParent %lx\n",
 		this, m_name, m_window, m_groupParent);
 #endif
 
@@ -558,18 +550,14 @@ void Client::selectOnMotion(Window w, Boolean select)
 void Client::gotoClient()
 {
 	if (isKilled()) {
-		fprintf(stderr, "Client[%p]::gotoClient: client is killed\n", this);
 		return;
 	}
 	if (m_channel != windowManager()->channel()) {
-		fprintf(stderr, "Client[%p]::gotoClient: going to channel %d\n", this, (int)m_channel);
 		windowManager()->gotoChannel(m_channel, 0);
 	}
 	if (isHidden()) {
-		fprintf(stderr, "Client[%p]::gotoClient: unhiding\n", this);
 		unhide(True);
 	} else {
-		fprintf(stderr, "Client[%p]::gotoClient: bringing to front\n", this);
 		if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick()) activate();
 		else mapRaised();
 		ensureVisible();
@@ -584,14 +572,12 @@ void Client::decorate(Boolean active)
 
 void Client::activate()
 {
-	fprintf(stderr, "Client::activate (this = %p, window = %p, parent = %p)\n",
 		this, (void *)m_window, (void *)parent());
 
 	if(isNonFocusable())
 		return;
 
 	if (parent() == root()) {
-	fprintf(stderr, "wmx: warning: bad parent in Client::activate\n");
 	return;
 	}
 
@@ -644,7 +630,6 @@ void Client::activate()
 void Client::deactivate()	// called from wm?
 {
 	if (parent() == root()) {
-	fprintf(stderr, "wmx: warning: bad parent in Client::deactivate\n");
 	return;
 	}
 
@@ -671,7 +656,6 @@ void Client::setSkipFocus(Boolean skipFocus)
 { 
 //    setNetwmProperty(Atoms::netwm_winHints, WIN_HINTS_SKIP_FOCUS, skipFocus);      
 	m_skipFocus = skipFocus;
-	fprintf(stderr, "Setting \"%s\" to %sskip focus\n", name(), skipFocus?"":"not ");
 }
 
 void Client::setFocusOnClick(Boolean focusOnClick) 
@@ -683,7 +667,6 @@ void Client::setFocusOnClick(Boolean focusOnClick)
 void Client::setNetwmProperty(Atom property, unsigned char state, Boolean to) {
 
 
-	fprintf(stderr, "wmx: Client::setNetwmProperty needs rewriting\n");
 
 /*
 
@@ -729,7 +712,6 @@ void Client::setLayer(int newLayer)
 										// list for its layer.
 	windowManager()->updateStackingOrder();
 
-	fprintf(stderr, "wmx: Moving client \"%s\" to layer %d\n", name(), m_layer);
 }
 
 void Client::sendMessage(Atom a, long l)
@@ -749,7 +731,6 @@ void Client::sendMessage(Atom a, long l)
 	status = XSendEvent(display(), m_window, False, mask, &ev);
 
 	if (status == 0) {
-	fprintf(stderr, "wmx: warning: Client::sendMessage failed\n");
 	}
 }
 
@@ -767,7 +748,6 @@ tryagain:
 	status = XGetWindowProperty(d, w, a, 0L, len, False, type, &realType,
 				&format, &n, &extra, p);
 
-//    fprintf(stderr, "XGetWindowProperty: len = %ld, return count = %lu, format = %d, pointer = %p\n",
 //            len, n, format, *p);
 
 	if (status != Success || *p == 0) return -1;
@@ -778,9 +758,7 @@ tryagain:
 	}
 	if (type == XA_STRING || type == AnyPropertyType || retried) {
 	if (realType != XA_STRING || format != 8) {
-			fprintf(stderr, "string property for window %lx is not an 8-bit string\n", w);
 		}
-		// XA_STRING is needed by a caller.  But XGetWindowProperty()
 		// returns other typed data.  So try to convert them.
 		XTextProperty textprop;
 		textprop.value = *p;
@@ -792,7 +770,6 @@ tryagain:
 		int num, cnt;
 		cnt = XmbTextPropertyToTextList(d, &textprop, &list, &num);
 		if (cnt > Success) {
-			fprintf(stderr, "wmx: WARNING: Failed to convert text property using Xmb method, trying again using Xutf8\n");
 			XFreeStringList(list);
 			cnt = Xutf8TextPropertyToTextList(d, &textprop, &list, &num);
 		}
@@ -802,7 +779,6 @@ tryagain:
 			XFreeStringList(list);
 			n = num;
 		} else if (cnt > Success) {
-			fprintf(stderr, "Something wrong, cannot convert "
 					"text property\n"
 					"  original type %ld, string %s\n"
 					"  converted string %s\n"
@@ -835,7 +811,6 @@ char *Client::getProperty(Atom a)
 	// text", and part-garbage is possibly better than "incognito" --
 	// thanks to Bill Spitzak
 
-//    if (getProperty_aux(display(), m_window, a, XA_STRING, 100L, &p) <= 0) {
 	if (getProperty_aux(display(), m_window, a, AnyPropertyType, 100L, &p) <= 0) {
 	return NULL;
 	}
@@ -963,7 +938,6 @@ void Client::gravitate(Boolean invert)
 	break;
 
 	default:
-	fprintf(stderr, "wmx: bad window gravity %d for window 0x%lx\n",
 		gravity, m_window);
 	return;
 	}
@@ -1048,14 +1022,12 @@ void Client::getClientType()
 
 	if (m_transient != None) m_type = DialogClient;
 
-//    fprintf(stderr, "trying to get client type...\n");
 
 	int count = 0;
 	char *property = getProperty(Atoms::netwm_winType, XA_ATOM, count);
 
 	if (property) {
 
-//        fprintf(stderr, "got property, count = %d\n", count);
 
 		for (int i = 0; i < count; ++i) {
 
@@ -1063,7 +1035,6 @@ void Client::getClientType()
 
 			char *name = XGetAtomName(display(), typeAtom);
 
-			fprintf(stderr, "window type property item %d is \"%s\"\n",
 					i, name);
 
 			if (name) XFree(name);
@@ -1107,7 +1078,6 @@ void Client::getClientType()
 		XFree(property);
 	}
 
-	fprintf(stderr, "client window type = %d\n", (int)m_type);
 }
 
 
@@ -1120,7 +1090,6 @@ void Client::getChannel()
 		m_channel = ((CARD32 *)property)[0] + 1; // netwm counts from 0
 		if (m_channel < 1) m_channel = 1;
 		m_windowManager->ensureChannelExists(m_channel);
-		fprintf(stderr, "channel = %d\n", m_channel);
 		XFree(property);
 	}   
 }
@@ -1150,7 +1119,6 @@ void Client::getTransient()
 void Client::hide()
 {
 	if (isHidden()) {
-	fprintf(stderr, "wmx: Client already hidden in Client::hide\n");
 	return;
 	}
 
@@ -1178,7 +1146,6 @@ void Client::unhide(Boolean map)
 	}
 
 	if (!isHidden()) {
-	fprintf(stderr, "wmx: Client not hidden in Client::unhide\n");
 	return;
 	}
 
@@ -1226,7 +1193,6 @@ void Client::sendConfigureNotify()
 
 void Client::withdraw(Boolean changeState)
 {
-	fprintf(stderr, "withdraw: changeState = %d\n", (int)changeState);
 	m_border->unmap();
 
 	gravitate(True);
@@ -1249,7 +1215,6 @@ void Client::withdraw(Boolean changeState)
 	XSync(display(), False);
 	ignoreBadWindowErrors = False;
 
-//    m_reparenting = False;
 }
 
 
@@ -1262,11 +1227,9 @@ void Client::unwithdraw()
 		return;
 	}
 
-	fprintf(stderr, "unwithdraw: reparenting\n");
 
 	m_reparenting = true;
 	m_border->reparent();
-//    XMapWindow(display(), m_window);
 	m_border->map();
 	setState(NormalState);
 }
@@ -1324,7 +1287,6 @@ void Client::ensureVisible()
 
 void Client::lower()
 {
-	//m_border->lower();
 	windowManager()->hoistToBottom(this);
 	windowManager()->updateStackingOrder();
 }
@@ -1336,7 +1298,6 @@ void Client::raiseOrLower()
 	lower();
 	} else {
 	mapRaised();
-		//windowManager()->updateStackingOrder();
 	}
 }
 
@@ -1483,7 +1444,6 @@ void Client::warpPointer()
 
 void Client::flipChannel(Boolean leaving, int newChannel)
 {
-	fprintf(stderr, "Client[%p]::flipChannel(leaving = %d, newChannel = %d, my channel = %d)\n", this, (int)leaving, newChannel, m_channel);
 
 	if (m_channel != windowManager()->channel()) {
 
@@ -1542,7 +1502,6 @@ void Client::showFeedback()
 	if (CONFIG_MAD_FEEDBACK) {
 	if (m_speculating || m_levelRaised) removeFeedback(False);
 	m_border->showFeedback(m_x, m_y, m_w, m_h);
-//    XSync(display(), False);
 	}
 }
 
@@ -1558,7 +1517,6 @@ void Client::raiseFeedbackLevel()
 	} else if (isHidden()) {
 		unhide(True);
 		m_speculating = True;
-//	XSync(display(), False);
 	}
 	}
 }
@@ -1585,11 +1543,6 @@ void Client::removeFeedback(Boolean mapped)
 void Client::updateFromNetwmProperty(Atom property, unsigned char state) {
 
 	//!!! out of date
-
-	fprintf(stderr, "Client(\"%s\")::updateFromNetwmProperty(\"%s\", %d)\n",
-			name(),
-			XGetAtomName(display(), property),
-			(int)state);
 
 	return;//!!!
 
@@ -1668,7 +1621,6 @@ void Client::updateFromNetwmProperty(Atom property, unsigned char state) {
 			WIN_HINTS_FOCUS_ON_CLICK  // app only accepts focus if clicked
 		*/
 	} else {
-		fprintf(stderr, "wmx: Client::updateFromNetwmProperty called with unknown property!");
 	}
 }
 
@@ -1679,7 +1631,6 @@ void Client::netwmUpdateChannel()
 	// netwm numbers then 0... not 1...
 	val = (CARD32)(channel() - 1);
 
-	fprintf(stderr, "Client::netwmUpdateChannel: setting desktop property on window %lx for client \"%s\" to %d\n", window(), name(), (int)val);
 
 	XChangeProperty(display(), window(), Atoms::netwm_winDesktop,
 					XA_CARDINAL, 32, 
@@ -1701,8 +1652,6 @@ void Client::appendEdges(EdgeRectList &list)
 	}
 	r.right  = m_x + m_w;
 	r.bottom = m_y + m_h;
-//    fprintf(stderr, "edges: H %d - %d  V %d - %d  for \"%s\"\n",
-//            r.left, r.right, r.top, r.bottom, name());
 	list.append(r);
 }
 

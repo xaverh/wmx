@@ -37,7 +37,6 @@ Connection::Connection(int buff_size, int new_fd)
 }
 
 Connection::~Connection() {
-	// printf("Connection::~Connection fd = %d\n", fd);
 	if (buff) {
 	free(buff);
 	}
@@ -53,12 +52,9 @@ int Connection::store_input(Remote *r)
 	int n;
 	char *next;
 
-	// printf("Connection::store_input for fd %d \n", fd);
-	// printf("size: %d  room: %d  p: 0x%x %s\n", size, room, p, p);
 
 	n = read(fd, p, room);
 	if ( n < 0 && errno == EINTR ) {
-	fprintf(stderr, "interrupted system call!\n") ;
 	return 0;	// ???
 	}
 	if ( n <= 0 ) {
@@ -76,12 +72,10 @@ int Connection::store_input(Remote *r)
 
 	while ( (next = strchr(buff, '\n')) ) {
 	*next++ = '\0';
-	// printf("Found a command: %s\n", buff);
 	n = r->parse_command(buff, fd);
 	if (n < 0) {
 		return n;
 	}
-	// for next time:
 	strcpy(buff, next);
 	room = size - strlen(buff) - 1;
 	}
@@ -94,7 +88,6 @@ Remote::Remote(WindowManager *const w_mgr)
 	wm = w_mgr;
 
 	verbose = 0;
-	// FD_ZERO(&remote_control_connections);
 	memset((void *)&remote_control_connections, 0, 
 	   sizeof(remote_control_connections)); // SGI's FD_ZERO is fucked
 	remote_control_port = 0;
@@ -138,9 +131,6 @@ int Remote::setup_socket(char *host, int port)
 	return(-1) ;
 	}
 	memcpy(& ip_addr.s_addr,  h->h_addr_list[0],  sizeof(struct in_addr)) ;
-	if (verbose) {
-	fprintf(stderr, "%x\n", ip_addr.s_addr) ;
-	}
 
 	fd_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) ;
 	if (fd_socket < 0) {
@@ -182,7 +172,6 @@ int Remote::setup_socket(char *host, int port)
 void Remote::setup_port(int port, int v)
 {
 	verbose = v;
-	// FD_ZERO(&remote_control_connections);
 	memset((void *)&remote_control_connections, 0, 
 	   sizeof(remote_control_connections)); // SGI's FD_ZERO is fucked
 	remote_control_socket = -1;
@@ -221,23 +210,10 @@ int Remote::get_connection(int socket_fd)
 	if (n != 0) {
 	perror("get_connection: Unable to get peer name") ;
 	} else {
-	if (verbose) {
-		fprintf(stderr, "peername is ") ;
-	}
 	if (peer_adr.sin_family != AF_INET) {
-		fprintf(stderr, "Family %d (not AF_INET!) ", peer_adr.sin_family) ;
 	} else {
-		if (verbose) {
-		fprintf(stderr, " port %d  ip adr ", ntohs(peer_adr.sin_port)) ;
-		}
 		pi = (unsigned char *) &peer_adr.sin_addr ;
-		if (verbose) {
-		for (i=0; i<4; i++) {
-			fprintf(stderr, "%d%s", *pi++,  (i==3)?"":".") ;
-		}
-		}
 	}
-	fprintf(stderr, "\n") ;
 	}
 	return(fd) ;
 }
@@ -271,7 +247,6 @@ void give_reply(int fd, cmd_errors e) {
 	int inv_err = sizeof(err_strings)/sizeof(err_strings[0]);
 
 	if (e >= inv_err) {
-	fprintf(stderr, "give_reply: invalid error number %d\n", e);
 	e = err_unknown;
 	}
 	write(fd, err_strings[e], strlen(err_strings[e]));
@@ -403,9 +378,7 @@ cmd_errors move_client(WindowManager * mgr, char *buff, int fd) {
 	if (sig_y == '-') {
 		y = DisplayHeight(c->display(), 0) - y;
 	}
-	// printf("Moving window 0x%x to (%d, %d)\n", w, x, y);
 	c->move(x, y, False);
-	// c->ensureVisible();
 	} else {
 	return err_missing_args;
 	}
@@ -429,7 +402,6 @@ cmd_errors rmove_client(WindowManager * mgr, char *buff, int fd) {
 	if (get_num(&p, &x) && get_num(&p, &y)) {
 	printf("Moving window 0x%x to (%d, %d)\n", w, x, y);
 	c->move(x, y, True);
-	// c->ensureVisible();
 	} else {
 	return err_missing_args;
 	}
@@ -633,7 +605,6 @@ cmd_errors quit_cmd(WindowManager * mgr, char *buff, int fd) {
 cmd_errors options_cmd(WindowManager * mgr, char *buff, int fd) {
 	char *p;
 
-	fprintf(stderr, "processing options %s\n", buff);
 	p = buff;
 	while (isspace(*p)) p++;
 	if (*p) {
@@ -643,11 +614,7 @@ cmd_errors options_cmd(WindowManager * mgr, char *buff, int fd) {
 	} 
 	return err_syntax_error;
 }
-
-// typedef int (WindowManager::*command_func)(char *buff, int fd);
-// typedef int (*command_func)(WindowManager * mgr, char *buff, int fd);
 typedef cmd_errors(*command_func)(WindowManager * mgr, char *buff, int fd);
-// typedef cmd_errors(*command_func)(Remote * mgr, char *buff, int fd);
 
 int Remote::parse_command(char *buff, int fd)
 {
@@ -711,13 +678,11 @@ int Remote::parse_command(char *buff, int fd)
 		err = err_no_error;
 		break;
 		}
-		// err = (*func)(this, p, fd);
 		err = (*func)(wm, p, fd);
 		break;
 	}
 	}
 	if (err == err_quit) {
-	// closeConnection(fd);
 	return -1;
 	}
 	give_reply(fd, err);
@@ -790,13 +755,10 @@ Boolean Remote::doRemoteControl(int fd)
 	if (new_fd >= max_connection) {
 		int size;
 		max_connection = new_fd + 1;
-		// printf("max_connection is now %d\n", max_connection);
 		size = max_connection * sizeof(Connection*);
-		// printf("reallocating to size %d\n", size);
 		connections = (Connection **)
 		realloc(connections, size);
 	}
-	// printf("setting connections[%d]\n", new_fd);
 	connections[new_fd] = new Connection(1024, new_fd);
 
 	FD_SET(new_fd, &remote_control_connections);
@@ -822,8 +784,6 @@ Boolean Remote::doRemoteControl(int fd)
 	return True;
 
 	}
-	fprintf(stderr,
-		"WindowManager::doRemoteControl(%d) -- why were we called?\n", fd);
 	return False;
 }
 

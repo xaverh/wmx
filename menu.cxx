@@ -42,7 +42,6 @@ Menu::Menu(WindowManager *manager, XEvent *e)
 	char *ffi = fi, *tokstr = fi;
 	while ((fi = strtok(tokstr, ","))) {
 
-		fprintf(stderr, "fi = \"%s\"\n", fi);
 		tokstr = 0;
 
 		FcPattern *pattern = FcPatternCreate();
@@ -542,8 +541,6 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 	if (client->root() == m_windowManager->root() &&
 		client->channel() == m_windowManager->channel() &&
 			client->type() != DockClient) {
-			fprintf(stderr, "wmx: Menu: hidden client %d is \"%s\"\n",
-					i, client->name());
 		m_clients.append(client);
 	}
 	}
@@ -558,8 +555,6 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 		client->root() == m_windowManager->root() &&
 		client->channel() == m_windowManager->channel() &&
 				client->type() != DockClient) {
-		fprintf(stderr, "wmx: Menu: client %d is \"%s\"\n",
-			i, client->name());
 		m_clients.append(client);
 		}
 	}

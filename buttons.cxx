@@ -16,7 +16,6 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 	setScreenFromPointer();
 	Client *c = windowToClient(e->window);
 
-//    fprintf(stderr, "button event, channel change time == %d\n",
 //            (int)m_channelChangeTime);
 
 	// We shouldn't be getting button events for non-focusable clients,
@@ -29,7 +28,6 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 	bool furniture = (c && ((c->type() == DesktopClient) ||
 							(c->type() == DockClient)));
 
-	fprintf(stderr, "wmx: client %p for window %p: furniture? %s\n", c, (void *)(e->window), furniture ? "yes" : "no");
 
 	if (!furniture) {
 		if (e->button == CONFIG_CIRCULATE_BUTTON && m_channelChangeTime == 0) {
@@ -80,7 +78,6 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 		}
 	}
 
-	fprintf(stderr, "wmx: effective root? %s\n", effectiveRoot ? "yes" : "no");
 
 	if (effectiveRoot) {
 
@@ -122,7 +119,6 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 #endif
 		return;
 	} else if (e->button == CONFIG_CLIENTMENU_BUTTON && m_channelChangeTime != 0) {
-			fprintf(stderr, "pushing down a channel\n");
 		// allow left-button to push down a channel --cc 19991001
 		flipChannel(False, True, False, c);
 		return;
@@ -191,9 +187,6 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 
 	Client *c = windowToClient(ev->window);
 
-//        fprintf(stderr, "eventKeyPress, client %p (%s)\n",
-//                c, c ? c->name() : "(none)");
-
 		if (key == CONFIG_ALT_KEY) {
 			m_altPressed = True;
 			m_altStateRetained = False;
@@ -258,10 +251,8 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 
 		   if (!m_altPressed) {
 			   // oops! bug
-//               fprintf(stderr, "wmx: Alt key record in inconsistent state\n");
 			   m_altPressed = True;
 			   m_altStateRetained = False;
-//        fprintf(stderr, "state is %ld, mask is %ld\n",
 //                (long)ev->state, (long)m_altModMask);
 		   }
 
@@ -385,7 +376,6 @@ void WindowManager::eventKeyRelease(XKeyEvent *ev)
 		m_altPressed = False;
 		m_altStateRetained = False;
 
-//        fprintf(stderr, "state is %ld, mask is %ld\n",
 //                (long)ev->state, (long)m_altModMask);
 	}
 	return;
@@ -409,7 +399,6 @@ void WindowManager::windowGrouping(XKeyEvent *ev, KeySym key, Client *c) {
 
 		for (int i = 0; i < grouping.item(group)->count(); i++) {
 		if (grouping.item(group)->item(i) == c) {
-			//		    fprintf(stderr, "removing client from %d at %d\n", group, i);
 			there = i;
 		}
 		}
@@ -418,7 +407,6 @@ void WindowManager::windowGrouping(XKeyEvent *ev, KeySym key, Client *c) {
 		grouping.item(group)->remove(there);
 		} else {
 		// add if it's not there
-		//fprintf(stderr, "adding client to %d at %d \n", 
 		//	group, grouping.item(group)->count());
 
 		grouping.item(group)->append(c);
@@ -456,7 +444,6 @@ void WindowManager::windowGrouping(XKeyEvent *ev, KeySym key, Client *c) {
 		if ((raise != 2) && (temp == count)) {
 		raise = 0;
 		}
-		//	    fprintf(stderr, "raise = %d temp =  %d \n", 
 		//	    raise, temp);   
 	}
 
@@ -623,11 +610,9 @@ void Client::move(XButtonEvent *e)
 	switch (event.type) {
 
 	default:
-		fprintf(stderr, "wmx: unknown event type %d\n", event.type);
 		break;
 
 	case Expose:
-//	    m_windowManager->eventExposure(&event.xexpose);
 		m_windowManager->dispatchEvent(&event);
 		break;
 
@@ -691,14 +676,12 @@ void Client::move(XButtonEvent *e)
 									nx <= edges.item(i).right - xi + ft &&
 									nx  > edges.item(i).right - xi + ft - bd) {
 									nx  = edges.item(i).right - xi + ft;
-//                                    fprintf(stderr, "bumping at left\n");
 									bumpedh = 1;
 								}
 								if (nx > x &&
 									nx >= edges.item(i).left - m_w - xi &&
 									nx  < edges.item(i).left - m_w - xi + bd) {
 									nx  = edges.item(i).left - m_w - xi;
-//                                    fprintf(stderr, "bumping at right\n");
 									bumpedh = 1;
 								}
 							}
@@ -710,14 +693,12 @@ void Client::move(XButtonEvent *e)
 									ny <= edges.item(i).bottom &&
 									ny  > edges.item(i).bottom - bd) {
 									ny  = edges.item(i).bottom;
-//                                    fprintf(stderr, "bumping at top\n");
 									bumpedv = 1;
 								}
 								if (ny > y &&
 									ny >= edges.item(i).top - m_h - yi &&
 									ny  < edges.item(i).top - m_h - yi + bd) {
 									ny  = edges.item(i).top - m_h - yi;
-//                                    fprintf(stderr, "bumping at bottom\n");
 									bumpedv = 1;
 								}
 							}
@@ -842,11 +823,9 @@ void Client::resize(XButtonEvent *e, Boolean horizontal, Boolean vertical)
 	switch (event.type) {
 
 	default:
-		fprintf(stderr, "wmx: unknown event type %d\n", event.type);
 		break;
 
 	case Expose:
-//	    m_windowManager->eventExposure(&event.xexpose);
 		m_windowManager->dispatchEvent(&event);
 		break;
 
@@ -1027,11 +1006,9 @@ void Border::eventButton(XButtonEvent *e)
 	switch (event.type) {
 
 	default:
-		fprintf(stderr, "wmx: unknown event type %d\n", event.type);
 		break;
 
 	case Expose:
-//	    windowManager()->eventExposure(&event.xexpose);
 		windowManager()->dispatchEvent(&event);
 		break;
 
