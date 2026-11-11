@@ -29,7 +29,7 @@ SRC = border.cxx \
       keybinding.cxx \
       main.cxx \
       manager.cxx \
-      menu.cxx \
+      menu.cxx
 
 OBJ = border.o \
       buttons.o \
@@ -40,7 +40,7 @@ OBJ = border.o \
       keybinding.o \
       main.o \
       manager.o \
-      menu.o \
+      menu.o
 
 all: wmx
 
@@ -67,7 +67,7 @@ keybinding.o: keybinding.cxx config.hxx dynamicconfig.hxx general.hxx keybinding
 main.o: main.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
 	keybinding.hxx manager.hxx
 manager.o: manager.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx cursors.hxx \
-	general.hxx keybinding.hxx manager.hxx menu.hxx \
+	general.hxx keybinding.hxx manager.hxx menu.hxx
 menu.o: menu.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
 	keybinding.hxx manager.hxx menu.hxx
 
