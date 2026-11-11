@@ -941,7 +941,7 @@ void WindowManager::sort_clients(void)
 
 
 
-void WindowManager::gnomeInitialiseCompliance()
+void WindowManager::netwmInitialiseCompliance()
 {
 	// NOTE that this has been altered to coexist with the
 	// multihead code; but we're only using screen 0 here
@@ -1136,7 +1136,7 @@ void WindowManager::netwmUpdateChannelList()
 }   
 
 
-void WindowManager::gnomeUpdateCurrentChannel()
+void WindowManager::netwmUpdateCurrentChannel()
 {
 	CARD32 val;
 
