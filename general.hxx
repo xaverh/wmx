@@ -28,20 +28,6 @@ typedef char Boolean;
 
 #define NewString(x) (strcpy((char *)malloc(strlen(x)+1),(x)))
 
-#ifndef SIGNAL_CALLBACK_TYPE
-//#define SIGNAL_CALLBACK_TYPE (void (*)(...))
-#define SIGNAL_CALLBACK_TYPE (void (*)(int))
-#endif
-
-#define signal(x,y)     \
-  do { \
-	struct sigaction sAct; \
-	(void)sigemptyset(&sAct.sa_mask); \
-	sAct.sa_flags = 0; \
-	sAct.sa_handler = (SIGNAL_CALLBACK_TYPE(y)); \
-	(void)sigaction((x), &sAct, NULL); \
-  } while (0)
-
 #include "config.hxx"
 
 #include <ft2build.h>
