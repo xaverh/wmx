@@ -86,11 +86,12 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 		   e->y < CONFIG_CHANNEL_CLICK_SIZE) {
 
 		if (e->button == CONFIG_COMMANDMENU_BUTTON) {
-#if CONFIG_USE_CHANNEL_MENU	
+if constexpr (CONFIG_USE_CHANNEL_MENU) {
 				ChannelMenu(this, (XEvent *)e);
-#else
+} else {
 				if (m_channelChangeTime == 0) flipChannel(true, false, false, 0);
 				else flipChannel(false, false, false, 0);
+}
 
 			} else if (e->button == CONFIG_CLIENTMENU_BUTTON && m_channelChangeTime != 0) {
 
@@ -105,11 +106,12 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 	} else if (c && !furniture) {
 
 	if (e->button == CONFIG_COMMANDMENU_BUTTON && CONFIG_CHANNEL_SURF) {
-#if CONFIG_USE_CHANNEL_MENU	
+if constexpr (CONFIG_USE_CHANNEL_MENU) {
 		ChannelMenu menu(this, (XEvent *)e);
-#else
+} else {
 			if (m_channelChangeTime == 0) flipChannel(true, false, false, 0);
 			else flipChannel(false, false, false, c);
+}
 		return;
 	} else if (e->button == CONFIG_CLIENTMENU_BUTTON && m_channelChangeTime != 0) {
 		// allow left-button to push down a channel --cc 19991001
