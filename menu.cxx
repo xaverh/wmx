@@ -650,9 +650,6 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	m_hasSubmenus = true;
 
 	if (otherdir == nullptr) {
-#if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-		isRootDir = true;
-#endif
 		namespace fs = std::filesystem;
 		fs::path p;
 		if (wmxdir == nullptr) {
@@ -667,9 +664,6 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 		auto s = p.string();
 		m_commandDir = strdup(s.c_str());
 	} else {
-#if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-		isRootDir = false;
-#endif
 		m_commandDir = strdup(otherdir);
 	}
 
@@ -720,31 +714,6 @@ void CommandMenu::createSubmenu (XEvent *e, int i)
 	free(new_directory);
 }
 
-#if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-DIR *CommandMenu::screenopendir(char *m_commandDir,int *dirlen,int olddirlen)
-{
-	char *p;
-	DIR *dir;
-
-	if(isRootDir)
-	{
-	for(p=m_commandDir;*p;p++);  // search end of m_commandDir
-	sprintf(p,".%d",screen());   // append screen number
-	dir = opendir(m_commandDir);
-	if (dir == nullptr) {
-		m_commandDir[olddirlen] = '\0'; // strip of screen number
-		*dirlen = olddirlen;
-		dir = opendir(m_commandDir);
-	}
-	}
-	else
-	{
-	*dirlen = olddirlen;
-	dir = opendir(m_commandDir);
-	}
-	return(dir);
-}
-#endif
 
 char **CommandMenu::getItems(int *niR, int *nhR)
 {

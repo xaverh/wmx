@@ -95,10 +95,6 @@ private:
 	virtual char **getItems(int *, int *);
 	char *m_commandDir;
 
-#if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-	bool isRootDir;
-	DIR *screenopendir(char *,int *,int);
-#endif
 };
 
 class ShowGeometry : public Menu

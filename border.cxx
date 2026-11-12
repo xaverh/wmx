@@ -1,5 +1,4 @@
 #include "border.hxx"
-#include <filesystem>
 #include "client.hxx"
 #include "manager.hxx"
 
@@ -238,31 +237,15 @@ void Border::initialiseStatics(WindowManager *wm)
 	}
 
 #if CONFIG_USE_PIXMAPS != false
-		int use_dynamic = true;
 		XpmAttributes attrs;
-
-
 		attrs.valuemask =
 		  XpmCloseness | XpmVisual | XpmColormap | XpmDepth;
 		attrs.closeness = 40000;
-	attrs.visual = XDefaultVisual(wm->display(), i);
-	attrs.colormap = XDefaultColormap(wm->display(), i);
-	attrs.depth = XDefaultDepth(wm->display(), i);
+		attrs.visual = XDefaultVisual(wm->display(), i);
+		attrs.colormap = XDefaultColormap(wm->display(), i);
+		attrs.depth = XDefaultDepth(wm->display(), i);
 
-		char *home = getenv("HOME");
-		if (home) {
-			namespace fs = std::filesystem;
-			auto pixMapPath = (fs::path(home) / CONFIG_COMMAND_MENU / "border.xpm").string();
-			// look for background pixmap file in the users .wmx directory.
-			// It is not an error if none is found.
-			if (XpmReadFileToPixmap(wm->display(), wm->root(),
-						pixMapPath.c_str(),
-						&m_backgroundPixmap, nullptr, &attrs)
-				!= XpmSuccess)
-				use_dynamic = false;
-		}
-
-		if (use_dynamic == false) {
+		{
 			switch (XpmCreatePixmapFromData
 					(wm->display(), wm->root(), (char **)background,
 					 &m_backgroundPixmap, nullptr, &attrs)) {

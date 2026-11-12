@@ -54,10 +54,6 @@ constexpr int CONFIG_EXIT_CLICK_SIZE_Y = -3;
 // Directory under $HOME in which to look for commands for the
 // middle-button menu
 constexpr char const *CONFIG_COMMAND_MENU = ".wmx";
-// append screennumber to COMMAND_MENU directory;
-// use non screen style as fallback
-constexpr bool CONFIG_ADD_SCREEN_TO_COMMAND_MENU = false;
-
 // Focus.  Independent: click-to-focus does not require raise-on-focus.
 // Default is focus-follows-pointer with no raise.
 constexpr bool CONFIG_CLICK_TO_FOCUS = false;
