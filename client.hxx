@@ -75,7 +75,7 @@ public:
 	// Client should not receive focus (panel, desktop etc.)
 	bool isNonFocusable() const { return ((layer() > LAST_FOCUSABLE_LAYER)); }
 
-	char const *label()     const { return m_label;    }
+	std::string_view label() const { return m_label; }
 	char const *name()      const { return m_name;     }
 	char const *iconName()  const { return m_iconName; }
 
@@ -111,7 +111,7 @@ public:
 
 	/* for call from within: */
 
-	void fatal(char const *m)    { m_windowManager->fatal(m);              }
+	void fatal(std::string_view m) { m_windowManager->fatal(m); }
 	Display *display()     const { return m_windowManager->display();      }
 	int screen();
 	Window parent()        const { return m_border->parent();              }
@@ -201,7 +201,7 @@ private:
 
 	char *m_name;
 	char *m_iconName;
-	char const *m_label;	// alias: one of (instance,class,name,iconName)
+	std::string m_label;
 	static char const *const m_defaultLabel;
 
 	Colormap m_colormap;

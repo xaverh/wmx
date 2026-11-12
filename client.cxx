@@ -47,7 +47,7 @@ Client::Client(WindowManager *const wm, Window w, bool shaped) :
 	m_isFullWidth(false),
 	m_name(nullptr),
 	m_iconName(nullptr),
-	m_label(nullptr),
+	m_label(),
 	m_colormap(None),
 	m_colormapWinCount(0),
 	m_colormapWindows(nullptr),
@@ -69,7 +69,7 @@ Client::Client(WindowManager *const wm, Window w, bool shaped) :
 	wm->setScreenFromRoot(m_wroot);
 	m_screen = wm->screen();
 
-	m_label = NewString(m_defaultLabel);
+	m_label = m_defaultLabel;
 	m_border = new Border(this, w);
 
 	m_channel = wm->channel();
@@ -151,8 +151,7 @@ void Client::release()
 
 	if (m_iconName) XFree(m_iconName);
 	if (m_name)     XFree(m_name);
-	if (m_label) free((void *)m_label);
-
+	
 	delete this;
 }
 
@@ -680,11 +679,11 @@ tryagain:
 		}
 		unsigned char *string;
 		if (cnt == Success && num > 0 && *list) {
-			string = (unsigned char*)NewString(*list);
+			string = (unsigned char*)strdup(*list);
 			XFreeStringList(list);
 			n = num;
 		} else if (cnt > Success) {
-			string = (unsigned char*)NewString(*(char**)p);
+			string = (unsigned char*)strdup(*(char**)p);
 			XFreeStringList(list);
 			n = n;
 		} else if (!retried) {
@@ -859,18 +858,10 @@ bool Client::setLabel(void)
 	else if (m_iconName) newLabel = m_iconName;
 	else newLabel = m_defaultLabel;
 
-	if (!m_label) {
-
-	m_label = NewString(newLabel);
+	if (m_label != newLabel) {
+	m_label = newLabel;
 	return true;
-
-	} else if (strcmp(m_label, newLabel)) {
-
-	free((void *)m_label);
-	m_label = NewString(newLabel);
-	return true;
-
-	} else return true;//false;// dammit!
+	} else return true;
 }
 
 
@@ -1002,7 +993,7 @@ void Client::getTransient()
 		fprintf(stderr,
 			"wmx: warning: client \"%s\" thinks it's a transient "
 			"for\nitself -- ignoring WM_TRANSIENT_FOR property...\n",
-			m_label ? m_label : "(no name)");
+			m_label.empty() ? "(no name)" : m_label.c_str());
 		m_transient = None;
 	} else {		
 		m_transient = t;

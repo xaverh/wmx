@@ -57,7 +57,7 @@ void BorderRectangleList::append(int x, int y, int w, int h)
 
 Border::Border(Client *const c, Window child) :
 	m_client(c), m_parent(0), m_tab(0),
-	m_child(child), m_button(0), m_resize(0), m_label(0),
+	m_child(child), m_button(0), m_resize(0), m_label(),
 	m_xftDraw(0),
 	m_prevW(-1), m_prevH(-1), m_tabHeight(-1)
 {
@@ -91,8 +91,7 @@ Border::~Border()
 
 	//!!! remind me why we don't delete these windows if m_parent == root() ?
 
-	if (m_label) free(m_label);
-}
+	}
 
 
 void Border::initialiseStatics(WindowManager *wm)
@@ -327,7 +326,7 @@ GC Border::drawGC(WindowManager *wm,int screen)
 }
 
 
-void Border::fatal(char const *s)
+void Border::fatal(std::string_view s)
 {
 	windowManager()->fatal(s);
 }
@@ -384,7 +383,7 @@ int Border::xIndent()
 
 void Border::drawLabel()
 {
-	if (m_label) {
+	if (!m_label.empty()) {
 	XClearWindow(display(), m_tab);
 //		(int)(m_tabHeight - 1), m_label);
 	XftDrawStringUtf8(m_xftDraw,
@@ -392,8 +391,8 @@ void Border::drawLabel()
 			  m_tabFont,
 			  CONFIG_TAB_MARGIN + m_tabFont->ascent,
 			  m_tabHeight - 1,
-			  (FcChar8 *)m_label,
-			  strlen(m_label));
+			  (FcChar8 *)m_label.data(),
+			  m_label.size());
 	}
 }
 
@@ -409,10 +408,10 @@ bool Border::isFixedSize(void)
 	return m_client->isFixedSize();
 }
 
-int Border::getRotatedTextWidth(char *text)
+int Border::getRotatedTextWidth(std::string_view text)
 {
 	XGlyphInfo extents;
-	XftTextExtentsUtf8(display(), m_tabFont, (FcChar8 *)text, strlen(text),
+	XftTextExtentsUtf8(display(), m_tabFont, (FcChar8 *)text.data(), text.size(),
 			   &extents);
 //	    (int)extents.height);
 	return extents.height;
@@ -428,43 +427,31 @@ void Border::fixTabHeight(int maxHeight)
 	m_tabWidth[screen()] + 2;
 
 
-	if (m_label) free(m_label);
-	m_label = NewString(m_client->label());
+	m_label = m_client->label();
 
-	if (m_label) {
+	if (!m_label.empty()) {
 	m_tabHeight = getRotatedTextWidth(m_label) + 6 + m_tabWidth[screen()];
 	}
 
-
 	if (m_tabHeight <= maxHeight) return;
 
-	if (!m_label) {
-	m_label = m_client->iconName() ?
-		NewString(m_client->iconName()) : NewString("incognito");
+	if (m_label.empty()) {
+	m_label = m_client->iconName() ? m_client->iconName() : "incognito";
 	}
 
-	int len = strlen(m_label);
 	m_tabHeight = getRotatedTextWidth(m_label) + 6 + m_tabWidth[screen()];
 	if (m_tabHeight <= maxHeight) return;
 
-	char *newLabel = (char *)malloc(len + 3);
-
-	do {
-	// (incorrect for utf8)
-	strncpy(newLabel, m_label, len - 1);
-	strcpy(newLabel + len - 1, "...");
-	m_tabHeight = getRotatedTextWidth(newLabel) + 6 + m_tabWidth[screen()];
-	--len;
-
-	} while (m_tabHeight > maxHeight && len > 2);
-
-	free(m_label);
-	m_label = newLabel;
+	std::string truncated = m_label;
+	while (m_tabHeight > maxHeight && truncated.size() > 2) {
+		truncated.pop_back();
+		m_tabHeight = getRotatedTextWidth(truncated + "...") + 6 + m_tabWidth[screen()];
+	}
+	m_label = truncated + "...";
 
 	if (m_tabHeight > maxHeight) {
 	m_tabHeight = maxHeight;
-	free(m_label);
-	m_label = NewString("");
+	m_label.clear();
 	}
 
 }

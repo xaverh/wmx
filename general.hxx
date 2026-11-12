@@ -10,6 +10,8 @@
 #include <cerrno>
 #include <cstdlib>
 #include <vector>
+#include <string>
+#include <string_view>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -24,7 +26,6 @@
 #include "config.hxx"
 
 
-#define NewString(x) (strcpy((char *)malloc(strlen(x)+1),(x)))
 
 #include "config.hxx"
 

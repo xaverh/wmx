@@ -14,7 +14,7 @@ public:
 	WindowManager(int argc, char **argv);
 	~WindowManager();
 
-	void fatal(char const *);
+	void fatal(std::string_view);
 
 	// for call from Client and within:
 

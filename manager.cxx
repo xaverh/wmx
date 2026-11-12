@@ -308,11 +308,11 @@ void WindowManager::release()
 }
 
 
-void WindowManager::fatal(char const *message)
+void WindowManager::fatal(std::string_view message)
 {
 	fprintf(stderr, "wmx: ");
-	if (errno != 0) perror(message);
-	else fprintf(stderr, "%s", message);
+	if (errno != 0) perror(std::string(message).c_str());
+	else fprintf(stderr, "%.*s", (int)message.size(), message.data());
 	fprintf(stderr, "\n");
 	exit(1);
 }

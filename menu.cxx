@@ -824,7 +824,7 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 	items = (!items ? (char **)malloc(sizeof(char *)) :
 		 (char **)realloc(items, (count + 1) * sizeof(char *)));
 
-	items[count++] = NewString(ent->d_name);
+	items[count++] = strdup(ent->d_name);
 	}
 
 	qsort(items, count, sizeof(char *), sortstrs);
@@ -843,7 +843,7 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 	items = (!items ? (char **)malloc(sizeof(char *)) :
 		 (char **)realloc(items, (count + 1) * sizeof(char *)));
 
-	items[count++] = NewString(ent->d_name);
+	items[count++] = strdup(ent->d_name);
 	}
 
 	*niR = count;

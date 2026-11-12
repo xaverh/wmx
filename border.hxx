@@ -72,14 +72,14 @@ private:
 	bool m_fedback;
 //#endif
 
-	void fatal(char const *);
+	void fatal(std::string_view);
 
-	char *m_label;
+	std::string m_label;
 
 	XftDraw *m_xftDraw;
 
 	void fixTabHeight(int);
-	int getRotatedTextWidth(char *);
+	int getRotatedTextWidth(std::string_view);
 	void drawLabel();
 
 	void setFrameVisibility(bool, int, int);
