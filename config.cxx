@@ -60,7 +60,6 @@ DynamicConfig::~DynamicConfig()
 
 char DynamicConfig::clickFocus() { return m_impl->focus & 1; }
 char DynamicConfig::raiseFocus() { return m_impl->focus & 2; }
-char DynamicConfig::autoRaiseFocus() { return m_impl->focus & 4; }
 char DynamicConfig::rightCirculate() { return m_impl->rightBt & 1; }
 char DynamicConfig::rightLower() { return m_impl->rightBt & 2; }
 char DynamicConfig::rightToggleHeight() { return m_impl->rightBt & 4; }
@@ -93,9 +92,7 @@ void DynamicConfig::update(char *string)
 	if (OPTION("focus:")) {
 		if (OPTION("click")) m_impl->focus = 3;
 		else if (OPTION("raise")) m_impl->focus = 2;
-		else if (OPTION("delay-raise")) {
-		m_impl->focus = 4;
-		} else if (OPTION("follow")) m_impl->focus = 0;
+		else if (OPTION("follow")) m_impl->focus = 0;
 	}
 
 	if (OPTION("right:")) {

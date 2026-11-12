@@ -51,8 +51,6 @@ public:
 	void installColormap(Colormap);
 	unsigned long allocateColour(int, char const *, char const *);
 
-	void considerFocusChange(Client *, Window, Time timestamp);
-	void stopConsideringFocus();
 
 	// shouldn't really be public
 	int attemptGrab(Window, Window, int, int);
@@ -162,14 +160,6 @@ private:
 	void scanInitialWindows();
 
 	void circulate(bool activeFirst);
-
-	bool m_focusChanging;	// checking times for focus change
-	Client *m_focusCandidate;
-	Window  m_focusCandidateWindow;
-	Time    m_focusTimestamp;	// time of last crossing event
-	bool m_focusPointerMoved;
-	bool m_focusPointerNowStill;
-	void checkDelaysForFocus();
 
 
 	void nextEvent(XEvent *);	// return

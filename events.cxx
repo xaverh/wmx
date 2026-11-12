@@ -96,10 +96,6 @@ void WindowManager::dispatchEvent(XEvent *ev)
 	break;
 
 	case MotionNotify:
-	if (CONFIG_AUTO_RAISE && m_focusChanging) {
-		if (!m_focusPointerMoved) m_focusPointerMoved = true;
-		else m_focusPointerNowStill = false;
-	}
 	break;
 
 	case MapNotify:
@@ -181,7 +177,7 @@ void WindowManager::nextEvent(XEvent *e)
 
 
 	if ((r = select(max_fd, &rfds, nullptr, nullptr,
-			(m_channelChangeTime > 0 || m_focusChanging) ? &t :
+			(m_channelChangeTime > 0) ? &t :
 			(struct timeval *)nullptr)) > 0) {
 
 		int f;
@@ -196,10 +192,6 @@ void WindowManager::nextEvent(XEvent *e)
 
 	} // if select found something
 
-	if (CONFIG_AUTO_RAISE && m_focusChanging) { // timeout on select
-		checkDelaysForFocus();
-	}
-
 	if (r == 0) goto waiting;
 
 	if (errno != EINTR || !m_signalled) {
@@ -212,89 +204,6 @@ void WindowManager::nextEvent(XEvent *e)
 	ignoreBadWindowErrors = true;
 	m_looping = false;
 	m_returnCode = 0;
-}
-
-
-void WindowManager::checkDelaysForFocus()
-{
-	if (!CONFIG_AUTO_RAISE) return;
-
-	Time t = timestamp(true);
-
-	if (m_focusPointerMoved) {	// only raise when pointer stops
-
-	if (t < m_focusTimestamp ||
-		t - m_focusTimestamp > CONFIG_POINTER_STOPPED_DELAY) {
-
-		if (m_focusPointerNowStill) {
-		m_focusPointerMoved = false;
-
-		} else m_focusPointerNowStill = true; // until proven false
-	}
-	} else {
-
-	if (t < m_focusTimestamp ||
-		t - m_focusTimestamp > (Time)CONFIG_AUTO_RAISE_DELAY) {
-
-		m_focusCandidate->focusIfAppropriate(true);
-
-	}
-	}
-}
-
-
-void WindowManager::considerFocusChange(Client *c, Window w, Time timestamp)
-{
-	if (!CONFIG_AUTO_RAISE) return;
-
-	if (m_focusChanging) {
-	stopConsideringFocus();
-	}
-
-	m_focusChanging = true;
-	m_focusTimestamp = timestamp;
-	m_focusCandidate = c;
-	m_focusCandidateWindow = w;
-
-	// we need to wait until at least one pointer-motion event has
-	// come in before we can start to wonder if the pointer's
-	// stopped moving -- otherwise we'll be caught out by all the
-	// windows for which we don't get motion events at all
-
-	m_focusPointerMoved = false;
-	m_focusPointerNowStill = false;
-	m_focusCandidate->selectOnMotion(m_focusCandidateWindow, true);
-}
-
-
-void WindowManager::stopConsideringFocus()
-{
-	if (!CONFIG_AUTO_RAISE) return;
-
-	m_focusChanging = false;
-	if (m_focusChanging && m_focusCandidateWindow) {
-	m_focusCandidate->selectOnMotion(m_focusCandidateWindow, false);
-	}
-}
-
-
-void Client::focusIfAppropriate(bool ifActive)
-{
-	if (!CONFIG_AUTO_RAISE) return;
-	if (!m_managed || !isNormal()) return;
-	if (!ifActive && isActive()) return;
-
-	Window rw, cw;
-	int rx, ry, cx, cy;
-	unsigned int k;
-
-	XQueryPointer(display(), root(), &rw, &cw, &rx, &ry, &cx, &cy, &k);
-
-	if (hasWindow(cw)) {
-	activate();
-	mapRaised();
-	m_windowManager->stopConsideringFocus();
-	}
 }
 
 
@@ -379,11 +288,7 @@ void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 
 	if (raise && parent() != root()) {
 
-	if (CONFIG_AUTO_RAISE) {
-
-		m_windowManager->stopConsideringFocus();
-
-		if (!m_stubborn) { // outstubborn stubborn windows
+	if (!m_stubborn) { // outstubborn stubborn windows
 		Time popTime = windowManager()->timestamp(true);
 
 		if (m_lastPopTime > 0L &&
@@ -443,7 +348,6 @@ void Client::eventMapRequest(XMapRequestEvent *)
 
 	m_border->reparent();
 
-	if (CONFIG_AUTO_RAISE) m_windowManager->stopConsideringFocus();
 	XAddToSaveSet(display(), m_window);
 	if (m_channel == windowManager()->channel()) {
 		XMapWindow(display(), m_window);
@@ -462,7 +366,6 @@ void Client::eventMapRequest(XMapRequestEvent *)
 	break;
 
 	case IconicState:
-	if (CONFIG_AUTO_RAISE) m_windowManager->stopConsideringFocus();
 	unhide(true);
 	break;
 	}
@@ -514,9 +417,7 @@ void Client::eventUnmap(XUnmapEvent *e)
 	Client* c = windowManager()->windowToClient(transientFor());
 	if (c && !c->isActive() && !CONFIG_CLICK_TO_FOCUS && !c->isFocusOnClick()) {
 		c->activate();
-		if (CONFIG_AUTO_RAISE) {
-		c->windowManager()->considerFocusChange(this, c->m_window, windowManager()->timestamp(false));
-		} else if (CONFIG_RAISE_ON_FOCUS) {
+		if (CONFIG_RAISE_ON_FOCUS) {
 		c->mapRaised();
 		}
 	}
@@ -549,9 +450,6 @@ void WindowManager::eventDestroy(XDestroyWindowEvent *e)
 
 	if (c) {
 
-	if (CONFIG_AUTO_RAISE && m_focusChanging && c == m_focusCandidate) {
-		m_focusChanging = false;
-	}
 
 	for (int i = m_clients.size()-1; i >= 0; --i) {
 		if (m_clients[i] == c) {
@@ -759,9 +657,7 @@ void Client::eventEnter(XCrossingEvent *e)
 	if (e->type == EnterNotify) {
 	if (!isActive() && !CONFIG_CLICK_TO_FOCUS && !isFocusOnClick()) {
 		activate();
-		if (CONFIG_AUTO_RAISE) {
-		windowManager()->considerFocusChange(this, m_window, e->time);
-		} else if (CONFIG_RAISE_ON_FOCUS) {
+		if (CONFIG_RAISE_ON_FOCUS) {
 		mapRaised();
 		}
 	}

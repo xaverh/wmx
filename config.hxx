@@ -60,26 +60,12 @@ constexpr char const *CONFIG_COMMAND_MENU = ".wmx";
 constexpr bool CONFIG_ADD_SCREEN_TO_COMMAND_MENU = false;
 
 // Focus possibilities.
-// 
-// You can't have CLICK_TO_FOCUS without RAISE_ON_FOCUS, but the other
-// combinations should be okay.  If you set AUTO_RAISE you must leave
-// the other two false; you'll then get focus-follows, auto-raise, and
-// a delay on auto-raise as configured in the DELAY settings below.
+//
+// You can't have CLICK_TO_FOCUS without RAISE_ON_FOCUS.
 
 #define CONFIG_CLICK_TO_FOCUS     (DynamicConfig::config.clickFocus())
 #define CONFIG_RAISE_ON_FOCUS     (DynamicConfig::config.raiseFocus())
-#define CONFIG_AUTO_RAISE         (DynamicConfig::config.autoRaiseFocus())
 
-
-// Delays when using AUTO_RAISE focus method
-// 
-// In theory these only apply when using AUTO_RAISE, not when just
-// using RAISE_ON_FOCUS without CLICK_TO_FOCUS.  First of these is the
-// usual delay before raising; second is the delay after the pointer
-// has stopped moving (only when over simple X windows such as xvt).
-
-constexpr int CONFIG_AUTO_RAISE_DELAY = 400;
-constexpr int CONFIG_POINTER_STOPPED_DELAY = 80;
 constexpr int CONFIG_DESTROY_WINDOW_DELAY = 600;
 
 // Number of pixels off the screen you have to push a window

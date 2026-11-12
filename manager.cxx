@@ -61,7 +61,6 @@ bool ignoreBadWindowErrors;
 
 #define DEFAULT_PORT 6999
 WindowManager::WindowManager(int argc, char **argv) :
-	m_focusChanging(false),
 	m_altPressed(false),
 	m_altStateRetained(false),
 	m_netwmCheckWin(0),
@@ -109,19 +108,8 @@ WindowManager::WindowManager(int argc, char **argv) :
      fprintf(stderr,
 		"Warning: X locale modifiers not supported, using default\n");
 
-	if (CONFIG_AUTO_RAISE) {
-	if (CONFIG_CLICK_TO_FOCUS) {
-		fatal("can't have auto-raise-with-delay with click-to-focus");
-	} else if (CONFIG_RAISE_ON_FOCUS) {
-		fatal("can't have raise-on-focus AND auto-raise-with-delay");
-	}
-	} else {
-	if (CONFIG_CLICK_TO_FOCUS) {
-		if (!CONFIG_RAISE_ON_FOCUS) {
+	if (CONFIG_CLICK_TO_FOCUS && !CONFIG_RAISE_ON_FOCUS)
 		fatal("can't have click-to-focus without raise-on-focus");
-		}
-	}
-	}
 
 	m_display = XOpenDisplay(nullptr);
 	if (!m_display) fatal("can't open display");
@@ -604,7 +592,7 @@ void WindowManager::clearFocus()
 	static Window w = 0;
 	Client *active = activeClient();
 
-	if (CONFIG_AUTO_RAISE || !CONFIG_CLICK_TO_FOCUS) {
+	if (!CONFIG_CLICK_TO_FOCUS) {
 	setActiveClient(0);
 	return;
 	}

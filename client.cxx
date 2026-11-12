@@ -426,33 +426,12 @@ void Client::manage(bool mapped)
 	activeClient()->installColormap();
 	}
 
-	if (CONFIG_AUTO_RAISE) {
-	m_windowManager->stopConsideringFocus();
-	focusIfAppropriate(false);
-	}
-
 	char *property = 0;
 	int length = 0;
 
 	m_windowManager->hoistToTop(this);
 
 	sendConfigureNotify(); // due to Martin Andrews
-}
-
-
-void Client::selectOnMotion(Window w, bool select)
-{
-	if (!CONFIG_AUTO_RAISE) return;
-	if (!w || w == root()) return;
-
-	if (w == m_window || m_border->hasWindow(w)) {
-	XSelectInput(display(), m_window, // not "w"
-			 ColormapChangeMask | EnterWindowMask |
-			 PropertyChangeMask | FocusChangeMask |
-			 (select ? PointerMotionMask : 0L));
-	} else {
-	XSelectInput(display(), w, select ? PointerMotionMask : 0L);
-	}
 }
 
 
@@ -493,7 +472,7 @@ void Client::activate()
 
 	if (isActive()) {
 	decorate(true);
-	if (CONFIG_AUTO_RAISE || CONFIG_RAISE_ON_FOCUS) mapRaised();
+	if (CONFIG_RAISE_ON_FOCUS) mapRaised();
 	return;
 	}
 /*!!!
@@ -1041,7 +1020,6 @@ void Client::unhide(bool map)
 	}
 	mapRaised();
 
-	if (CONFIG_AUTO_RAISE) focusIfAppropriate(false);
 	else if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick()) activate();
 	}
 
@@ -1342,7 +1320,6 @@ void Client::flipChannel(bool leaving, int newChannel)
 
 	setState(WithdrawnState);
 	m_border->reparent();
-	if (CONFIG_AUTO_RAISE) m_windowManager->stopConsideringFocus();
 	XAddToSaveSet(display(), m_window);
 	XMapWindow(display(), m_window);
 	setState(NormalState);

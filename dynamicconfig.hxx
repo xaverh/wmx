@@ -16,7 +16,6 @@ public:
 
 	char clickFocus();
 	char raiseFocus();
-	char autoRaiseFocus();
 	char rightCirculate();
 	char rightLower();
 	char rightToggleHeight();

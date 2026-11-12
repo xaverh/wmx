@@ -98,8 +98,6 @@ public:
 
 	void warpPointer();
 	void activateAndWarp();
-	void focusIfAppropriate(bool);
-	void selectOnMotion(Window, bool);
 
 	void gotoClient(); // when activated from e.g. menu or netwm task bar
 
