@@ -25,7 +25,6 @@
 // -- Chris Cannam, January 1998
 
 
-#include "dynamicconfig.hxx"
 #include <optional>
 #include <X11/X.h>
 #include <X11/keysym.h>
@@ -63,6 +62,10 @@ constexpr bool CONFIG_ADD_SCREEN_TO_COMMAND_MENU = false;
 // Default is focus-follows-pointer with no raise.
 constexpr bool CONFIG_CLICK_TO_FOCUS = false;
 constexpr bool CONFIG_RAISE_ON_FOCUS = false;
+
+// Right-button action on a window.
+enum class RightButton { Off, Circulate, Lower, ToggleHeight };
+constexpr RightButton CONFIG_RIGHT_BUTTON = RightButton::Circulate;
 
 constexpr int CONFIG_DESTROY_WINDOW_DELAY = 600;
 

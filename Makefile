@@ -24,7 +24,6 @@ SRC = border.cxx \
       buttons.cxx \
       channel.cxx \
       client.cxx \
-      config.cxx \
       events.cxx \
       keybinding.cxx \
       main.cxx \
@@ -35,7 +34,6 @@ OBJ = border.o \
       buttons.o \
       channel.o \
       client.o \
-      config.o \
       events.o \
       keybinding.o \
       main.o \
@@ -52,24 +50,23 @@ wmx: $(OBJ)
 	$(CXX) -o $@ $(OBJ) $(LDFLAGS)
 
 # Header dependencies
-border.o: border.cxx background.xpm border.hxx client.hxx config.hxx dynamicconfig.hxx \
+border.o: border.cxx background.xpm border.hxx client.hxx config.hxx \
 	general.hxx keybinding.hxx manager.hxx
-buttons.o: buttons.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
+buttons.o: buttons.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx menu.hxx
-channel.o: channel.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
+channel.o: channel.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx
-client.o: client.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
+client.o: client.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx
-config.o: config.cxx config.hxx dynamicconfig.hxx
-events.o: events.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
+events.o: events.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx
-keybinding.o: keybinding.cxx config.hxx dynamicconfig.hxx general.hxx keybinding.hxx \
+keybinding.o: keybinding.cxx config.hxx general.hxx keybinding.hxx \
 	manager.hxx
-main.o: main.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
+main.o: main.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx
-manager.o: manager.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx cursors.hxx \
+manager.o: manager.cxx border.hxx client.hxx config.hxx cursors.hxx \
 	general.hxx keybinding.hxx manager.hxx menu.hxx
-menu.o: menu.cxx border.hxx client.hxx config.hxx dynamicconfig.hxx general.hxx \
+menu.o: menu.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx menu.hxx
 
 wmx.desktop: wmx.desktop.in

@@ -23,20 +23,17 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 
 	if (!furniture) {
 		if (e->button == CONFIG_CIRCULATE_BUTTON && m_channelChangeTime == 0) {
-			if (DynamicConfig::config.rightCirculate())
+			if (CONFIG_RIGHT_BUTTON == RightButton::Circulate)
 				circulate(e->window == e->root);
-			else if (DynamicConfig::config.rightLower())
-			{
+			else if (CONFIG_RIGHT_BUTTON == RightButton::Lower) {
 				if (e->window != e->root && c) c->lower();
 			}
-			else if (DynamicConfig::config.rightToggleHeight())
-			{
+			else if (CONFIG_RIGHT_BUTTON == RightButton::ToggleHeight) {
 				if (e->window != e->root && c) {
-					if (c->isFullHeight()) {
+					if (c->isFullHeight())
 						c->unmaximise(Vertical);
-					} else {
+					else
 						c->maximise(Vertical);
-					}
 				}
 			}
 			return;
@@ -96,7 +93,6 @@ if constexpr (CONFIG_USE_CHANNEL_MENU) {
 		}
 
 	} else if (e->button == CONFIG_COMMANDMENU_BUTTON && m_channelChangeTime == 0) {
-		DynamicConfig::config.scan();
 		CommandMenu menu(this, (XEvent *)e);
 	}
 
