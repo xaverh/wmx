@@ -1153,14 +1153,13 @@ void Client::maximise(int max)
 	if (m_fixedSize || (m_transient != None))
 		return;
 
-	if constexpr (CONFIG_SAME_KEY_MAX_UNMAX) {
-		if (m_isFullHeight && m_isFullWidth) {
-			unmaximise(max);
-			return;
-		} else if (m_isFullHeight && max == Vertical) {
-			unmaximise(max);
-			return;
-		} else if (m_isFullWidth && max == Horizontal) {
+	bool toggle = (max == Vertical && !CONFIG_NORMALHEIGHT_KEY)
+		   || (max == Horizontal && !CONFIG_NORMALWIDTH_KEY)
+		   || (max == Maximum && !CONFIG_UNMAXIMISE_KEY);
+	if (toggle) {
+		if ((max == Maximum && m_isFullHeight && m_isFullWidth)
+		 || (max == Vertical && m_isFullHeight)
+		 || (max == Horizontal && m_isFullWidth)) {
 			unmaximise(max);
 			return;
 		}

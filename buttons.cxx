@@ -243,21 +243,21 @@ if constexpr (CONFIG_QUICKHEIGHT_KEY) if (key == *CONFIG_QUICKHEIGHT_KEY && c) {
 			if (c) c->maximise(Vertical);
 
 		else if constexpr (CONFIG_NORMALHEIGHT_KEY) if (key == *CONFIG_NORMALHEIGHT_KEY)
-			if (c && !CONFIG_SAME_KEY_MAX_UNMAX)
+			if (c)
 						c->unmaximise(Vertical);
 
 		else if constexpr (CONFIG_FULLWIDTH_KEY) if (key == *CONFIG_FULLWIDTH_KEY)
 			if (c) c->maximise(Horizontal);
 
 		else if constexpr (CONFIG_NORMALWIDTH_KEY) if (key == *CONFIG_NORMALWIDTH_KEY)
-			if (c && !CONFIG_SAME_KEY_MAX_UNMAX)
+			if (c)
 						c->unmaximise(Horizontal);
 
 		else if constexpr (CONFIG_MAXIMISE_KEY) if (key == *CONFIG_MAXIMISE_KEY)
 			if (c) c->maximise(Maximum);
 
 		else if constexpr (CONFIG_UNMAXIMISE_KEY) if (key == *CONFIG_UNMAXIMISE_KEY)
-			if (c && !CONFIG_SAME_KEY_MAX_UNMAX)
+			if (c)
 						c->unmaximise(Maximum);
 
 		else if constexpr (CONFIG_STICKY_KEY) if (key == *CONFIG_STICKY_KEY)

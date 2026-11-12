@@ -123,7 +123,6 @@ constexpr std::optional<KeySym> CONFIG_FULLWIDTH_KEY = XK_KP_Add;
 constexpr std::optional<KeySym> CONFIG_NORMALWIDTH_KEY = XK_KP_Subtract;
 constexpr std::optional<KeySym> CONFIG_MAXIMISE_KEY = XK_Home;
 constexpr std::optional<KeySym> CONFIG_UNMAXIMISE_KEY = XK_End;
-constexpr bool CONFIG_SAME_KEY_MAX_UNMAX = false;
 
 // The next two may clash badly with Emacs, if you use Alt as the
 // modifier.  The commented variants might work better for some.
