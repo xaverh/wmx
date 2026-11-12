@@ -210,7 +210,7 @@ constexpr int CONFIG_MENU_FONT_SIZE = 12;
 // CONFIG_TAB_MARGIN defines the size of the gap on the left and right of the
 // text in the tab.
 
-#define CONFIG_TAB_MARGIN   (DynamicConfig::config.tabMargin())
+constexpr int CONFIG_TAB_MARGIN = 2;
 
 
 // If USE_PLAIN_X_CURSORS is true, wmx will use cursors from the

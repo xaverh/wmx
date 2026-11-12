@@ -27,7 +27,6 @@ public:
 	char rightLower();
 	char rightToggleHeight();
 	char passFocusClick();
-	int  tabMargin();
 
 	static DynamicConfig config;
 

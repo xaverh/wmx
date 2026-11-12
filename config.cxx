@@ -24,7 +24,6 @@ struct DynamicConfigImpl
 	char disable;	// 0 = New Window option, 1 = no New
 	char rightBt;	// 0 = disable, 1 = circulate, 2 = lower, 4 = height
 	char passfocusclick;// 0 = no, 1 = yes
-	char tabmargin;
 };  
 
 DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
@@ -64,7 +63,6 @@ DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
 	m_impl->disable = 0;        // 0 = allow New window, 1 = don't
 	m_impl->rightBt = 1;	// 0 = disable, 1 = circulate, 2 = lower
 	m_impl->passfocusclick = 1;
-	m_impl->tabmargin = 2;
 
 	scan(1);
 }
@@ -87,7 +85,6 @@ char DynamicConfig::rightCirculate() { return m_impl->rightBt & 1; }
 char DynamicConfig::rightLower() { return m_impl->rightBt & 2; }
 char DynamicConfig::rightToggleHeight() { return m_impl->rightBt & 4; }
 char DynamicConfig::passFocusClick() { return m_impl->passfocusclick; }
-int  DynamicConfig::tabMargin() { return m_impl->tabmargin; }
 
 void DynamicConfig::scan(char startup)
 {
@@ -155,10 +152,6 @@ void DynamicConfig::update(char *string)
 		else if (OPTION("circulate")) m_impl->rightBt = 1;
 		else if (OPTION("lower")) m_impl->rightBt = 2;
 		else if (OPTION("toggleheight")) m_impl->rightBt = 4;
-	}
-
-		if (OPTION("tabmargin:")) {
-			m_impl->tabmargin = strtol(s, &s, 10);
 	}
 
 	if (*s != '\0') {
