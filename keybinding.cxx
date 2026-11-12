@@ -82,6 +82,10 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 	if (pass == 0) {
 		// end of first pass
 		table_count = count;
+		if (count == 0) {
+		table = nullptr;
+		break;
+		}
 		p = table = (struct key_entry *)
 		malloc( count * sizeof(struct key_entry) );
 		if (table == nullptr) {
@@ -103,7 +107,7 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 	}
 
 	closedir(dir);
-
+	return table_count;
 }
 
 Keybinding::Keybinding(WindowManager *const w_mgr, char *dir, 
