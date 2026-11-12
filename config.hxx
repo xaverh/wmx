@@ -48,7 +48,7 @@ constexpr char const *CONFIG_NEW_WINDOW_COMMAND_OPTIONS[] = {
 	nullptr
 };
 // alternatively,
-#define CONFIG_DISABLE_NEW_WINDOW_COMMAND (DynamicConfig::config.disableNew())
+constexpr bool CONFIG_DISABLE_NEW_WINDOW_COMMAND = false;
 
 // Area where [exit wmx] is added (0 -> everywhere -# -> px from other side)
 constexpr int CONFIG_EXIT_CLICK_SIZE_X = 0;
