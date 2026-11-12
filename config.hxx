@@ -81,7 +81,7 @@ constexpr bool CONFIG_ADD_SCREEN_TO_COMMAND_MENU = false;
 // usual delay before raising; second is the delay after the pointer
 // has stopped moving (only when over simple X windows such as xvt).
 
-#define CONFIG_AUTO_RAISE_DELAY       (DynamicConfig::config.raiseDelay())
+constexpr int CONFIG_AUTO_RAISE_DELAY = 400;
 constexpr int CONFIG_POINTER_STOPPED_DELAY = 80;
 constexpr int CONFIG_DESTROY_WINDOW_DELAY = 600;
 
@@ -284,8 +284,8 @@ constexpr int CONFIG_QUICK_FLIP_DELAY = 500;
 // machine is fast and you're really hyper, you might even like a
 // delay of 0ms.
 
-#define CONFIG_MAD_FEEDBACK       (DynamicConfig::config.useFeedback())
-#define CONFIG_FEEDBACK_DELAY     (DynamicConfig::config.feedbackDelay())
+constexpr bool CONFIG_MAD_FEEDBACK = true;
+constexpr int CONFIG_FEEDBACK_DELAY = 300;
 
 // Position of the geometry window:
 // X < 0 left, X > 0 right,  X = 0 center

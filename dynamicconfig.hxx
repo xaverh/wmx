@@ -17,11 +17,8 @@ public:
 	char clickFocus();
 	char raiseFocus();
 	char autoRaiseFocus();
-	int  raiseDelay();
 	char useKeyboard();
 	char fullMenu();
-	char useFeedback();
-	int  feedbackDelay();
 	char disableNew();
 	char rightCirculate();
 	char rightLower();
