@@ -45,7 +45,7 @@ public:
 	Window root()      { return m_windowManager->root();    }
 
 	bool isKeyboardMenuEvent (XEvent *e) {
-		return (CONFIG_WANT_KEYBOARD_MENU && (e->type == KeyPress));
+		return e->type == KeyPress;
 	}
 
 	virtual void showFeedback(int) { }

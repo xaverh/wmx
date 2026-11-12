@@ -135,9 +135,6 @@ constexpr std::optional<KeySym> CONFIG_DESTROY_KEY = XK_BackSpace;
 //constexpr std::optional<KeySym> CONFIG_DESTROY_KEY = XK_Delete;
 //constexpr std::optional<KeySym> CONFIG_DESTROY_KEY = XK_Insert;
 
-// If WANT_KEYBOARD_MENU is true, then the MENU_KEY, when pressed with
-// the modifier, will call up a client menu with keyboard navigation
-constexpr bool CONFIG_WANT_KEYBOARD_MENU = true;
 constexpr std::optional<KeySym> CONFIG_CLIENT_MENU_KEY = XK_Menu;
 constexpr std::optional<KeySym> CONFIG_COMMAND_MENU_KEY = XK_Multi_key;
 constexpr bool CONFIG_EXIT_ON_KBD_MENU = true;

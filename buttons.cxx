@@ -264,15 +264,9 @@ if constexpr (CONFIG_QUICKHEIGHT_KEY) if (key == *CONFIG_QUICKHEIGHT_KEY && c) {
 			if (c) c->setSticky(!(c->isSticky()));
 
 		else if constexpr (CONFIG_CLIENT_MENU_KEY) if (key == *CONFIG_CLIENT_MENU_KEY)
-			if constexpr (CONFIG_WANT_KEYBOARD_MENU) {
 			ClientMenu menu(this, (XEvent *)ev);
-
-			}
 		else if constexpr (CONFIG_COMMAND_MENU_KEY) if (key == *CONFIG_COMMAND_MENU_KEY)
-			if constexpr (CONFIG_WANT_KEYBOARD_MENU) {
 			CommandMenu menu(this, (XEvent *)ev);
-
-			}
 
 		}
 	}
