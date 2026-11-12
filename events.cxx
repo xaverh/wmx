@@ -134,19 +134,13 @@ void WindowManager::nextEvent(XEvent *e)
 
 	waiting:
 
-	if (m_channelChangeTime > 0 || CONFIG_CLOCK) {
+	if (m_channelChangeTime > 0) {
 
 		Time t = timestamp(true);
 
 		if (m_channelChangeTime > 0 && t >= m_channelChangeTime) {
 		instateChannel();
 		}
-
-			if constexpr (CONFIG_CLOCK && (m_clockUpdateTime == CurrentTime ||
-								 t >= m_clockUpdateTime + 60000)) {
-				m_clockUpdateTime = t;
-				updateClock();
-			}
 	}
 
 	if (QLength(m_display) > 0) {

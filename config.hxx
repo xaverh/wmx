@@ -231,7 +231,6 @@ constexpr bool CONFIG_USE_PLAIN_X_CURSORS = true;
 #define CONFIG_BUTTON_BACKGROUND  (DynamicConfig::config.frameBackground())
 constexpr char const *CONFIG_BORDERS = "black";
 constexpr char const *CONFIG_CHANNEL_NUMBER = "green";
-constexpr char const *CONFIG_CLOCK_NUMBER = "gray90";
 
 #define CONFIG_MENU_FOREGROUND    (DynamicConfig::config.tabForeground())
 #define CONFIG_MENU_BACKGROUND    (DynamicConfig::config.tabBackground())
@@ -293,12 +292,6 @@ constexpr int CONFIG_QUICK_FLIP_DELAY = 500;
 // Y < 0 top,  Y > 0 bottom, Y = 0 center
 constexpr int CONFIG_GEOMETRY_X_POS = 0;
 constexpr int CONFIG_GEOMETRY_Y_POS = 0;
-
-// Set CLOCK if you want wmx to display a clock permanently in the
-// background at top-left of screen 0.  Use CONFIG_CLOCK_NUMBER
-// to control the colour of the clock digits.
-
-constexpr bool CONFIG_CLOCK = false;
 
 #endif
 
