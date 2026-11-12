@@ -611,34 +611,21 @@ void WindowManager::eventClient(XClientMessageEvent *e)
 
 void Client::eventClient(XClientMessageEvent *e)
 {
-	//!!! review this
-
-	char *atomName0 = XGetAtomName(display(), e->message_type);
-	XFree(atomName0);
-
-
-
 	if (e->message_type == Atoms::netwm_activeWindow) {
 		gotoClient();
 		return;
 	}
 
 	if (e->message_type == Atoms::wm_changeState) {
-	if (e->format == 32 && e->data.l[0] == IconicState) {
-		if (isNormal()) hide();
-			else if (isHidden()) gotoClient(); // seems to be necessary for some taskbars
-		return;
-	} else if (e->format == 32 && e->data.l[0] == NormalState) {
+		if (e->format == 32 && e->data.l[0] == IconicState) {
+			if (isNormal()) hide();
+			else if (isHidden()) gotoClient();
+			return;
+		} else if (e->format == 32 && e->data.l[0] == NormalState) {
 			gotoClient();
 			return;
 		}
-	} else if (e->message_type == 0xed) {  // What is this for?
-	XUnmapWindow(display(), window());
-	return;
 	}
-
-	char *atomName = XGetAtomName(display(), e->message_type);
-	XFree(atomName);
 }
 
 
