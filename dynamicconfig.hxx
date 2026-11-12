@@ -20,7 +20,6 @@ public:
 	char rightCirculate();
 	char rightLower();
 	char rightToggleHeight();
-	char passFocusClick();
 
 	static DynamicConfig config;
 

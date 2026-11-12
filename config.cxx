@@ -17,7 +17,6 @@ struct DynamicConfigImpl
 	char path[1000];	// Path to Options-Link
 	char focus; 	// 1 = Click , 2 = Raise, 4 = Autoraise
 	char rightBt;	// 0 = disable, 1 = circulate, 2 = lower, 4 = height
-	char passfocusclick;// 0 = no, 1 = yes
 };  
 
 DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
@@ -50,7 +49,6 @@ DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
 
 	m_impl->focus = 0;	// 1 = Click , 2 = Raise, 4 = Autoraise
 	m_impl->rightBt = 1;	// 0 = disable, 1 = circulate, 2 = lower
-	m_impl->passfocusclick = 1;
 
 	scan(1);
 }
@@ -66,7 +64,6 @@ char DynamicConfig::autoRaiseFocus() { return m_impl->focus & 4; }
 char DynamicConfig::rightCirculate() { return m_impl->rightBt & 1; }
 char DynamicConfig::rightLower() { return m_impl->rightBt & 2; }
 char DynamicConfig::rightToggleHeight() { return m_impl->rightBt & 4; }
-char DynamicConfig::passFocusClick() { return m_impl->passfocusclick; }
 
 void DynamicConfig::scan(char startup)
 {
@@ -92,11 +89,6 @@ void DynamicConfig::update(char *string)
 
 	s = strtok(string, "/");
 	do {
-
-	if (OPTION("passclick:")) {
-		if (OPTION("on")) m_impl->passfocusclick = 1;
-		else if (OPTION("off")) m_impl->passfocusclick = 0;
-	}
 
 	if (OPTION("focus:")) {
 		if (OPTION("click")) m_impl->focus = 3;

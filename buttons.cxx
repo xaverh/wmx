@@ -15,10 +15,7 @@ void WindowManager::eventButton(XButtonEvent *e, XEvent *ev)
 
 	// We shouldn't be getting button events for non-focusable clients,
 	// but we'd better check just in case.
-	if (CONFIG_PASS_FOCUS_CLICK || c->isNonFocusable())
-		XAllowEvents(display(), ReplayPointer, e->time);            
-	else
-		XAllowEvents(display(), SyncPointer, e->time);
+	XAllowEvents(display(), ReplayPointer, e->time);
 
 	bool furniture = (c && ((c->type() == DesktopClient) ||
 							(c->type() == DockClient)));

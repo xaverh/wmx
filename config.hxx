@@ -70,7 +70,6 @@ constexpr bool CONFIG_ADD_SCREEN_TO_COMMAND_MENU = false;
 #define CONFIG_RAISE_ON_FOCUS     (DynamicConfig::config.raiseFocus())
 #define CONFIG_AUTO_RAISE         (DynamicConfig::config.autoRaiseFocus())
 
-#define CONFIG_PASS_FOCUS_CLICK   (DynamicConfig::config.passFocusClick())
 
 // Delays when using AUTO_RAISE focus method
 // 
