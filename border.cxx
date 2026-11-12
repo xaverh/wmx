@@ -1,4 +1,5 @@
 #include "border.hxx"
+#include <filesystem>
 #include "client.hxx"
 #include "manager.hxx"
 
@@ -248,29 +249,17 @@ void Border::initialiseStatics(WindowManager *wm)
 	attrs.colormap = XDefaultColormap(wm->display(), i);
 	attrs.depth = XDefaultDepth(wm->display(), i);
 
-		char *home = getenv ("HOME");
+		char *home = getenv("HOME");
 		if (home) {
-			char *pixMapPath = (char *) malloc (sizeof (char) * (strlen (home)
-																 + strlen (CONFIG_COMMAND_MENU) + 20));
-			if (pixMapPath) {
-				strcpy (pixMapPath, home);
-				strcat (pixMapPath, "/");
-				strcat (pixMapPath, CONFIG_COMMAND_MENU);
-				strcat (pixMapPath, "/border.xpm");
-
-				// look for background pixmap file in
-				// the users .wmx directory. It is *not*
-				// an error, if none is found. (joze)
-				// 
-				// (todo: omit compiling in default pixmap, and look for
-				//  it in systemwide directory)
-				if (XpmReadFileToPixmap (wm->display(), wm->root(), pixMapPath,
-										 &m_backgroundPixmap, nullptr, &attrs)
-					!= XpmSuccess) {
-					use_dynamic = false;
-				}
-				free (pixMapPath);
-			}
+			namespace fs = std::filesystem;
+			auto pixMapPath = (fs::path(home) / CONFIG_COMMAND_MENU / "border.xpm").string();
+			// look for background pixmap file in the users .wmx directory.
+			// It is not an error if none is found.
+			if (XpmReadFileToPixmap(wm->display(), wm->root(),
+						pixMapPath.c_str(),
+						&m_backgroundPixmap, nullptr, &attrs)
+				!= XpmSuccess)
+				use_dynamic = false;
 		}
 
 		if (use_dynamic == false) {
