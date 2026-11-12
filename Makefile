@@ -64,7 +64,7 @@ keybinding.o: keybinding.cxx config.hxx general.hxx keybinding.hxx \
 	manager.hxx
 main.o: main.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx
-manager.o: manager.cxx border.hxx client.hxx config.hxx cursors.hxx \
+manager.o: manager.cxx border.hxx client.hxx config.hxx \
 	general.hxx keybinding.hxx manager.hxx menu.hxx
 menu.o: menu.cxx border.hxx client.hxx config.hxx general.hxx \
 	keybinding.hxx manager.hxx menu.hxx

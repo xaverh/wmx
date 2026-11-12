@@ -11,7 +11,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "cursors.hxx"
 #include <X11/cursorfont.h>
 
 #include <X11/extensions/Xcomposite.h>
@@ -331,32 +330,9 @@ int WindowManager::errorHandler(Display *d, XErrorEvent *e)
 }    
 
 
-static Cursor makeCursor(Display *d, Window w,
-			 unsigned char *bits, unsigned char *mask_bits,
-			 int width, int height, int xhot, int yhot,
-			 XColor *fg, XColor *bg, int fontIndex)
+static Cursor makeCursor(Display *d, int fontIndex)
 {
-	Cursor cursor;
-
-	if constexpr (CONFIG_USE_PLAIN_X_CURSORS) {
-
-	cursor = XCreateFontCursor(d, fontIndex);
-
-	} else {
-
-	Pixmap pixmap =
-		XCreateBitmapFromData(d, w, (char const *)bits, width, height);
-
-	Pixmap mask =
-		XCreateBitmapFromData(d, w, (char const *)mask_bits, width,height);
-
-	cursor = XCreatePixmapCursor(d, pixmap, mask, fg, bg, xhot, yhot);
-
-	XFreePixmap(d, pixmap);
-	XFreePixmap(d, mask);
-	}
-
-	return cursor;
+	return XCreateFontCursor(d, fontIndex);
 }
 
 void WindowManager::setScreenFromRoot(Window root)
@@ -393,31 +369,11 @@ void WindowManager::initialiseScreen()
 		if (!XAllocNamedColor(m_display, m_defaultColormap[i], "white", &white, &temp))
 	fatal("couldn't load colour \"white\"!");
 
-		m_cursor = makeCursor
-	(m_display, m_root[i], cursor_bits, cursor_mask_bits,
-	 cursor_width, cursor_height, cursor_x_hot,
-	 cursor_y_hot, &black, &white, XC_top_left_arrow);
-
-		m_xCursor = makeCursor
-	(m_display, m_root[i], ninja_cross_bits, ninja_cross_mask_bits,
-	 ninja_cross_width, ninja_cross_height, ninja_cross_x_hot,
-	 ninja_cross_y_hot, &black, &white, XC_X_cursor);
-
-		m_hCursor = makeCursor
-	(m_display, m_root[i], cursor_right_bits, cursor_right_mask_bits,
-	 cursor_right_width, cursor_right_height, cursor_right_x_hot,
-	 cursor_right_y_hot, &black, &white, XC_right_side);
-
-		m_vCursor = makeCursor
-	(m_display, m_root[i], cursor_down_bits, cursor_down_mask_bits,
-	 cursor_down_width, cursor_down_height, cursor_down_x_hot,
-	 cursor_down_y_hot, &black, &white, XC_bottom_side);
-
-		m_vhCursor = makeCursor
-	(m_display, m_root[i], cursor_down_right_bits, cursor_down_right_mask_bits,
-	 cursor_down_right_width, cursor_down_right_height,
-	 cursor_down_right_x_hot, cursor_down_right_y_hot, &black, &white,
-	 XC_bottom_right_corner);
+		m_cursor = makeCursor(m_display, XC_top_left_arrow);
+		m_xCursor = makeCursor(m_display, XC_X_cursor);
+		m_hCursor = makeCursor(m_display, XC_right_side);
+		m_vCursor = makeCursor(m_display, XC_bottom_side);
+		m_vhCursor = makeCursor(m_display, XC_bottom_right_corner);
 
 		XSetWindowAttributes attr;
 		attr.cursor = m_cursor;

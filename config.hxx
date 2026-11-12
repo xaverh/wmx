@@ -192,14 +192,6 @@ constexpr int CONFIG_MENU_FONT_SIZE = 12;
 constexpr int CONFIG_TAB_MARGIN = 2;
 
 
-// If USE_PLAIN_X_CURSORS is true, wmx will use cursors from the
-// standard X cursor font; otherwise it will install its own.  You may
-// wish to set this if your X client and server are on different
-// endian machines, or if you've aliased the cursor font to something
-// else you like better, or if you just prefer the plain X cursors
-
-constexpr bool CONFIG_USE_PLAIN_X_CURSORS = true;
-
 // Colours for window decorations.  The BORDERS one is for the
 // one-pixel border around the edge of each piece of decoration, not
 // for the whole decoration
