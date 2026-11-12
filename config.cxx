@@ -16,7 +16,6 @@ struct DynamicConfigImpl
 	char options[1000];	// Old options-string
 	char path[1000];	// Path to Options-Link
 	char focus; 	// 1 = Click , 2 = Raise, 4 = Autoraise
-	char kbd;		// 1 = Keyboard on
 	char disable;	// 0 = New Window option, 1 = no New
 	char rightBt;	// 0 = disable, 1 = circulate, 2 = lower, 4 = height
 	char passfocusclick;// 0 = no, 1 = yes
@@ -51,7 +50,6 @@ DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
 	}
 
 	m_impl->focus = 0;	// 1 = Click , 2 = Raise, 4 = Autoraise
-	m_impl->kbd = 1;		// 1 = Keyboard on
 	m_impl->disable = 0;        // 0 = allow New window, 1 = don't
 	m_impl->rightBt = 1;	// 0 = disable, 1 = circulate, 2 = lower
 	m_impl->passfocusclick = 1;
@@ -67,7 +65,6 @@ DynamicConfig::~DynamicConfig()
 char DynamicConfig::clickFocus() { return m_impl->focus & 1; }
 char DynamicConfig::raiseFocus() { return m_impl->focus & 2; }
 char DynamicConfig::autoRaiseFocus() { return m_impl->focus & 4; }
-char DynamicConfig::useKeyboard() { return m_impl->kbd & 1; }
 char DynamicConfig::disableNew() { return m_impl->disable & 1; }
 char DynamicConfig::rightCirculate() { return m_impl->rightBt & 1; }
 char DynamicConfig::rightLower() { return m_impl->rightBt & 2; }
@@ -102,11 +99,6 @@ void DynamicConfig::update(char *string)
 	if (OPTION("new:")) {
 		if (OPTION("on")) m_impl->disable = 0;
 		else if (OPTION("off")) m_impl->disable = 1;
-	}
-
-	if (OPTION("keyboard:")) {
-		if (OPTION("on")) m_impl->kbd = 1;
-		else if (OPTION("off")) m_impl->kbd = 0;
 	}
 
 	if (OPTION("passclick:")) {

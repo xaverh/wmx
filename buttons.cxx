@@ -178,8 +178,7 @@ void WindowManager::eventKeyPress(XKeyEvent *ev)
 	enum {Vertical, Maximum, Horizontal};
 	KeySym key = XKeycodeToKeysym(display(), ev->keycode, 0);
 
-	if (CONFIG_USE_KEYBOARD) {
-
+	
 	Client *c = windowToClient(ev->window);
 
 		if constexpr (CONFIG_ALT_KEY) if (key == *CONFIG_ALT_KEY) {
@@ -295,7 +294,6 @@ if constexpr (CONFIG_QUICKHEIGHT_KEY) if (key == *CONFIG_QUICKHEIGHT_KEY && c) {
 
 	XSync(display(), false);
 	XUngrabKeyboard(display(), CurrentTime);
-	}
 
 	return;
 }

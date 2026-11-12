@@ -215,8 +215,7 @@ void Client::manage(bool mapped)
 
 
 
-	if (CONFIG_USE_KEYBOARD) {
-
+	
 	int i;
 	int keycode;
 

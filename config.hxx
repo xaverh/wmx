@@ -119,7 +119,6 @@ constexpr int MENU_ENTRY_MAXLENGTH = 80;
 // ========================
 
 // Allow keyboard control?
-#define CONFIG_USE_KEYBOARD       (DynamicConfig::config.useKeyboard())
 
 // This is the key for wm controls: e.g. Alt/Left and Alt/Right to
 // flip channels, and Alt/Tab to switch windows.  (On my 105-key
