@@ -37,7 +37,7 @@
 
 // List visible as well as hidden clients on the root menu?  (Visible
 // ones will be towards the bottom of the menu, flush-right.)
-#define CONFIG_EVERYTHING_ON_ROOT_MENU (DynamicConfig::config.fullMenu())
+constexpr bool CONFIG_EVERYTHING_ON_ROOT_MENU = true;
 
 // What to run to get a new window (from the "New" menu option)
 constexpr char const *CONFIG_NEW_WINDOW_LABEL = "New";

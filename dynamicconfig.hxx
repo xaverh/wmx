@@ -18,7 +18,6 @@ public:
 	char raiseFocus();
 	char autoRaiseFocus();
 	char useKeyboard();
-	char fullMenu();
 	char disableNew();
 	char rightCirculate();
 	char rightLower();
