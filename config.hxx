@@ -39,16 +39,14 @@
 // ones will be towards the bottom of the menu, flush-right.)
 constexpr bool CONFIG_EVERYTHING_ON_ROOT_MENU = true;
 
-// What to run to get a new window (from the "New" menu option)
+// "New" menu entry.  First element is the command; the rest are
+// arguments.  An empty list (just nullptr) omits the entry.
+// Label is display text only.
 constexpr char const *CONFIG_NEW_WINDOW_LABEL = "New";
-constexpr char const *CONFIG_NEW_WINDOW_COMMAND = "x-terminal-emulator";
-// Null-terminated argument list for the New command.
-// Example with flags: { "-ls", "-sb", "-sl", "1024", nullptr }
-constexpr char const *CONFIG_NEW_WINDOW_COMMAND_OPTIONS[] = {
+constexpr char const *CONFIG_NEW_WINDOW[] = {
+	"x-terminal-emulator",
 	nullptr
 };
-// alternatively,
-constexpr bool CONFIG_DISABLE_NEW_WINDOW_COMMAND = false;
 
 // Area where [exit wmx] is added (0 -> everywhere -# -> px from other side)
 constexpr int CONFIG_EXIT_CLICK_SIZE_X = 0;

@@ -834,14 +834,13 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = nullptr*/)
 		if (file) {
 		execl(file, name, arg1, nullptr);
 		}
-		else if (strcmp(CONFIG_NEW_WINDOW_COMMAND, name) == 0) {
+		else if (CONFIG_NEW_WINDOW[0] && strcmp(CONFIG_NEW_WINDOW[0], name) == 0) {
 			size_t n = 0;
-			while (CONFIG_NEW_WINDOW_COMMAND_OPTIONS[n]) ++n;
-			char const *argv[n + 2];
-			argv[0] = name;
+			while (CONFIG_NEW_WINDOW[n]) ++n;
+			char const *argv[n + 1];
 			for (size_t i = 0; i < n; ++i)
-				argv[i + 1] = CONFIG_NEW_WINDOW_COMMAND_OPTIONS[i];
-			argv[n + 1] = nullptr;
+				argv[i] = CONFIG_NEW_WINDOW[i];
+			argv[n] = nullptr;
 			execvp(name, const_cast<char **>(argv));
 		}
 		else {

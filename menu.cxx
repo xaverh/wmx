@@ -499,13 +499,13 @@ ClientMenu::ClientMenu(WindowManager *manager, XEvent *e)
 	return;
 	}
 
-	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND && selecting >= 0) {
+	if (!CONFIG_NEW_WINDOW[0] && selecting >= 0) {
 	++selecting; // ha ha ha!
 	++m_nHidden;
 	}
 
 	if (selecting == 0) {
-	m_windowManager->spawn((char *)CONFIG_NEW_WINDOW_COMMAND, nullptr);
+	m_windowManager->spawn((char *)CONFIG_NEW_WINDOW[0], nullptr);
 	return;
 	}
 
@@ -546,7 +546,7 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 	}
 
 	int nh = m_clients.size();
-	if (!CONFIG_DISABLE_NEW_WINDOW_COMMAND) ++nh;
+	if (CONFIG_NEW_WINDOW[0]) ++nh;
 
 	if (CONFIG_EVERYTHING_ON_ROOT_MENU) {
 	for (i = 0; i < m_windowManager->clients().size(); ++i) {
@@ -561,7 +561,7 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 	}
 
 	int n = m_clients.size();
-	if (!CONFIG_DISABLE_NEW_WINDOW_COMMAND) ++n;
+	if (CONFIG_NEW_WINDOW[0]) ++n;
 
 	int mx = DisplayWidth (display(), screen()) - 1;
 	int my = DisplayHeight(display(), screen()) - 1;
@@ -585,7 +585,7 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 
 	for (i = 0; i < n; ++i) {
 
-	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == false) {
+	if (CONFIG_NEW_WINDOW[0]) {
 
 		if (i == 0) items[i] = CONFIG_NEW_WINDOW_LABEL;
 		else if (m_allowExit && i > m_clients.size()) items[i] = "[Exit wmx]";
@@ -609,7 +609,7 @@ Client *ClientMenu::checkFeedback(int item)
 {
 	if (CONFIG_MAD_FEEDBACK == false) return nullptr;
 
-	if (CONFIG_DISABLE_NEW_WINDOW_COMMAND == false) {
+	if (CONFIG_NEW_WINDOW[0]) {
 
 	if (item <= 0 || item > m_clients.size()+1) return nullptr;
 	if (m_allowExit && item == m_clients.size() + 1) return nullptr;
