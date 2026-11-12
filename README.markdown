@@ -46,6 +46,8 @@ The modifier is `CONFIG_ALT_KEY` (default `Super_L`). Bindings are `std::optiona
 | Alt/PageUp, Alt/PageDown | Full height / restore height |
 | Alt/Home, Alt/End | Maximise / unmaximise |
 | Alt/KP_Add, Alt/KP_Subtract | Full width / restore width |
+
+Each of these is a pair. Leave the restore key as `std::nullopt` and the first key toggles.
 | Alt/Left, Alt/Right | Change channel |
 | Alt/Fn | Jump to channel *n* |
 | Alt/Pause | Sticky toggle |

@@ -116,7 +116,9 @@ constexpr std::optional<KeySym> CONFIG_HIDE_KEY = XK_Return;
 constexpr std::optional<KeySym> CONFIG_STICKY_KEY = XK_Pause;
 constexpr std::optional<KeySym> CONFIG_RAISE_KEY = XK_Up;
 constexpr std::optional<KeySym> CONFIG_LOWER_KEY = XK_Down;
-// Prior and Next should be the same as Page_Up and Page_Down in R6
+// Prior and Next should be the same as Page_Up and Page_Down in R6.
+// Each pair is an on-key and an off-key.  Leave the off-key as
+// std::nullopt and the on-key toggles.
 constexpr std::optional<KeySym> CONFIG_FULLHEIGHT_KEY = XK_Prior;
 constexpr std::optional<KeySym> CONFIG_NORMALHEIGHT_KEY = XK_Next;
 constexpr std::optional<KeySym> CONFIG_FULLWIDTH_KEY = XK_KP_Add;
