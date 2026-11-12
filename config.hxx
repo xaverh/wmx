@@ -225,15 +225,15 @@ constexpr bool CONFIG_USE_PLAIN_X_CURSORS = true;
 // one-pixel border around the edge of each piece of decoration, not
 // for the whole decoration
 
-#define CONFIG_TAB_FOREGROUND     (DynamicConfig::config.tabForeground())
-#define CONFIG_TAB_BACKGROUND     (DynamicConfig::config.tabBackground())
-#define CONFIG_FRAME_BACKGROUND   (DynamicConfig::config.frameBackground())
-#define CONFIG_BUTTON_BACKGROUND  (DynamicConfig::config.frameBackground())
+constexpr char const *CONFIG_TAB_FOREGROUND = "black";
+constexpr char const *CONFIG_TAB_BACKGROUND = "gray80";
+constexpr char const *CONFIG_FRAME_BACKGROUND = "gray95";
+constexpr char const *CONFIG_BUTTON_BACKGROUND = "gray95";
 constexpr char const *CONFIG_BORDERS = "black";
 constexpr char const *CONFIG_CHANNEL_NUMBER = "green";
 
-#define CONFIG_MENU_FOREGROUND    (DynamicConfig::config.tabForeground())
-#define CONFIG_MENU_BACKGROUND    (DynamicConfig::config.tabBackground())
+constexpr char const *CONFIG_MENU_FOREGROUND = "black";
+constexpr char const *CONFIG_MENU_BACKGROUND = "gray80";
 constexpr char const *CONFIG_MENU_BORDERS = "black";
 
 // Pixel width for the bit of frame to the left of the window and the

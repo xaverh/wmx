@@ -25,9 +25,6 @@ struct DynamicConfigImpl
 	char rightBt;	// 0 = disable, 1 = circulate, 2 = lower, 4 = height
 	char passfocusclick;// 0 = no, 1 = yes
 	char tabmargin;
-	char tabfg[COLOR_LEN];     // black
-	char tabbg[COLOR_LEN];     // gray80
-	char framebg[COLOR_LEN];   // gray95
 };  
 
 DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
@@ -68,9 +65,6 @@ DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
 	m_impl->rightBt = 1;	// 0 = disable, 1 = circulate, 2 = lower
 	m_impl->passfocusclick = 1;
 	m_impl->tabmargin = 2;
-	strcpy(m_impl->tabfg, "black");
-	strcpy(m_impl->tabbg, "gray80");
-	strcpy(m_impl->framebg, "gray95");
 
 	scan(1);
 }
@@ -94,9 +88,6 @@ char DynamicConfig::rightLower() { return m_impl->rightBt & 2; }
 char DynamicConfig::rightToggleHeight() { return m_impl->rightBt & 4; }
 char DynamicConfig::passFocusClick() { return m_impl->passfocusclick; }
 int  DynamicConfig::tabMargin() { return m_impl->tabmargin; }
-char *DynamicConfig::tabForeground() { return m_impl->tabfg; }
-char *DynamicConfig::tabBackground() { return m_impl->tabbg; }
-char *DynamicConfig::frameBackground() { return m_impl->framebg; }
 
 void DynamicConfig::scan(char startup)
 {
@@ -168,24 +159,6 @@ void DynamicConfig::update(char *string)
 
 		if (OPTION("tabmargin:")) {
 			m_impl->tabmargin = strtol(s, &s, 10);
-	}
-
-	if (OPTION("tabfg:")) {
-		strncpy(m_impl->tabfg, s, COLOR_LEN-1);
-		m_impl->tabfg[COLOR_LEN-1] = '\0';	// prevent unterminated string
-		s += strlen(m_impl->tabfg);		// avoid error message below
-	}
-
-	if (OPTION("tabbg:")) {
-		strncpy(m_impl->tabbg, s, COLOR_LEN-1);
-		m_impl->tabbg[COLOR_LEN-1] = '\0';
-		s += strlen(m_impl->tabbg);
-	}
-
-	if (OPTION("framebg:")) {
-		strncpy(m_impl->framebg, s, COLOR_LEN-1);
-		m_impl->framebg[COLOR_LEN-1] = '\0';
-		s += strlen(m_impl->framebg);
 	}
 
 	if (*s != '\0') {

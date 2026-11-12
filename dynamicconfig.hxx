@@ -28,9 +28,6 @@ public:
 	char rightToggleHeight();
 	char passFocusClick();
 	int  tabMargin();
-	char *tabForeground();
-	char *tabBackground();
-	char *frameBackground();
 
 	static DynamicConfig config;
 
