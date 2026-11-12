@@ -813,14 +813,7 @@ int compare_client_names_a(void const *p, void const *q)
 	return compare_client_names(c1, c2);
 }
 
-void WindowManager::print_clients(int fd) {
-	  int i;
-	  char buff[1024];
-	  Client *c;
-	  XTextProperty text_prop;
-	  char const *res_name = "?";
 
-	  //}
 
 	  if (m_clients.size() == 0) {
 	  sprintf(buff, "No clients!\n");

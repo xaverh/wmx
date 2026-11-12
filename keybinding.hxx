@@ -13,7 +13,6 @@ class Keybinding {
  public:
 	Keybinding(WindowManager *const, char *, bool);
 	~Keybinding();
-	void setup(void);
 	char *command_for_keysym(KeySym sym);
 	void spawn(char *command, int);
 	void grab_each_key(Display *display, Window window, int mask);

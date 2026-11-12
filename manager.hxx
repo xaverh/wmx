@@ -97,7 +97,6 @@ public:
 	class Keybinding *key_binding_with_mod;
 	class Keybinding *key_binding_without_mod;
 
-	void print_clients(int);
 	void add_fd_to_watch(int);
 	void remove_fd_from_watch(int fd);
 

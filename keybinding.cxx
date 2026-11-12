@@ -64,9 +64,6 @@ Keybinding::~Keybinding()
 {}
 
 
-void Keybinding::setup(void) 
-{}
-
 char *Keybinding::command_for_keysym(KeySym sym)
 {
 	int i;
