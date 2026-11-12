@@ -1,131 +1,63 @@
-#include <cerrno>
 #include <cstdio>
 #include <cstdlib>
-#include <sys/types.h>
 #include <cstring>
-#include <unistd.h>
-#include <dirent.h>
-#include <sys/stat.h>
-
-#include <sys/wait.h>
+#include <filesystem>
+#include <vector>
 
 #include "keybinding.hxx"
 
 int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 {
-
-	DIR *dir;
-	struct dirent *ent;
-	struct stat buf;
-	int n;
-	char filename[1024];
-	int pass = 0;
-	int count = 0;
-	struct key_entry *p;
-	KeySym sym;
-
+	namespace fs = std::filesystem;
 	table_count = 0;
 	table = nullptr;
-	n = stat(dir_name, &buf);
-	if (n != 0 || !S_ISDIR(buf.st_mode))
-		return 0;
-	dir = opendir(dir_name);
-	if (dir == nullptr)
+
+	std::error_code ec;
+	if (!fs::is_directory(dir_name, ec))
 		return 0;
 
-	for (pass=0; pass<2; pass++) {
-	count = 0;
-	while (ent = readdir(dir)) {
-		sprintf(filename, "%s/%s", dir_name, ent->d_name);
-		n = stat(filename, &buf);
-		if (n != 0) {
-		printf("stat failed for %s, n = %d\n", filename, n);
-		continue;
-		}
-		if (!S_ISREG(buf.st_mode)) {
-		continue;
-		}
-		if (S_ISDIR(buf.st_mode)) {
-		continue;
-		}
-		// but we probably don't need to exclude them anyway
+	struct found { KeySym sym; std::string path; };
+	std::vector<found> entries;
 
-		if (! (buf.st_mode & S_IXUSR) ) {
-		continue;
-		}
-		sym = XStringToKeysym(ent->d_name);
-		if (sym == 0) {
-		printf("not suitable filename: %s\n", ent->d_name);
-		continue;
-		}
+	for (auto const &ent : fs::directory_iterator(dir_name, ec)) {
+		if (ec || !ent.is_regular_file())
+			continue;
+		auto perms = ent.status().permissions();
+		if ((perms & fs::perms::owner_exec) == fs::perms::none)
+			continue;
+		auto name = ent.path().filename().string();
+		KeySym sym = XStringToKeysym(name.c_str());
+		if (sym == 0)
+			continue;
+		entries.push_back({sym, ent.path().string()});
+	}
 
-		// it is valid
+	if (entries.empty())
+		return 0;
 
-		count++;
-		if (pass == 0) {
-		continue;
-		} else {
-		if (count > table_count) {
-			printf("internal error count=%d table_count=%d\n",
-			   count, table_count);
-			exit(2);
-		}
-		p->sym = sym;
-		p->command = strdup(filename);
-		p++;
-		}
-
-	} // while readdir
-	if (pass == 0) {
-		// end of first pass
-		table_count = count;
-		if (count == 0) {
-		table = nullptr;
-		break;
-		}
-		p = table = (struct key_entry *)
-		malloc( count * sizeof(struct key_entry) );
-		if (table == nullptr) {
-		printf("Cannot allocate user key table\n");
+	table_count = entries.size();
+	table = static_cast<key_entry *>(malloc(table_count * sizeof(key_entry)));
+	if (!table) {
+		fprintf(stderr, "wmx: cannot allocate key table\n");
 		exit(1);
-		}
-		rewinddir(dir);
 	}
+	for (int i = 0; i < table_count; ++i) {
+		table[i].sym = entries[i].sym;
+		table[i].command = strdup(entries[i].path.c_str());
 	}
-	if (with_modifier) {
-	  printf("These keys are dynamically bound if the modifier key is active\n");
-	} else {
-	  printf("These keys are dynamically bound if there is no modifier.\n");
-	}
-
-	int i;
-	for (i=0; i < table_count; i++) {
-	printf("0x%x  %s\n", table[i].sym, table[i].command);
-	}
-
-	closedir(dir);
 	return table_count;
 }
 
-Keybinding::Keybinding(WindowManager *const w_mgr, char *dir, 
+Keybinding::Keybinding(WindowManager *const w_mgr, char *dir,
 			   bool with_modifier)
 {
-	char key_dir_name[1024];
-	int n;
-	char *home = getenv("HOME");
-	char const *keys_name = ".keys";
-
-	if (with_modifier) {
-	  keys_name = ".mkeys";
-	}
+	namespace fs = std::filesystem;
 	wm = w_mgr;
-	if (dir) {
-	sprintf(key_dir_name, "%s/%s", dir, keys_name);
-	} else {
-	sprintf(key_dir_name, "%s/%s/%s", home, CONFIG_COMMAND_MENU, keys_name);
-	}
-	n = scan_directory(key_dir_name, with_modifier);
-
+	char const *keys_name = with_modifier ? ".mkeys" : ".keys";
+	fs::path base = dir ? fs::path(dir)
+			    : fs::path(getenv("HOME") ? getenv("HOME") : "")
+			      / CONFIG_COMMAND_MENU;
+	scan_directory(const_cast<char *>((base / keys_name).c_str()), with_modifier);
 }
 
 Keybinding::~Keybinding()
