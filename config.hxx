@@ -237,15 +237,12 @@ constexpr bool CONFIG_USE_PIXMAP_MENUS = true;
 // how close you have to middle-button-click to the top-right corner
 // of the root window before the channel change happens.  Set
 // USE_CHANNEL_KEYS if you want Alt-F1, Alt-F2 etc for quick channel
-// changes, provided USE_KEYBOARD is also true.  Set USE_CHANNEL_MENU
-// if you want to change channels via a keyboard-controlled menu
-// instead of linearly up and down one at a time like TV.
+// changes, provided USE_KEYBOARD is also true.
 
 constexpr bool CONFIG_CHANNEL_SURF = true;
 constexpr int CONFIG_CHANNEL_CLICK_SIZE = 120;
 constexpr int CONFIG_CHANNEL_NUMBER_SIZE = 20;
 constexpr bool CONFIG_USE_CHANNEL_KEYS = true;
-constexpr bool CONFIG_USE_CHANNEL_MENU = false;
 
 // FLIP_DELAY is the length of time the big green number stays in the
 // top-right when flipping channels, before the windows reappear.

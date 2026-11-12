@@ -71,19 +71,6 @@ private:
 	virtual void raiseFeedbackLevel(int);
 };
 
-class ChannelMenu : public Menu
-{
- public:
-	ChannelMenu(WindowManager *, XEvent *e);
-	virtual ~ChannelMenu();
-
- private:
-	virtual char **getItems(int *, int *);
-	int m_channel;
-	int m_channels;
-	char **m_items;
-};
-
 class CommandMenu : public Menu
 {
 public:
