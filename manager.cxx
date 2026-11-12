@@ -894,15 +894,16 @@ void WindowManager::print_clients(int fd) {
 	  sprintf(buff, "No clients!\n");
 	  write(fd, buff, strlen(buff));
 	  }
-	  for (i = 0; i < m_clients.size(); ++i) {
+	  for (i = 0; i < (int)m_clients.size(); ++i) {
 	  c = clients()[i];
-	  if (XGetTextProperty(c->display(), c->window(), 
+	  res_name = "?";
+	  if (XGetTextProperty(c->display(), c->window(),
 				   &text_prop, XA_WM_CLASS)) {
 		  res_name = (char *)text_prop.value;
 	  }
 	  sprintf(buff,
-		  "0x%x %d %c%c%c (%s) \"%s\"\n", 
-		  c->window(),
+		  "0x%lx %d %c%c%c (%s) \"%s\"\n",
+		  (unsigned long)c->window(),
 		  c->channel(),
 		  c->isHidden() ? 'H' :  '-',
 		  c->isWithdrawn() ? 'W' :  '-',
@@ -910,6 +911,7 @@ void WindowManager::print_clients(int fd) {
 		  res_name,
 		  c->label() );
 	  write(fd, buff, strlen(buff));
+	  if (res_name != "?") XFree(text_prop.value);
 	  }
 }
 
