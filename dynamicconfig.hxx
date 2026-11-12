@@ -14,8 +14,6 @@ public:
 	~DynamicConfig();
 	void scan(char startup = 0);
 
-	char clickFocus();
-	char raiseFocus();
 	char rightCirculate();
 	char rightLower();
 	char rightToggleHeight();

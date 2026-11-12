@@ -108,9 +108,6 @@ WindowManager::WindowManager(int argc, char **argv) :
      fprintf(stderr,
 		"Warning: X locale modifiers not supported, using default\n");
 
-	if (CONFIG_CLICK_TO_FOCUS && !CONFIG_RAISE_ON_FOCUS)
-		fatal("can't have click-to-focus without raise-on-focus");
-
 	m_display = XOpenDisplay(nullptr);
 	if (!m_display) fatal("can't open display");
 

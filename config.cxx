@@ -47,7 +47,6 @@ DynamicConfig::DynamicConfig() : m_impl(new DynamicConfigImpl)
 	strcat(m_impl->path, "/options");
 	}
 
-	m_impl->focus = 0;	// 1 = Click , 2 = Raise, 4 = Autoraise
 	m_impl->rightBt = 1;	// 0 = disable, 1 = circulate, 2 = lower
 
 	scan(1);
@@ -58,8 +57,6 @@ DynamicConfig::~DynamicConfig()
 	delete m_impl;
 }
 
-char DynamicConfig::clickFocus() { return m_impl->focus & 1; }
-char DynamicConfig::raiseFocus() { return m_impl->focus & 2; }
 char DynamicConfig::rightCirculate() { return m_impl->rightBt & 1; }
 char DynamicConfig::rightLower() { return m_impl->rightBt & 2; }
 char DynamicConfig::rightToggleHeight() { return m_impl->rightBt & 4; }
@@ -88,12 +85,6 @@ void DynamicConfig::update(char *string)
 
 	s = strtok(string, "/");
 	do {
-
-	if (OPTION("focus:")) {
-		if (OPTION("click")) m_impl->focus = 3;
-		else if (OPTION("raise")) m_impl->focus = 2;
-		else if (OPTION("follow")) m_impl->focus = 0;
-	}
 
 	if (OPTION("right:")) {
 		if (OPTION("off")) m_impl->rightBt = 0;

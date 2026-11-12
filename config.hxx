@@ -59,12 +59,10 @@ constexpr char const *CONFIG_COMMAND_MENU = ".wmx";
 // use non screen style as fallback
 constexpr bool CONFIG_ADD_SCREEN_TO_COMMAND_MENU = false;
 
-// Focus possibilities.
-//
-// You can't have CLICK_TO_FOCUS without RAISE_ON_FOCUS.
-
-#define CONFIG_CLICK_TO_FOCUS     (DynamicConfig::config.clickFocus())
-#define CONFIG_RAISE_ON_FOCUS     (DynamicConfig::config.raiseFocus())
+// Focus.  Independent: click-to-focus does not require raise-on-focus.
+// Default is focus-follows-pointer with no raise.
+constexpr bool CONFIG_CLICK_TO_FOCUS = false;
+constexpr bool CONFIG_RAISE_ON_FOCUS = false;
 
 constexpr int CONFIG_DESTROY_WINDOW_DELAY = 600;
 
