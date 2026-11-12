@@ -25,16 +25,13 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 	KeySym sym;
 
 	table_count = 0;
+	table = nullptr;
 	n = stat(dir_name, &buf);
-	if (n != 0 || !S_ISDIR(buf.st_mode)) {
-	printf("Directory %s does not exist\n", dir_name);
-	return -1;
-	}
+	if (n != 0 || !S_ISDIR(buf.st_mode))
+		return 0;
 	dir = opendir(dir_name);
-	if (dir == nullptr) {
-	printf("Could not open directory %s\n", dir_name);
-	return -1;
-	}
+	if (dir == nullptr)
+		return 0;
 
 	for (pass=0; pass<2; pass++) {
 	count = 0;
