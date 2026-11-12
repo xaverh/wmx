@@ -649,41 +649,28 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	m_commandDir = nullptr;
 	m_hasSubmenus = true;
 
-	if (otherdir == nullptr)
-	{
+	if (otherdir == nullptr) {
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-	isRootDir = true;
+		isRootDir = true;
 #endif
-	if (wmxdir == nullptr)
-	{
-		if (home == nullptr) return;
-		m_commandDir =
-		(char *)malloc(strlen(home) + strlen(CONFIG_COMMAND_MENU) + 2);
-		sprintf(m_commandDir, "%s/%s", home, CONFIG_COMMAND_MENU);
-	}
-	else // wmxdir != nullptr
-	{
-		if(wmxdir[0] == '/')
-		{
-		m_commandDir =
-			(char *)malloc(strlen(wmxdir) + 1);
-		strcpy(m_commandDir, wmxdir);
+		namespace fs = std::filesystem;
+		fs::path p;
+		if (wmxdir == nullptr) {
+			if (home == nullptr) return;
+			p = fs::path(home) / CONFIG_COMMAND_MENU;
+		} else if (wmxdir[0] == '/') {
+			p = wmxdir;
+		} else {
+			if (home == nullptr) return;
+			p = fs::path(home) / wmxdir;
 		}
-		else // wmxdir doesn't start with /
-		{
-		m_commandDir =
-			(char *)malloc(strlen(home) + strlen(wmxdir) + 2);
-		sprintf(m_commandDir, "%s/%s", home, wmxdir);
-		}
-	}
-	}
-	else // otherdir != nullptr
-	{
+		auto s = p.string();
+		m_commandDir = strdup(s.c_str());
+	} else {
 #if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-	isRootDir = false;
+		isRootDir = false;
 #endif
-	m_commandDir = (char *)malloc(strlen(otherdir) + 1);
-	strcpy(m_commandDir, otherdir);
+		m_commandDir = strdup(otherdir);
 	}
 
 	int i = getSelection();
