@@ -42,9 +42,11 @@
 // What to run to get a new window (from the "New" menu option)
 constexpr char const *CONFIG_NEW_WINDOW_LABEL = "New";
 constexpr char const *CONFIG_NEW_WINDOW_COMMAND = "x-terminal-emulator";
-#define CONFIG_NEW_WINDOW_COMMAND_OPTIONS 0
-// or, for example,
-//#define CONFIG_NEW_WINDOW_COMMAND_OPTIONS "-ls","-sb","-sl","1024",0
+// Null-terminated argument list for the New command.
+// Example with flags: { "-ls", "-sb", "-sl", "1024", nullptr }
+constexpr char const *CONFIG_NEW_WINDOW_COMMAND_OPTIONS[] = {
+	nullptr
+};
 // alternatively,
 #define CONFIG_DISABLE_NEW_WINDOW_COMMAND (DynamicConfig::config.disableNew())
 

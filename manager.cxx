@@ -839,15 +839,20 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = nullptr*/)
 		}
 
 		if (file) {
-		execl(file, name, arg1, 0);
+		execl(file, name, arg1, nullptr);
+		}
+		else if (strcmp(CONFIG_NEW_WINDOW_COMMAND, name) == 0) {
+			size_t n = 0;
+			while (CONFIG_NEW_WINDOW_COMMAND_OPTIONS[n]) ++n;
+			char const *argv[n + 2];
+			argv[0] = name;
+			for (size_t i = 0; i < n; ++i)
+				argv[i + 1] = CONFIG_NEW_WINDOW_COMMAND_OPTIONS[i];
+			argv[n + 1] = nullptr;
+			execvp(name, const_cast<char **>(argv));
 		}
 		else {
-		if (strcmp(CONFIG_NEW_WINDOW_COMMAND, name)) {
 			execlp(name, name, nullptr);
-		}
-		else {
-			execlp(name, name, CONFIG_NEW_WINDOW_COMMAND_OPTIONS, nullptr);
-		}
 		}
 
 		XBell(display(), 70);
