@@ -3,7 +3,8 @@
 #include "client.hxx"
 
 #include <sys/types.h>
-#include <sys/stat.h>
+#include <filesystem>
+#include <vector>
 #include <X11/keysym.h>
 
 bool       Menu::m_initialised = false;
@@ -760,98 +761,48 @@ DIR *CommandMenu::screenopendir(char *m_commandDir,int *dirlen,int olddirlen)
 
 char **CommandMenu::getItems(int *niR, int *nhR)
 {
+	namespace fs = std::filesystem;
 	*niR = *nhR = 0;
-	DIR *dir;
-	char const *home;
-	char *dirpath;
 
-	if ((home = getenv("HOME")) == nullptr) return nullptr;
+	if (!getenv("HOME")) return nullptr;
 
-#if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-	int olddirlen = strlen(m_commandDir);
-	int dirlen = olddirlen + 1 + m_windowManager->numdigits(screen());
-	m_commandDir=(char *)realloc((void *)m_commandDir,(size_t)dirlen);
-	dir = screenopendir(m_commandDir,&dirlen,olddirlen);
-#else
-	int dirlen = strlen(m_commandDir);
-	dir = opendir(m_commandDir);
-#endif
-
-	if (dir == nullptr) {
-
+	std::error_code ec;
+	fs::path dir = m_commandDir;
+	if (!fs::is_directory(dir, ec)) {
 		free(m_commandDir);
 #ifndef CONFIG_SYSTEM_COMMAND_MENU
 #define CONFIG_SYSTEM_COMMAND_MENU "/usr/local/lib/wmx/menu"
 #endif
-		m_commandDir =
-		(char *)malloc(strlen(CONFIG_SYSTEM_COMMAND_MENU) + 1);
-		sprintf(m_commandDir, CONFIG_SYSTEM_COMMAND_MENU);
-
-#if CONFIG_ADD_SCREEN_TO_COMMAND_MENU
-		olddirlen = strlen(m_commandDir);
-	dirlen = olddirlen + 1 + m_windowManager->numdigits(screen());
-	dir = screenopendir(m_commandDir,&dirlen,olddirlen);
-#else
-		dirlen = strlen(m_commandDir);
-		dir = opendir(m_commandDir);
-#endif
-
-		if (dir == nullptr) {
-		return nullptr;
-	}
+		m_commandDir = strdup(CONFIG_SYSTEM_COMMAND_MENU);
+		dir = m_commandDir;
+		if (!fs::is_directory(dir, ec))
+			return nullptr;
 	}
 
-	dirpath = (char *)malloc(dirlen + 1024 + 2); // NAME_MAX guess
-	strcpy(dirpath, m_commandDir);
-
-	int count = 0;
-	struct dirent *ent;
-
-	// We already assume efficient realloc() in Border.C, so we may as
-	// well assume it here too.
-
-	char **items = 0;
-
-	while ((ent = readdir(dir)) != nullptr) {
-
-	struct stat st;
-	sprintf(dirpath + dirlen, "/%s", ent->d_name);
-
-	if (stat(dirpath, &st) == -1) continue;
-	if (!S_ISDIR(st.st_mode) || !(st.st_mode & 0444)) continue;
-	if (ent->d_name[0] == '.') continue;
-
-	items = (!items ? (char **)malloc(sizeof(char *)) :
-		 (char **)realloc(items, (count + 1) * sizeof(char *)));
-
-	items[count++] = strdup(ent->d_name);
+	std::vector<std::string> dirs, files;
+	for (auto const &ent : fs::directory_iterator(dir, ec)) {
+		if (ec) break;
+		auto name = ent.path().filename().string();
+		if (name.empty() || name[0] == '.') continue;
+		if (ent.is_directory() &&
+		    (ent.status().permissions() & fs::perms::owner_read) != fs::perms::none)
+			dirs.push_back(name);
+		else if (ent.is_regular_file() &&
+			 (ent.status().permissions() & fs::perms::owner_exec) != fs::perms::none)
+			files.push_back(name);
 	}
 
-	qsort(items, count, sizeof(char *), sortstrs);
-	*nhR = count;
+	std::sort(dirs.begin(), dirs.end());
+	std::sort(files.begin(), files.end());
 
-	rewinddir(dir);
+	*nhR = dirs.size();
+	*niR = dirs.size() + files.size();
+	if (*niR == 0) return nullptr;
 
-	while ((ent = readdir(dir)) != nullptr) {
-
-	struct stat st;
-	sprintf(dirpath + dirlen, "/%s", ent->d_name);
-
-	if (stat(dirpath, &st) == -1) continue;
-	if (!S_ISREG(st.st_mode) || !(st.st_mode & 0111)) continue;
-
-	items = (!items ? (char **)malloc(sizeof(char *)) :
-		 (char **)realloc(items, (count + 1) * sizeof(char *)));
-
-	items[count++] = strdup(ent->d_name);
-	}
-
-	*niR = count;
-	qsort(items + *nhR, *niR - *nhR, sizeof(char *), sortstrs);
-
-	free(dirpath);
-	closedir(dir);
-
+	char **items = static_cast<char **>(malloc(*niR * sizeof(char *)));
+	int i = 0;
+	for (auto const &s : dirs)  items[i++] = strdup(s.c_str());
+	for (auto const &s : files) items[i++] = strdup(s.c_str());
 	return items;
 }
 
