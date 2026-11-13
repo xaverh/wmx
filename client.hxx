@@ -180,6 +180,7 @@ private:
 	bool m_movable;
 	int m_minWidth;
 	int m_minHeight;
+	void applySizeHints(int &, int &);
 	void fixResizeDimensions(int &, int &, int &, int &);
 	bool coordsInHole(int, int);
 

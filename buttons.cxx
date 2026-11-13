@@ -558,30 +558,59 @@ void Client::move(XButtonEvent *e)
 }
 
 
+void Client::applySizeHints(int &w, int &h)
+{
+	auto const &sh = m_sizeHints;
+	int basew = (sh.flags & PBaseSize) ? sh.base_width  : m_minWidth;
+	int baseh = (sh.flags & PBaseSize) ? sh.base_height : m_minHeight;
+	bool baseismin = basew == m_minWidth && baseh == m_minHeight;
+
+	if (w < 1) w = 1;
+	if (h < 1) h = 1;
+
+	if (!baseismin) {
+		w -= basew;
+		h -= baseh;
+	}
+
+	if ((sh.flags & PAspect) && sh.min_aspect.y && sh.max_aspect.x) {
+		float mina = (float)sh.min_aspect.x / sh.min_aspect.y;
+		float maxa = (float)sh.max_aspect.x / sh.max_aspect.y;
+		if (maxa > 0 && (float)w / h > maxa)
+			w = h * maxa + 0.5;
+		else if (mina > 0 && (float)h / w > mina)
+			h = w * mina + 0.5;
+	}
+
+	if (baseismin) {
+		w -= basew;
+		h -= baseh;
+	}
+
+	if ((sh.flags & PResizeInc) && sh.width_inc)
+		w -= w % sh.width_inc;
+	if ((sh.flags & PResizeInc) && sh.height_inc)
+		h -= h % sh.height_inc;
+
+	w = std::max(w + basew, m_minWidth);
+	h = std::max(h + baseh, m_minHeight);
+
+	if ((sh.flags & PMaxSize) && sh.max_width)
+		w = std::min(w, sh.max_width);
+	if ((sh.flags & PMaxSize) && sh.max_height)
+		h = std::min(h, sh.max_height);
+}
+
 void Client::fixResizeDimensions(int &w, int &h, int &dw, int &dh)
 {
-	if (w < 50) w = 50;
-	if (h < 50) h = 50;
-
+	applySizeHints(w, h);
 	if (m_sizeHints.flags & PResizeInc) {
-	w = m_minWidth  + (((w - m_minWidth) / m_sizeHints.width_inc) *
-			   m_sizeHints.width_inc);
-	h = m_minHeight + (((h - m_minHeight) / m_sizeHints.height_inc) *
-			   m_sizeHints.height_inc);
-
-	dw = (w - m_minWidth)  / m_sizeHints.width_inc;
-	dh = (h - m_minHeight) / m_sizeHints.height_inc;
+		dw = (w - m_minWidth) / m_sizeHints.width_inc;
+		dh = (h - m_minHeight) / m_sizeHints.height_inc;
 	} else {
-	dw = w; dh = h;
+		dw = w;
+		dh = h;
 	}
-
-	if (m_sizeHints.flags & PMaxSize) {
-	if (w > m_sizeHints.max_width)  w = m_sizeHints.max_width;
-	if (h > m_sizeHints.max_height) h = m_sizeHints.max_height;
-	}
-
-	if (w < m_minWidth)  w = m_minWidth;
-	if (h < m_minHeight) h = m_minHeight;
 }
 
 
