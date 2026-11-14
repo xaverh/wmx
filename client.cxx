@@ -418,9 +418,6 @@ void Client::manage(bool mapped)
 	activeClient()->installColormap();
 	}
 
-	char *property = 0;
-	int length = 0;
-
 	m_windowManager->hoistToTop(this);
 
 	sendConfigureNotify(); // due to Martin Andrews
@@ -1011,8 +1008,7 @@ void Client::unhide(bool map)
 		XMapWindow(display(), m_window);
 	}
 	mapRaised();
-
-	else if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick()) activate();
+	if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick()) activate();
 	}
 
 }
