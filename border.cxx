@@ -245,34 +245,18 @@ void Border::initialiseStatics(WindowManager *wm)
 		attrs.colormap = XDefaultColormap(wm->display(), i);
 		attrs.depth = XDefaultDepth(wm->display(), i);
 
-		{
-			switch (XpmCreatePixmapFromData
-					(wm->display(), wm->root(), (char **)background,
-					 &m_backgroundPixmap, nullptr, &attrs)) {
-			case XpmSuccess:
-				break;
-			case XpmColorError:
-				m_backgroundPixmap = None;
-				break;
-			case XpmOpenFailed:
-				m_backgroundPixmap = None;
-				break;
-			case XpmFileInvalid:
-				m_backgroundPixmap = None;
-				break;
-			case XpmNoMemory:
-				m_backgroundPixmap = None;
-				break;
-			case XpmColorFailed:
-				m_backgroundPixmap = None;
-				break;
-			default:
-				m_backgroundPixmap = None;
-				break;
-			}
-	} else
-#endif  
+		switch (XpmCreatePixmapFromData
+				(wm->display(), wm->root(), (char **)background,
+				 &m_backgroundPixmap, nullptr, &attrs)) {
+		case XpmSuccess:
+			break;
+		default:
 			m_backgroundPixmap = None;
+			break;
+		}
+#else
+		m_backgroundPixmap = None;
+#endif
 	}
 }
 
