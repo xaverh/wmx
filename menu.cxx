@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <filesystem>
 #include <vector>
+#include <algorithm>
 #include <X11/keysym.h>
 
 bool       Menu::m_initialised = false;
@@ -587,12 +588,12 @@ char **ClientMenu::getItems(int *niR, int *nhR)
 
 		if (i == 0) items[i] = CONFIG_NEW_WINDOW_LABEL;
 		else if (m_allowExit && i > m_clients.size()) items[i] = "[Exit wmx]";
-		else items[i] = m_clients[i-1]->label();
+		else items[i] = strdup(std::string(m_clients[i-1]->label()).c_str());
 
 	} else {
 
 		if (m_allowExit && i >= m_clients.size()) items[i] = "[Exit wmx]";
-		else items[i] = m_clients[i]->label();
+		else items[i] = strdup(std::string(m_clients[i]->label()).c_str());
 	}
 	}
 
@@ -688,13 +689,6 @@ CommandMenu::~CommandMenu()
 	free(m_items[i]);
 	}
 	free(m_items);
-}
-
-static int sortstrs(void const *va, void const *vb)
-{
-	char **a = (char **)va;
-	char **b = (char **)vb;    
-	return strcmp(*a, *b);
 }
 
 void CommandMenu::createSubmenu (XEvent *e, int i)
