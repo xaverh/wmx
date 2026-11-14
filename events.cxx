@@ -304,7 +304,6 @@ void Client::eventConfigureRequest(XConfigureRequestEvent *e)
 		if (CONFIG_CLICK_TO_FOCUS || isFocusOnClick())
 				 activate();
 	}
-	}
 }
 
 
@@ -453,9 +452,6 @@ void WindowManager::eventDestroy(XDestroyWindowEvent *e)
 		break;
 		}
 	}
-
-		int there = -1;
-
 
 	checkChannel(c->channel());
 	c->release();
