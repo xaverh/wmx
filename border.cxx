@@ -246,11 +246,32 @@ void Border::initialiseStatics(WindowManager *wm)
 		attrs.depth = XDefaultDepth(wm->display(), i);
 
 		switch (XpmCreatePixmapFromData
-				(wm->display(), wm->root(), (char **)background,
+				(wm->display(), wm->mroot(i), (char **)background,
 				 &m_backgroundPixmap, nullptr, &attrs)) {
 		case XpmSuccess:
 			break;
+		case XpmColorError:
+			fprintf(stderr, "wmx: pixmap colour error\n");
+			m_backgroundPixmap = None;
+			break;
+		case XpmOpenFailed:
+			fprintf(stderr, "wmx: pixmap open failed\n");
+			m_backgroundPixmap = None;
+			break;
+		case XpmFileInvalid:
+			fprintf(stderr, "wmx: pixmap file invalid\n");
+			m_backgroundPixmap = None;
+			break;
+		case XpmNoMemory:
+			fprintf(stderr, "wmx: pixmap out of memory\n");
+			m_backgroundPixmap = None;
+			break;
+		case XpmColorFailed:
+			fprintf(stderr, "wmx: pixmap colour failed\n");
+			m_backgroundPixmap = None;
+			break;
 		default:
+			fprintf(stderr, "wmx: pixmap unknown error\n");
 			m_backgroundPixmap = None;
 			break;
 		}
