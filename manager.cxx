@@ -65,7 +65,6 @@ WindowManager::WindowManager(int argc, char **argv) :
 	m_netwmCheckWin(0),
 	m_altModMask(0) // later
 {
-	char *home = getenv("HOME");
 	char *wmxdir = getenv("WMXDIR");
 
 	max_fd = 0;
@@ -795,9 +794,7 @@ void WindowManager::spawn(char *name, char *file, char *arg1 /* = nullptr*/)
 
 int compare_client_names(Client *c1, Client *c2)
 {
-	char const *n1 = c1->label() ? c1->label() : "";
-	char const *n2 = c2->label() ? c2->label() : "";
-	return strcmp(n1, n2);
+	return c1->label().compare(c2->label());
 }
 
 int compare_client_names_a(void const *p, void const *q)
@@ -811,33 +808,6 @@ int compare_client_names_a(void const *p, void const *q)
 	Client *c2 = *x2;
 
 	return compare_client_names(c1, c2);
-}
-
-
-
-	  if (m_clients.size() == 0) {
-	  sprintf(buff, "No clients!\n");
-	  write(fd, buff, strlen(buff));
-	  }
-	  for (i = 0; i < (int)m_clients.size(); ++i) {
-	  c = clients()[i];
-	  res_name = "?";
-	  if (XGetTextProperty(c->display(), c->window(),
-				   &text_prop, XA_WM_CLASS)) {
-		  res_name = (char *)text_prop.value;
-	  }
-	  sprintf(buff,
-		  "0x%lx %d %c%c%c (%s) \"%s\"\n",
-		  (unsigned long)c->window(),
-		  c->channel(),
-		  c->isHidden() ? 'H' :  '-',
-		  c->isWithdrawn() ? 'W' :  '-',
-		  c->isSticky() ? 'S' : '-',
-		  res_name,
-		  c->label() );
-	  write(fd, buff, strlen(buff));
-	  if (res_name != "?") XFree(text_prop.value);
-	  }
 }
 
 void WindowManager::add_fd_to_watch(int fd)
