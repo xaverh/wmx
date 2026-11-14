@@ -284,7 +284,6 @@ void Client::manage(bool mapped)
 		}
 		}
 	}
-	}
 
 	m_iconName = getProperty(XA_WM_ICON_NAME);
 	m_name = getProperty(XA_WM_NAME);
