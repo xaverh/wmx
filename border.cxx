@@ -4,10 +4,8 @@
 
 // Some shaping mods due to Jacques Garrigue, garrigue@kurims.kyoto-u.ac.jp
 
-#if CONFIG_USE_PIXMAPS != false
 #include <X11/xpm.h>
 #include "background.xpm"
-#endif
 
 // These are degenerate initialisations, don't change them
 XftFont *Border::m_tabFont = 0;
@@ -236,7 +234,7 @@ void Border::initialiseStatics(WindowManager *wm)
 		wm->fatal("couldn't allocate border GC");
 	}
 
-#if CONFIG_USE_PIXMAPS != false
+		if constexpr (CONFIG_USE_PIXMAPS) {
 		XpmAttributes attrs;
 		attrs.valuemask =
 		  XpmCloseness | XpmVisual | XpmColormap | XpmDepth;
@@ -250,34 +248,14 @@ void Border::initialiseStatics(WindowManager *wm)
 				 &m_backgroundPixmap, nullptr, &attrs)) {
 		case XpmSuccess:
 			break;
-		case XpmColorError:
-			fprintf(stderr, "wmx: pixmap colour error\n");
-			m_backgroundPixmap = None;
-			break;
-		case XpmOpenFailed:
-			fprintf(stderr, "wmx: pixmap open failed\n");
-			m_backgroundPixmap = None;
-			break;
-		case XpmFileInvalid:
-			fprintf(stderr, "wmx: pixmap file invalid\n");
-			m_backgroundPixmap = None;
-			break;
-		case XpmNoMemory:
-			fprintf(stderr, "wmx: pixmap out of memory\n");
-			m_backgroundPixmap = None;
-			break;
-		case XpmColorFailed:
-			fprintf(stderr, "wmx: pixmap colour failed\n");
-			m_backgroundPixmap = None;
-			break;
 		default:
-			fprintf(stderr, "wmx: pixmap unknown error\n");
+			fprintf(stderr, "wmx: pixmap load failed\n");
 			m_backgroundPixmap = None;
 			break;
 		}
-#else
+		} else {
 		m_backgroundPixmap = None;
-#endif
+		}
 	}
 }
 
