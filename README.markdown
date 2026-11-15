@@ -88,7 +88,7 @@ Executables and subdirectories in `~/.wmx` (or the directory named by `CONFIG_CO
 
 ## Pixmaps
 
-`CONFIG_USE_PIXMAPS` (default true) textures the frames with the compiled-in `background.xpm`. `CONFIG_USE_PIXMAP_MENUS` does the same for menus.
+`CONFIG_USE_PIXMAPS` (default true) textures the frames and menus with the compiled-in `background.xpm`.
 
 ## Configuration reference
 
@@ -107,8 +107,7 @@ Everything is set in `config.hxx`. Rebuild after changing it.
 | `CONFIG_BUMP_EVERYWHERE` | true | Resist other windows, not only screen edges |
 | `CONFIG_RESIZE_UPDATE` | true | Opaque resize |
 | `CONFIG_RAISELOWER_ON_CLICK` | false | Click on the top window lowers it |
-| `CONFIG_USE_PIXMAPS` | true | Frame background image |
-| `CONFIG_USE_PIXMAP_MENUS` | true | Menu background image |
+| `CONFIG_USE_PIXMAPS` | true | Frame and menu background image |
 | `CONFIG_CHANNEL_SURF` | true | Middle-click channel switcher |
 | `CONFIG_USE_CHANNEL_KEYS` | true | Alt-F1…F12 jump to channel |
 | `CONFIG_USE_CHANNEL_MENU` | false | Channel menu instead of surf |

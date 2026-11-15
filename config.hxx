@@ -215,13 +215,10 @@ constexpr int CONFIG_FRAME_THICKNESS = 8;
 // Section IV. Flashy stuff
 // ========================
 
-// If USE_PIXMAPS is true the frames will be decorated with the pixmap
-// in ./background.xpm; if USE_PIXMAP_MENUS is also true, the menus
-// will be too.  The latter screws up in palette-based visuals, but
-// should be okay in true-colour.
+// If USE_PIXMAPS is true the frames and menus are decorated with
+// the pixmap in ./background.xpm.
 
 constexpr bool CONFIG_USE_PIXMAPS = true;
-constexpr bool CONFIG_USE_PIXMAP_MENUS = true;
 
 // Set CHANNEL_SURF for multi-channel switching; CHANNEL_CLICK_SIZE is
 // how close you have to middle-button-click to the top-right corner
