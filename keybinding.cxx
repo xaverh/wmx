@@ -1,5 +1,4 @@
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
 #include <filesystem>
 #include <vector>
@@ -9,15 +8,11 @@
 int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 {
 	namespace fs = std::filesystem;
-	table_count = 0;
-	table = nullptr;
+	table.clear();
 
 	std::error_code ec;
 	if (!fs::is_directory(dir_name, ec))
 		return 0;
-
-	struct found { KeySym sym; std::string path; };
-	std::vector<found> entries;
 
 	for (auto const &ent : fs::directory_iterator(dir_name, ec)) {
 		if (ec || !ent.is_regular_file())
@@ -29,23 +24,9 @@ int Keybinding::scan_directory(char *dir_name, bool with_modifier)
 		KeySym sym = XStringToKeysym(name.c_str());
 		if (sym == 0)
 			continue;
-		entries.push_back({sym, ent.path().string()});
+		table.push_back({sym, ent.path().string()});
 	}
-
-	if (entries.empty())
-		return 0;
-
-	table_count = entries.size();
-	table = static_cast<key_entry *>(malloc(table_count * sizeof(key_entry)));
-	if (!table) {
-		fprintf(stderr, "wmx: cannot allocate key table\n");
-		exit(1);
-	}
-	for (int i = 0; i < table_count; ++i) {
-		table[i].sym = entries[i].sym;
-		table[i].command = strdup(entries[i].path.c_str());
-	}
-	return table_count;
+	return table.size();
 }
 
 Keybinding::Keybinding(WindowManager *const w_mgr, char *dir,
@@ -64,15 +45,11 @@ Keybinding::~Keybinding()
 {}
 
 
-char *Keybinding::command_for_keysym(KeySym sym)
+char const *Keybinding::command_for_keysym(KeySym sym)
 {
-	int i;
-
-	for (i=0; i < table_count; i++) {
-	if (sym == table[i].sym) {
-		return table[i].command;
-	}
-	}
+	for (auto const &e : table)
+		if (e.sym == sym)
+			return e.command.c_str();
 	return nullptr;
 }
 
@@ -90,8 +67,8 @@ void Keybinding::grab_each_key(Display *display, Window window, int mask) {
 	int i;
 	int keycode;
 
-	for (i=0; i < table_count; i++) {
-	keycode = XKeysymToKeycode(display, table[i].sym);
+	for (auto const &e : table) {
+	keycode = XKeysymToKeycode(display, e.sym);
 	XGrabKey(display, keycode,
 		 mask,
 		 window, false,
