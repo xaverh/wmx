@@ -80,7 +80,7 @@ public:
 private:
 	void createSubmenu(XEvent *, int i);
 	virtual char **getItems(int *, int *);
-	char *m_commandDir;
+	std::string m_commandDir;
 
 };
 

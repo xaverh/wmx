@@ -642,7 +642,7 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	char const *home = getenv("HOME");
 	char const *wmxdir = getenv("WMXDIR");
 
-	m_commandDir = nullptr;
+	m_commandDir.clear();
 	m_hasSubmenus = true;
 
 	if (otherdir == nullptr) {
@@ -658,9 +658,9 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 			p = fs::path(home) / wmxdir;
 		}
 		auto s = p.string();
-		m_commandDir = strdup(s.c_str());
+		m_commandDir = s;
 	} else {
-		m_commandDir = strdup(otherdir);
+		m_commandDir = otherdir;
 	}
 
 	int i = getSelection();
@@ -672,9 +672,9 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 	if (i >= m_nHidden && i < m_nItems)
 	{
 	char *commandFile =
-		(char *)malloc(strlen(m_commandDir) + STRLEN_MITEMS(i) + 2);
+		(char *)malloc(m_commandDir.size() + STRLEN_MITEMS(i) + 2);
 
-	sprintf(commandFile, "%s/%s", m_commandDir, m_items[i]);
+	sprintf(commandFile, "%s/%s", m_commandDir.c_str(), m_items[i]);
 	m_windowManager->spawn(m_items[i], commandFile);
 	free(commandFile);
 	}
@@ -682,7 +682,7 @@ CommandMenu::CommandMenu(WindowManager *manager, XEvent *e, char* otherdir)
 
 CommandMenu::~CommandMenu()
 {
-	free(m_commandDir);
+	
 	for (int i = 0; i < m_nItems; i++) {
 	free(m_items[i]);
 	}
@@ -692,10 +692,10 @@ CommandMenu::~CommandMenu()
 void CommandMenu::createSubmenu (XEvent *e, int i)
 {
 	char *new_directory;
-	int dirlen = strlen (m_commandDir);
+	int dirlen = m_commandDir.size();
 
 	new_directory = (char *)malloc (dirlen + STRLEN_MITEMS(i) + 2);
-	strcpy (new_directory, m_commandDir);
+	strcpy (new_directory, m_commandDir.c_str());
 	new_directory[dirlen] = '/';
 	strcpy (new_directory + dirlen + 1, m_items[i]);
 
@@ -714,11 +714,11 @@ char **CommandMenu::getItems(int *niR, int *nhR)
 	std::error_code ec;
 	fs::path dir = m_commandDir;
 	if (!fs::is_directory(dir, ec)) {
-		free(m_commandDir);
+		
 #ifndef CONFIG_SYSTEM_COMMAND_MENU
 #define CONFIG_SYSTEM_COMMAND_MENU "/usr/local/lib/wmx/menu"
 #endif
-		m_commandDir = strdup(CONFIG_SYSTEM_COMMAND_MENU);
+		m_commandDir = CONFIG_SYSTEM_COMMAND_MENU;
 		dir = m_commandDir;
 		if (!fs::is_directory(dir, ec))
 			return nullptr;
