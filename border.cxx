@@ -121,11 +121,12 @@ void Border::initialiseStatics(WindowManager *wm)
 		  "have different storage requirements -- bailing out");
 	}
 
-	char *fi = strdup(CONFIG_FRAME_FONT);
-	char *ffi = fi, *tokstr = fi;
-	while ((fi = strtok(tokstr, ","))) {
-
-	tokstr = 0;
+	std::string fontlist = CONFIG_FRAME_FONT;
+	for (size_t start = 0; start < fontlist.size(); ) {
+	size_t comma = fontlist.find(',', start);
+	if (comma == std::string::npos) comma = fontlist.size();
+	std::string fi = fontlist.substr(start, comma - start);
+	start = comma + 1;
 
 	int ascent = 0, height = 0;
 
@@ -133,7 +134,7 @@ void Border::initialiseStatics(WindowManager *wm)
 	// are not returned properly when querying with a rotated matrix
 
 	FcPattern *pattern = FcPatternCreate();
-	FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)fi);
+	FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)fi.c_str());
 	FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ROMAN);
 	FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_DEMIBOLD);
 	FcPatternAddInteger(pattern, FC_PIXEL_SIZE, CONFIG_FRAME_FONT_SIZE);
@@ -185,7 +186,6 @@ void Border::initialiseStatics(WindowManager *wm)
 	}
 	}
 
-	free(ffi);
 	if (!m_tabFont) {
 	wm->fatal("couldn't load default rotated Xft font, bailing out");
 	}

@@ -40,14 +40,15 @@ Menu::Menu(WindowManager *manager, XEvent *e)
 		m_menuGC = (GC *) malloc(m_windowManager->screensTotal() * sizeof(GC));
 		m_window = (Window *) malloc(m_windowManager->screensTotal() *
 					 sizeof(Window));
-	char *fi = strdup(CONFIG_MENU_FONT);
-	char *ffi = fi, *tokstr = fi;
-	while ((fi = strtok(tokstr, ","))) {
-
-		tokstr = 0;
+	std::string fontlist = CONFIG_MENU_FONT;
+	for (size_t start = 0; start < fontlist.size(); ) {
+	size_t comma = fontlist.find(',', start);
+	if (comma == std::string::npos) comma = fontlist.size();
+	std::string fi = fontlist.substr(start, comma - start);
+	start = comma + 1;
 
 		FcPattern *pattern = FcPatternCreate();
-		FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)fi);
+		FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)fi.c_str());
 		FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ROMAN);
 
 		FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_REGULAR);
@@ -67,7 +68,6 @@ Menu::Menu(WindowManager *manager, XEvent *e)
 		if (m_font) break;
 		FcPatternDestroy(match);
 	}
-	free(ffi);
 	if (!m_font) {
 		m_windowManager->fatal("couldn't load menu Xft font");
 	}
