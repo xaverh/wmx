@@ -4,13 +4,13 @@
 # wmx - another window manager
 # See COPYING for licence details.
 
-CXX         = c++
-PKG_CONFIG  = pkg-config
+CXX         ?= c++
+PKG_CONFIG  ?= pkg-config
 
-PREFIX      = /usr/local
+PREFIX      ?= /usr/local
 MANPREFIX   = $(PREFIX)/share/man
 
-CXXFLAGS    = -Wall -O2
+CXXFLAGS    ?= -Wall -O2
 LDFLAGS     = -lX11 -lXext -lXmu -lm
 
 # Xft is required for fonts.
